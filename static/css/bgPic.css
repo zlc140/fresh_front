@@ -1,0 +1,135 @@
+/*头部  */
+.search_box .arrow{
+    background: url(../image/arrow.png) no-repeat 0 0 ;
+}
+#register_upload_t a{
+    background: url(../image/upload.png) no-repeat center center;
+}
+/*底部  */
+#bottom_t_one{
+    background: url(../image/bottom.png) no-repeat 0 0;
+}
+#bottom_t_two{
+    background: url(../image/bottom.png) no-repeat 0 -70px;
+}
+#bottom_t_three{
+    background: url(../image/bottom.png) no-repeat 0 -140px;
+}
+#bottom_t_four{
+    background: url(../image/bottom.png) no-repeat 0 -210px;
+}
+/*前台用户部分的背景小图  */
+ .infor_index  .icon.coup{
+     background: url(../image/user.png) no-repeat 0px -180px;
+     background-size: 90px 540px;
+ }
+.infor_index  .icon.noPay{
+     background: url(../image/user.png) no-repeat 0px -90px;
+      background-size:90px 540px;
+ }
+.infor_index  .icon.order{
+     background: url(../image/user.png) no-repeat 0px -450px;
+      background-size:90px 540px;
+ }
+
+ /*用户侧边栏背景  */
+ .side_bar .infor{
+     background: url(../image/user.png) no-repeat 10px 10px;
+ }
+.side_bar .order{
+     background: url(../image/user.png) no-repeat 13px -85px;
+ }
+    .side_bar .coupon{
+     background: url(../image/user.png) no-repeat 12px -185px;
+ }
+.side_bar .address{
+     background: url(../image/user.png) no-repeat 12px -285px;
+ }
+.side_bar .bill{
+     background: url(../image/user.png) no-repeat 12px -385px;
+ }
+
+  .side_bar .active .infor{
+     background: url(../image/user.png) no-repeat -56px 10px;
+ }
+.side_bar .active .order{
+     background: url(../image/user.png) no-repeat -60px -85px;
+ }
+.side_bar .active .coupon{
+     background: url(../image/user.png) no-repeat -60px -185px;
+ }
+.side_bar .active .address{
+     background: url(../image/user.png) no-repeat -62px -285px;
+ }
+.side_bar .active .bill{
+     background: url(../image/user.png) no-repeat -61px -385px;
+ }
+    /*日历选中的背景图片  */
+.full-calendar-body .day-cell .select{
+    background: url(../image/selDate.png) no-repeat;
+    background-size: 168px 90px;
+}
+/*地址选为默认的背景  */
+.addr_box li.selDefault span.checkBtn{
+    /* border-color:  green !important; */
+    height: 42px;
+    width:160px;
+    background: url(../image/selAddr.png) no-repeat;
+    background-size: 160px 42px;
+    border-color: transparent;
+}
+/*右侧边栏背景图  */
+.right_nav .tel i{
+    background-image: url(../image/arrow.png);
+    background-size: 90%;
+    background-position: 4px -26px;
+    background-repeat: no-repeat;
+
+}
+.right_nav .car i{
+    background-image: url(../image/arrow.png);
+     background-size: 90%;
+    background-position: 3px -90px;
+    background-repeat: no-repeat;
+
+}
+.right_nav .ewm i{
+    background-image: url(../image/arrow.png);
+     background-size: 90%;
+    background-position: 3px -60px;
+    background-repeat: no-repeat;
+
+}
+.right_nav .goTop i{
+    background-image: url(../image/arrow.png);
+    background-size: 90%;
+    background-position: 3px -122px;
+    background-repeat: no-repeat;
+
+}
+/* 支付页面按钮 */
+ .account_payment .active{
+    width: 160px;
+    height: 40px;
+    background: url(../image/selAddr.png) no-repeat;
+}
+ .account_voucher .transition-box_one span {
+    width: 70px;
+    height: 22px;
+    display: block;
+    float: right;
+    font-size: 10px;
+    color:white;
+    line-height: 25px;
+    text-align: center;
+    background: url(../image/button.png) no-repeat; 
+}
+/* 支付页面提交按钮 */
+.account_voucher_list li.btn{
+   
+    background: url(../image/button.png) no-repeat; 
+} 
+/*地址编辑  */
+.addr_list .detail p a{
+    background: url(../image/edit.png) no-repeat 0px 15px;
+}
