@@ -75,16 +75,51 @@
         },
         mounted() {
             console.log(this.user)
+            let url = decodeURIComponent(window.location.search)
+            console.log(this.getValue(url))
         },
         methods: {
+             getValue (url) {
+                    let values = {}
+                    if(url.indexOf('?') != -1 &&　url.indexOf('&') == -1) {
+                        let str = url.substr(1)
+                        let strs = str.split('redirect=');
+                        values['redirect'] = strs[1]
+                    }
+                    if(url.indexOf('?') != -1 &&　url.indexOf('&') != -1){
+                        let str = url.split('?')[1]
+                        values['redirect'] = str.split('&')[0].split('=')[1]
+                        values['query'] = str.split('&')[1].split('=')
+                    }
+                    return values
+            }, 
             check () {
                 let _this = this
               this.$refs.ruleForm.validate((valid) => {
                 if(valid) {
                     this.loginLoading=true
                      _this.$store.dispatch('login',_this.user).then((res) => {
+                         this.loginLoading=false
                             if(res){
-                                _this.$router.push('/index')
+                                let url = decodeURIComponent(window.location.search)
+                                if(url == ''){
+                                    _this.$router.push('/index')
+                                }else{
+                                    console.log(_this.getValue(url).redirect)
+                                    if(_this.getValue(url).query){
+                                        let name = decodeURIComponent(_this.getValue(url).query[0])
+                                        _this.$router.push({
+                                            path:decodeURIComponent(_this.getValue(url).redirect),
+                                            query:{
+                                                id:decodeURIComponent(_this.getValue(url).query[1])
+                                                }
+                                        })
+
+                                    }else{
+                                         _this.$router.push (decodeURIComponent(_this.getValue(url).redirect))
+                                    }
+                                    
+                                }
                             }
                      })
                     }

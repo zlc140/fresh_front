@@ -36,6 +36,14 @@ export default {
                 {
                     path: banner,
                     title: '首页banner图'
+                },
+                {
+                    path: banner,
+                    title: '首页banner图'
+                },
+                {
+                    path: banner,
+                    title: '首页banner图'
                 }
 
             ]

@@ -56,10 +56,10 @@ const route = new Router({
       rightBar:false
     }},
     {  path:'/addWeekTel', name:'周模板', component:addWeekTel ,meta:{
-      rightBar:true
+      rightBar:false
     }},
     {  path:'/editWeekTel', name:'编辑周模板', component:editWeekTel ,meta:{
-      rightBar:true
+      rightBar:false
     }},
 
     {  

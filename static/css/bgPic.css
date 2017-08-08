@@ -20,49 +20,59 @@
 }
 /*前台用户部分的背景小图  */
  .infor_index  .icon.coup{
-     background: url(../image/user.png) no-repeat 0px -180px;
-     background-size: 90px 540px;
+     background: url(../image/user.png) no-repeat 0px -161px;;
+     background-size:80px 480px;
  }
-.infor_index  .icon.noPay{
-     background: url(../image/user.png) no-repeat 0px -90px;
-      background-size:90px 540px;
+.infor_index  .icon.noPay{ 
+     background: url(../image/user.png) no-repeat 1px -80px;
+      background-size:80px 480px;
  }
 .infor_index  .icon.order{
-     background: url(../image/user.png) no-repeat 0px -450px;
-      background-size:90px 540px;
+     background: url(../image/user.png) no-repeat 1px -320px;
+      background-size:80px 480px;
  }
 
  /*用户侧边栏背景  */
  .side_bar .infor{
-     background: url(../image/user.png) no-repeat 10px 10px;
+     background: url(../image/user.png) no-repeat 18px 13px;
+      background-size:90px 540px;
  }
 .side_bar .order{
-     background: url(../image/user.png) no-repeat 13px -85px;
+     background: url(../image/user.png) no-repeat 18px -74px;
+      background-size:90px 540px;
  }
-    .side_bar .coupon{
-     background: url(../image/user.png) no-repeat 12px -185px;
+.side_bar .coupon{
+     background: url(../image/user.png) no-repeat 18px -164px;
+      background-size:90px 540px;
  }
 .side_bar .address{
-     background: url(../image/user.png) no-repeat 12px -285px;
+     background: url(../image/user.png) no-repeat 18px -255px;
+      background-size:90px 540px;
  }
 .side_bar .bill{
-     background: url(../image/user.png) no-repeat 12px -385px;
+     background: url(../image/user.png) no-repeat 18px -345px;
+      background-size:90px 540px;
  }
 
-  .side_bar .active .infor{
-     background: url(../image/user.png) no-repeat -56px 10px;
+.side_bar .active .infor{
+     background: url(../image/user.png) no-repeat -44px 13px;
+    background-size:90px 540px;
  }
 .side_bar .active .order{
-     background: url(../image/user.png) no-repeat -60px -85px;
+     background: url(../image/user.png) no-repeat -44px -74px;
+      background-size:90px 540px;
  }
 .side_bar .active .coupon{
-     background: url(../image/user.png) no-repeat -60px -185px;
+     background: url(../image/user.png) no-repeat -44px -164px;
+      background-size:90px 540px;
  }
 .side_bar .active .address{
-     background: url(../image/user.png) no-repeat -62px -285px;
+     background: url(../image/user.png) no-repeat -44px -255px;
+      background-size:90px 540px;
  }
 .side_bar .active .bill{
-     background: url(../image/user.png) no-repeat -61px -385px;
+      background: url(../image/user.png) no-repeat -44px -345px;
+      background-size:90px 540px;
  }
     /*日历选中的背景图片  */
 .full-calendar-body .day-cell .select{
@@ -129,7 +139,11 @@
    
     background: url(../image/button.png) no-repeat; 
 } 
-/*地址编辑  */
-.addr_list .detail p a{
+/*地址编辑删除  */
+.addr_list .detail p a.edit{
     background: url(../image/edit.png) no-repeat 0px 15px;
+}
+.addr_list .detail p a.del{
+    background: url(../image/del.png) no-repeat 0px 15px;
+    background-size: 20px 20px;
 }

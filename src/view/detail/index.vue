@@ -47,7 +47,7 @@
 
 <script>
 import { goodsDetail,addCar } from '@/service'
-
+import {getStore} from '@/config/storage'
 import bigImg from './bigImg'
 export default {
 	data() {
@@ -88,7 +88,15 @@ export default {
 		},
 		addCars(val,event) {
 			console.log(this.num)
-			if (!this.addBtn) {
+			if( getStore('username') == null){
+				 this.$message('请先登录')
+				  this.$router.push({
+					  path:'/login',
+					  query:{redirect:this.$route.path,id:this.$route.query.id}
+				  })
+				  return false
+			}
+			if (!this.addBtn ) {
 					let _this = this
 					_this.addFlew(_this.imgs[0].path,event)
 					let prop = {

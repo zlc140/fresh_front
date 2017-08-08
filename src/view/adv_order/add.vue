@@ -44,7 +44,7 @@
     </full-calendar> 
     <div class="btn_box">
       <a class="btn" @click="addOrder">添加</a>
-      <a class="btn bgBtn" href="/shopCar">返回</a>
+      <router-link class="btn bgBtn" to="/shopCar">返回</router-link>
     </div>
   </div>
 </template>
@@ -91,11 +91,14 @@ export default {
     computed:{
       lists(){
         let list = []
-        this.getList().forEach((item) => {
-          if(this.$route.query.ids && this.$route.query.ids.indexOf(item.goodsId) > -1){
-            list.push(item)
-          }
-        })
+         if(this.getList()){
+           this.getList().forEach((item) => {
+            if(this.$route.query.ids && this.$route.query.ids.indexOf(item.goodsId) > -1){
+                list.push(item)
+              }
+            })
+         }
+        
         return list
       }
     },
@@ -107,9 +110,8 @@ export default {
       getList(){
         this.listLoading = true
         // this.lists =await carList()
-        if(this.$store.state.shopCar.lists.length == 0){
-           
-          this.$store.dispatch('getShopCar').then((res) => {
+        if(this.$store.state.shopCar.lists.length == 0 && getStore('username') != null){
+         this.$store.dispatch('getShopCar').then((res) => {
               this.listLoading = false
               return this.$store.state.shopCar.lists
           })

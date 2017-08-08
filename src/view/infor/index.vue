@@ -50,7 +50,7 @@ export default {
     data() {
         return {
             sum: {
-                nickname: '用户',
+                nickname: '未登录',
                 photo: userPhoto,
                 couponNum: 0,
                 couponAll: 0,

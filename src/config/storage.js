@@ -7,7 +7,7 @@ export const setStore = (name,content) => {
 		content = JSON.stringify(content)
 	}
 	// window.sessionStorage.setItem(name,content)
-	window.localStorage.setItem(name,content)
+	window.sessionStorage.setItem(name,content)
 
 }
 
@@ -16,7 +16,7 @@ export const setStore = (name,content) => {
 */
 export const getStore = name => {
 	if(!name) return;
-	let userInfo = JSON.parse(window.localStorage.getItem(name));
+	let userInfo = JSON.parse(window.sessionStorage.getItem(name));
 	return userInfo;
 
 }
@@ -26,5 +26,5 @@ export const getStore = name => {
 */
 export const removeStore = name => {
 	if (!name) return;
-	window.localStorage.removeItem(name);
+	window.sessionStorage.removeItem(name);
 }

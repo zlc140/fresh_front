@@ -1,8 +1,8 @@
 <template>
   <div class="addr_list">
     <div class="top_select cl">
-      <a class="addr">收货地址</a>
-      <el-button type="text" class="fr pos" @click="handAdd"> <span class="arrow">+</span>新增地址
+      <a class=" on">收货地址</a>
+      <el-button type="text" class="fr pos" @click="handAdd"> <i class="arrow el-icon-plus"></i>新增地址
        
       </el-button>
     </div>
@@ -11,7 +11,9 @@
         <span class="name">{{item.name}}</span>
         <span class="addr">{{'上海市'+item.county}}{{item.addrDetail}}</span>
         <span class="tel">{{item.phone | phone}}</span>
-        <a href="javascript:" title="" @click="handEdit(item)" class="arrow"> 编辑</a>
+        <a href="javascript:" title="" @click="handEdit(item)" class="arrow del"> 删除</a>
+        <a href="javascript:" title="" @click="handEdit(item)" class="arrow edit"> 编辑</a>
+        
       </p>
     </div>
     <!--新增/编辑地址界面-->
@@ -90,18 +92,21 @@ export default {
   height: 100%;
 }
 .el-button.pos {
+    font-size: 16px;
     color: #666;
-    margin: 9px 20px;
+    margin: 9px 50px;
     .arrow {
       display: inline-block;
       width: 16px;
       height: 16px;
       text-align: center;
       line-height: 16px;
+      font-size: 10px;
       border: 1px solid $baseColor;
       color: $baseColor;
       border-radius: 50%;
       margin-right:4px;
+      padding: 1px;
     }
     &:hover {
       color: $baseColor;

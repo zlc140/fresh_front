@@ -4,7 +4,7 @@
             <div class="dialog-cover" v-if="isShow" @click="closeMyself"></div>
             <transition name="drop">
                 <div class="dialog-content" v-if="isShow">
-                    <p class="dialog-close" @click="closeMyself">x</p>
+                    <p class="dialog-close el-icon el-icon-close" @click="closeMyself"></p>
                     <div class="table">
                         <el-table :data="tableData" style="width: 100%;" height="320">
                             <el-table-column prop="date" label="日期" width="180">
@@ -98,7 +98,27 @@ export default {
 }
 </script>
 
-<style >
+<style lang='scss' >
+.dialog-wrap{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+ ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+ ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgb(139, 186, 142);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+}
+  
+
 .drop-enter-active {
     transition: all .5s ease;
 }
@@ -115,11 +135,7 @@ export default {
     transform: translateY(-500px);
 }
 
-.dialog-wrap {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-}
+
 
 .dialog-cover {
     background: #000;
@@ -153,12 +169,10 @@ export default {
     top: -15px;
     width: 25px;
     height: 25px;
+    text-align: center;
     background-color: #fff;
     border-radius: 50%;
     color: #ccc;
-    text-align: center;
-    font-size: 18px;
-    cursor: pointer;
     line-height: 25px;
 }
 .dialog-close:hover{
@@ -170,6 +184,7 @@ export default {
 
 .table .el-table__header-wrapper thead div {
     background-color: rgb(108, 169, 110);
+    text-align: center;
 }
 
 .dialog-wrap table thead th {
@@ -178,8 +193,14 @@ export default {
     font-size: 14px;
     color: #fff;
 }
-
+.el-table{
+    border: none;
+}
+.el-table::after, .el-table::before{
+    background-color: transparent;
+}
 .el-table th>.cell {
     color: #fff;
+}
 }
 </style>

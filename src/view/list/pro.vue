@@ -25,6 +25,7 @@
 
 <script>
 import pro from '@/assets/images/pro.jpg'
+import { getStore } from '@/config/storage' 
 import { goodsList, addCar } from '@/service'
 import cateTem from './cates'
 export default {
@@ -60,7 +61,10 @@ export default {
        this.getList()
     },
     addtoCar(val,pic,event){
-        
+        if(getStore('username') == null){
+            this.$router.push('/login')
+            return false
+        }
         let _this = this
         _this.$emit('addFlew',pic,event)
         let prop = {

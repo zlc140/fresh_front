@@ -3,7 +3,7 @@
         <div class="container">
             <div class="week_tel_title">
                 <div class="select_all">
-                    <input type="checkbox" v-model="checkAllFlag" @click="checkAll()"> 全选
+                    <el-checkbox v-model="checkAllFlag" @change="checkAll()">全选</el-checkbox>
                 </div>
                 <div class="book_order">
                     <img src="../../assets/week_tel.jpg" alt="">
@@ -13,25 +13,27 @@
             <div class="week_tel_content">
     
                 <div class="div_7">
-                    <template >
-                        <div class="day" :class="day.cur?'cur':''" v-for="(day,id) in dayList" :key="id">
-                            <div class="titl" :class="day.checked?'on':''">
-                                <input type="checkbox" v-model="day.checked"></input>
+                    <template v-for="day in dayList">
+                        <div class="day" :class="day.cur?'cur':''">
+                            <div class="titl" :class="day.checked?'on':''" @click="sel(day)">
+                                <el-checkbox v-model="day.checked" @change="selectDay(day)" class="input"></el-checkbox>
                                 <span>{{day.title}}</span>
                             </div>
                             <div class="conten">
                                 <div class="product_box">
-                                        <div class="content-box"  v-for="(goods,index) in day.goodsList" :key="index">
+                                    <template v-for="goods in day.goodsList">
+                                        <div class="content-box">
                                             <div class="goods">{{goods.title}}</div>
                                             <div class="num">
                                                 <a class="decrease" @click="changeMoney(goods,-1)">-</a>
                                                 <input type="text" value="0" v-model="goods.quentity" min="0">
                                                 <a class="increase" @click="changeMoney(goods,1)">+</a>
                                             </div>
-                                            <div class="price">￥{{goods.price}}
+                                            <div class="price">{{goods.price | currency }}
                                                 <span>x</span>{{goods.quentity}}</div>
                                             <div class="hr" v-if="!goods.last"></div>
                                         </div>
+                                    </template>
                                 </div>
                                 <div class="add">
                                     <a @click="aboutClick">+</a>
@@ -42,7 +44,7 @@
                             </div>
                         </div>
                     </template>
-                     <edit :is-show="isShowDialog" @on-close="closeDialog('isShowDialog')" v-if="isShowDialog"></edit> 
+                    <edit :is-show="isShowDialog" @on-close="closeDialog('isShowDialog')" v-if="isShowDialog"></edit>
                 </div>
     
                 <div class="allPrice">
@@ -78,7 +80,7 @@ export default {
                     checked: false,
                     goodsList: [
                         {
-                             title: '鸡毛菜 (100g) ',
+                            title: '鸡毛菜 (100g)鸡毛菜 (100g)鸡毛菜 (100g)鸡毛菜 (100g)',
                             quentity: 1,
                             price: 16.80
                         },
@@ -195,7 +197,6 @@ export default {
         }
     },
     mounted() {
-       
         this.totals()
     },
     methods: {
@@ -224,16 +225,35 @@ export default {
                 for (var j = 0; j < ele.goodsList.length; j++) {
                     ele.totalPrice += ele.goodsList[j].price * ele.goodsList[j].quentity
                 }
-                _this.total1 += ele.totalPrice
+                if (ele.checked) {
+                    _this.total1 += ele.totalPrice
+                }
             })
         },
         selectDay(day) {
-
+            let _this = this
+            _this.total1 = 0
+            _this.checkAllFlag = true
+            _this.dayList.forEach(function (ele, idx) {
+                if (ele.checked) {
+                    _this.total1 += ele.totalPrice
+                } else {
+                    _this.checkAllFlag = false
+                }
+            })
+        },
+        sel(day) {
+            day.checked = !day.checked
+            this.selectDay(day)
         },
         checkAll() {
-            // this.checkAllFlag = !this.checkAllFlag
+            // this.checkAllFlag = this.checkAllFlag
             let _this = this
-            this.dayList.forEach(function (ele, idx) {
+            _this.total1 = 0
+            _this.dayList.forEach(function (ele, idx) {
+                if (_this.checkAllFlag) {
+                    _this.total1 += ele.totalPrice
+                }
                 if (typeof ele.checked == 'undefined') {
                     _this.$set(ele, "checked", _this.checkAllFlag)
                 } else {
@@ -244,18 +264,17 @@ export default {
     }
 }
 </script>
-
-<style  lang="scss">
- .product_box::-webkit-scrollbar {
+<style scoped lang="scss">
+ ::-webkit-scrollbar {
     width: 4px;
 }
 
-.product_box ::-webkit-scrollbar-track {
+ ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
 }
 
- .product_box::-webkit-scrollbar-thumb {
+ ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: rgb(139, 186, 142);
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
@@ -299,7 +318,6 @@ export default {
                 bottom: 10px;
                 vertical-align: middle;
                 a {
-                    text-align: center;
                     color: rgb(106, 169, 112);
                     display: inline-block;
                     width: 90px;
@@ -320,13 +338,15 @@ export default {
                         line-height: 90px;
                         position: relative;
                         font-size: 16px;
+                        cursor: pointer;
                         border-bottom: 1px solid #eee;
-                        input {
+                        .input {
                             display: inline-block;
                             width: 15px;
                             height: 15px;
                             position: absolute;
-                            top: 10px;
+                            top: -30px;
+                            ;
                             left: 10px;
                         }
                     }
@@ -346,6 +366,9 @@ export default {
                                 text-align: left;
                                 font-size: 14px;
                                 margin-bottom: 10px;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
                             }
                             .num {
                                 display: inline-block;
@@ -442,7 +465,8 @@ export default {
             a {
                 display: inline-block;
                 border: 2px solid rgb(108, 169, 110);
-                padding: 6px 100px;
+                padding: 10px 100px;
+
                 margin-right: 30px;
                 color: rgb(110, 169, 111);
                 font-size: 20px;
@@ -455,7 +479,7 @@ export default {
 }
 
 .product_box {
-    width: 150px;
+    width: 151px;
     height: 331px;
     overflow-y: auto;
     overflow-x: hidden;

@@ -231,6 +231,9 @@ export default {
                         text-decoration: none;
                     }
                     }
+            &:first-child{
+                padding-left: 0;
+            }
             }
         }
     }

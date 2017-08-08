@@ -118,7 +118,19 @@ export default {
       })
     },
     addOrder(){
-      console.log(this.selList)
+      
+      if(this.selList.length>0){
+          let ids = []
+          this.selList.forEach((res) => {
+              ids.push(res.goodsId)
+          })
+          this.$router.push({
+            path:'/addOrder',
+            query:{ ids:ids }
+          })
+       }else{
+         this.$message('请选择商品')
+       }
     }
   
   }

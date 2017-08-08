@@ -71,12 +71,13 @@ export default {
 .productlist_all {
   width: 100%;
   padding: 10px 0;
-  border-bottom: 1px solid #e3e3e3;
+  border-bottom: 1px solid #eee;
   background-color: #fafafa;
 }
 
 .all_left {
-  width: 90px;
+  width: 80px;
+  padding-left: 10px;
   float: left;
   font-size: 18px;
 }
@@ -89,9 +90,10 @@ export default {
 .all_right ul li {
   display: inline-block;
   padding: 0px 10px 0 45px;
-  margin: 8px 0;
-  line-height: 14px;
-  border-right: 1px solid #ccc;
+  margin: 12px 0;
+  height: 12px;
+  line-height: 12px;
+  border-right: 1px solid #ededed;
   width:75px;
   text-align: left;
 }
@@ -99,6 +101,8 @@ export default {
   border-right: none;
 }
 .all_right ul li a {
+  display: inline-block;
+  margin-top: -2px;
   font-size: 16px;
   line-height: 16px;
   color: #707070;
