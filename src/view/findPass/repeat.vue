@@ -103,8 +103,9 @@ input::-moz-placeholder{
  
 .callfind{
   position: absolute;
-  top: 5px;
-  left: -122px;
+  top: 9px;
+  font-size: 16px;
+  left: -100px;
   color:#666;
 }
 .findback_call{

@@ -1,7 +1,8 @@
 <template>
   <div class="content bgWhite">
+    <bread-rumb :breadname="breadname"></bread-rumb>
     <div class="container">
-      <cate-tem></cate-tem> 
+      <cate-tem @getName="getName"></cate-tem> 
       <pro-list @addFlew="addFlew"></pro-list>
     </div>
     <div class="flew"  ref="flew" v-show="flewMove"><img :src="flewPic"/></div>
@@ -12,22 +13,36 @@
  
 import cateTem from './cates'
 import proList from './pro'
+import breadRumb from '@/components/breadrumb'
 export default {
   data() {
     return {
       flewPic:'',
       flewMove:false,
-      timer:null
+      timer:null,
+      breadname:''
     }
   },
   components:{
-    cateTem,proList
+    cateTem,proList,breadRumb
   },
   mounted() {
-     
-   
+     if(this.$route.query.name){
+       this.breadname = this.$route.query.name
+     }
+  },
+  watch:{
+    '$route'(to,from){
+      if(to.query.name && to.query != from.query){
+        this.breadname = to.query.name
+      }
+       
+    }
   },
   methods: {
+    getName(name){
+      this.breadname = name
+    },
     addFlew(pic,event){
       this.flewMove = true
       let _this = this
@@ -89,35 +104,4 @@ export default {
   }
 }
 </script>
-
-<style >
-  .flew{
-     position: fixed;
-     top: 0px;
-     right:0px;
-     width:25px;
-     height: 25px;
-     background-color: rgba(0,0,0,0.1);
-     color: white;
-     display: inline-block;
-     padding: 5px;
-     line-height: 0;
-     border-radius: 50%;
-     opacity: 0;
- }
- .flew img{
-    width:90%;
-    height: 90%;
-    animation: rot 0.3s infinite;
-    -webkit-animation: rot 0.3s infinite;
-  }
- @keyframes rot{
-  from{transform: rotate(0deg);}
-  to{transform: rotate(540deg);}
- }
- @-webkit-keyframes  rot{
-  from{-webkit-transform: rotate(0deg);}
-  to{-webkit-transform: rotate(360deg);}
- }
-  
-</style>
+ 

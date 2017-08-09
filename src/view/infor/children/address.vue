@@ -6,15 +6,17 @@
        
       </el-button>
     </div>
-    <div class="detail">
+    <div class="detail" v-if="addrList.length>0">
       <p v-for="(item,id) in addrList" :key="id">
         <span class="name">{{item.name}}</span>
         <span class="addr">{{'上海市'+item.county}}{{item.addrDetail}}</span>
         <span class="tel">{{item.phone | phone}}</span>
         <a href="javascript:" title="" @click="handEdit(item)" class="arrow del"> 删除</a>
         <a href="javascript:" title="" @click="handEdit(item)" class="arrow edit"> 编辑</a>
-        
       </p>
+    </div>
+    <div class="null" v-if="addrList.length<1">
+      您还没有添加地址，请尽快添加！
     </div>
     <!--新增/编辑地址界面-->
     <el-dialog :title="title" v-model="addFormVisible" :close-on-click-modal="false">
@@ -65,7 +67,7 @@ export default {
       }
     },
     async getList() {
-      this.addrList = await getAddrList()
+      // this.addrList = await getAddrList()
     },
     handAdd() {
       this.title = "新增收货地址"

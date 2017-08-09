@@ -147,3 +147,8 @@
     background: url(../image/del.png) no-repeat 0px 15px;
     background-size: 20px 20px;
 }
+/*购物车为空  */
+.nullCar{
+    background:url(../image/shopNull.png) no-repeat center;
+    background-size: 100px 100px;
+}

@@ -5,7 +5,7 @@
         <div class="all_right">
           <ul>
             <li v-for="(item,index) in cates" :key="index">
-              <a @click="searchList(item.classId)">{{item.classTitle}}</a>
+              <a @click="searchList(item.classId,item.classTitle)">{{item.classTitle}}</a>
             </li>
           </ul>
         </div>
@@ -53,7 +53,8 @@ export default {
     
   },
   methods: {
-    searchList(val){
+    searchList(val ,name){
+      this.$emit('getName',name)
       this.$router.push({
         path:'/list',
         query:{

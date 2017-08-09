@@ -1,5 +1,6 @@
 <template>
 	<div class="content">
+		<bread-rumb :breadname ='breadname'></bread-rumb>
 		<div class="container detail cl" v-if='content != null'>
 			<div class="left_box" ref="box">
 				<big-img :imgs="imgs"></big-img>
@@ -46,6 +47,7 @@
 </template>
 
 <script>
+import breadRumb from '@/components/breadrumb'
 import { goodsDetail,addCar } from '@/service'
 import {getStore} from '@/config/storage'
 import bigImg from './bigImg'
@@ -57,11 +59,12 @@ export default {
 			flewPic:'',
 			num: 1,
 			content: null,
-			imgs: []
+			imgs: [],
+			breadname:''
 		}
 	},
 	components: {
-		bigImg
+		bigImg,breadRumb
 	},
 	async mounted() {
 
@@ -78,6 +81,7 @@ export default {
 		} else {
 			this.imgs = this.content.goodsPic
 		}
+		this.breadname = this.content.goodsTitle
 	},
 	methods: {
 		changNum() {

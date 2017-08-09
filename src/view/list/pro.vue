@@ -1,6 +1,6 @@
 <template>
    <div class="content">
-       <div class="productlist_list cl">
+       <div class="productlist_list cl" v-if="isNull">
          <div class="list_one" v-for="(item,id) in goods.list" :key="id">
                 <div class="list_one_img">
                    <router-link :to="{path:'detail',query:{id:`${item.goodsId}`}}"> <img :src="item.goodsPic[0].path" alt=""/></router-link>
@@ -16,10 +16,11 @@
                 </div>
             </div>
         </div>
-        <div class="pagination_box">
+        <div class="pagination_box" v-if="isNull">
              <el-pagination  small layout="total,prev,pager,next" :current-page.sync="currentPage" :page-size='pageSize' :total="total" @current-change="handleCurrentChange">
             </el-pagination>
         </div>
+        <div class="null" v-if="!isNull">相关商品暂时为空，<router-link to="/index">您可以去看看其他...</router-link></div>
    </div>
 </template>
 
@@ -37,6 +38,7 @@ export default {
       total:0,
       goods: [],
       page:1,
+      isNull:false
       
     }
   },
@@ -55,6 +57,7 @@ export default {
         }
         this.goods = await goodsList(para)
         this.total = this.goods.total
+        this.isNull = this.goods.list.length>1?true:false
     },
     handleCurrentChange(val){
        this.page=val

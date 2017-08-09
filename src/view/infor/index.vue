@@ -44,6 +44,7 @@
 <script>
 import userPhoto from '@/assets/face.jpg'
 import sideBar from '@/components/aside'
+import { getStore } from '@/config/storage'
 
 import { getSummary } from '@/service'
 export default {
@@ -63,6 +64,7 @@ export default {
         sideBar
     },
     async mounted() {
+        if(getStore('username') != null){
         this.sum = await getSummary()
         if (this.sum.photo == null) {
             this.sum.photo = userPhoto
@@ -70,6 +72,7 @@ export default {
         // console.log(this.sum)
         if (this.sum.nickname == '') {
             this.sum.nickname = '用户'
+        }
         }
 
     },

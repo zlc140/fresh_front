@@ -118,7 +118,6 @@ export default {
              
             return new Promise((resolve,reject) => {
                 setTimeout(() => {
-                        console.log(_carList)
                         resolve([200,{code:200,msg:'成功',_carList}])
                     
             },1000)

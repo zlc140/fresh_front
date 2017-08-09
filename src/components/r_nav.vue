@@ -19,8 +19,10 @@
             </li>
         </ul>
         <div class="carList">
-            <shop-car v-if="showCar"></shop-car>
-            <router-link to="/login" v-if="!showCar">您还没有登录，快去登录吧！</router-link>
+            <shop-car v-if="showCar" @closeBox="closeBox"></shop-car>
+             <div class="nullCar" v-if="!showCar">
+                您还没有登录，<router-link to="/login">快去登录吧！</router-link>
+            </div>
         </div>
     </div>
 </template>
@@ -57,6 +59,9 @@ export default {
         }
     },
     methods: {
+        closeBox(){
+                this.carBoxShow = false
+        },
         goTop() {
             if (document.documentElement.scrollTop) {
                 document.documentElement.scrollTop = 0

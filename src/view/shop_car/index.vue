@@ -1,9 +1,9 @@
 <template>
-  <div class="content">
+   
     <div class="container cart_box">
-          <p class="my">我的购物车<span class="allSeltext" >全选</span></p>
+          <p class="my">我的购物车<span class="allSeltext"  v-if="!isNull">全选</span></p>
         <!--列表-->
-        <div class="cart_list bigCar">
+        <div class="cart_list bigCar" v-if="!isNull">
             <el-table :data="lists" ref="carList"   v-loading="listLoading"  @selection-change="selsChange" style="width: 100%;">
             <el-table-column type="selection" label="全选" width="55">
             </el-table-column>
@@ -40,8 +40,10 @@
             <el-button class="addOrder" @click="addOrder">加入预订单</el-button>
         </el-col>
         </div>
+         <div class="nullCar" v-if="isNull">你的购物车为空，<router-link to="/index">赶快去战斗吧~</router-link></div>
     </div>
-</div>
+   
+ 
 </template>
 
 <script>
@@ -53,30 +55,34 @@ export default {
       total:'0.00',
       listLoading:false,
       checked:false,
-      selList:[]
+      selList:[],
+      isNull: false
     }
   },
     mounted(){
-      console.log('test',getStore('shopCarList'))
-      this.getList()
       this.caculate()
   },
   computed:{
       lists(){
           return this.getList()
       }
+       
   },
+  
   methods:{
      getList(){
         this.listLoading = true
         // this.lists =await carList()
         if(this.$store.state.shopCar.lists.length == 0 && getStore('username') != null){
           this.$store.dispatch('getShopCar').then((res) => {
+            console.log(this.$store.state.shopCar.lists)
               this.listLoading = false
+              this.isNull = this.$store.state.shopCar.lists.length > 1?false:true
               return this.$store.state.shopCar.lists
           })
         }else{
           this.listLoading = false
+          this.isNull = this.$store.state.shopCar.lists.length > 1?false:true
           return this.$store.state.shopCar.lists
         }
         

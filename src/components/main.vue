@@ -16,6 +16,7 @@
 import footBar from './footer'
 import headBar from './head'
 import rightNav from './r_nav'
+
 export default {
     data(){
         return{
@@ -23,7 +24,7 @@ export default {
         }
     },
     components:{
-        footBar,headBar,rightNav
+        footBar,headBar,rightNav 
     },
     created(){
        this.checkRoute(this.$route)
@@ -49,9 +50,6 @@ export default {
 <style lang="scss">
 @import '../assets/chang.scss';
   .main{
-   /* display: flex;
-  -webkit-display:flex;
-  -ms-display:flex; */
   width:100%;
   min-height:calc(100% - 564px); 
 }
@@ -71,6 +69,16 @@ export default {
 .el-checkbox__input.is-focus .el-checkbox__inner{
         border-color: rgb(108,169,110);
 }
+.el-message-box .el-button:focus, .el-message-box .el-button:hover{
+   color: $baseColor ;
+  border-color: $baseColor ;
+}
+.el-message-box .el-button--primary.el-button{
+  background-color: $baseColor ;
+  border-color: $baseColor ;
+  color:white ;
+}
+
 .section{
   flex-grow: 1;  
   -webkit-flex-grow: 1;
@@ -236,5 +244,65 @@ export default {
     color: #bababa;
     margin-top: 130px;
 }
-
+// 列表为空时一个有图一个没图
+.nullCar{
+    width: 100%;
+    height: 400px;
+    line-height: 550px;
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 30px;
+    color: #888;
+     a{
+       color:$baseColor;
+       &:hover{
+         color:red;
+       }
+     }
+    
+  }
+.null{
+   width: 100%;
+    height: 400px;
+    line-height: 550px;
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 30px;
+    color: #888;
+     a{
+       color:$baseColor;
+       &:hover{
+         color:red;
+       }
+     }
+}
+// 加入购物车的动画
+  .flew{
+     position: fixed;
+     top: 0px;
+     right:0px;
+     width:25px;
+     height: 25px;
+     background-color: rgba(0,0,0,0.1);
+     color: white;
+     display: inline-block;
+     padding: 5px;
+     line-height: 0;
+     border-radius: 50%;
+     opacity: 0;
+ }
+ .flew img{
+    width:90%;
+    height: 90%;
+    animation: rot 0.3s infinite;
+    -webkit-animation: rot 0.3s infinite;
+  }
+ @keyframes rot{
+  from{transform: rotate(0deg);}
+  to{transform: rotate(540deg);}
+ }
+ @-webkit-keyframes  rot{
+  from{-webkit-transform: rotate(0deg);}
+  to{-webkit-transform: rotate(360deg);}
+ }
 </style>

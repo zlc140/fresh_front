@@ -6,7 +6,7 @@
       <!-- <a class="">未支付订单</a>
       <a>已结算订单</a> -->
       </div>
-  	<div class="table1">
+  	<div class="table1" v-if="orderList.length>0">
 		<el-table :data="orderList" style="width: 90%" border>
 			<el-table-column prop="title" label="商品名称" min-width="180">
 			</el-table-column>
@@ -29,6 +29,9 @@
 			</el-table-column>
 		</el-table>
   	</div>
+	<div class="null" v-if="orderList.length<1">
+      您还没有添加地址，请尽快添加！
+    </div>
   </div>
 
 </template>
@@ -45,13 +48,13 @@ export default {
 						date:new Date(),
 						detail:'详情'
 					},
-						{
-						title:'白菜100g超级新鲜的白菜白菜100g超级新鲜的白菜',
-						price:'120.0',
-						payType:1,
-						date:new Date(),
-						detail:'详情'
-					}
+					// 	{
+					// 	title:'白菜100g超级新鲜的白菜白菜100g超级新鲜的白菜',
+					// 	price:'120.0',
+					// 	payType:1,
+					// 	date:new Date(),
+					// 	detail:'详情'
+					// }
 				]
 			}
 		}

@@ -8,8 +8,9 @@
 						<li v-if="userName==''"><router-link to="/register">注册</router-link></li>
                         <li v-if="userName!=''" >欢迎<router-link to="/user" >{{userName}}</router-link>登录哈福生鲜馆</li>
                         <li v-if="userName!=''" @click="logout"><a>退出</a></li>
-						<li><a href="#">我的配送计划</a></li>
-						<li><router-link to="/shopCar">购物车 {{shopNum }}</router-link></li>
+						<li  v-if="userName!=''"><router-link to="/editOrder" >我的配送计划</router-link></li>
+                        <li><router-link to="/user" >个人中心</router-link></li>
+						<li><router-link to="/shopCar">购物车{{shopNum}}</router-link></li>
 						<li><a href="#">客服电话：021-623453</a></li>
 					</ul>
 				</div>
@@ -76,6 +77,7 @@ export default {
             const toPath = to.path
             const fromPath = from.path
             if(to.path != from.path){
+                this.search = ''
                 this.cateShow = false
             }
         }

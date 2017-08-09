@@ -4,7 +4,7 @@
         <div class="findback_detail">
             <el-form :model="user" :rules="rules" ref="ruleForm" label-position="center" v-loading="loginLoading" class="demo-ruleForm login-container" style="text-align: center;">
                 <el-form-item prop="phone">
-                    <el-input placeholder="请输入手机号码" v-model="user.username" @keyup.enter.native="check">
+                    <el-input placeholder="请输入手机号码" v-model="user.phone" @keyup.enter.native="check">
                         <template slot="prepend">
                             <span class="call">
                                 <strong>*</strong>手机号:</span>
@@ -12,7 +12,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="checkWord">
-                    <el-input placeholder=875643 type="password" v-model="user.password" @keyup.enter.native="check" class="findback_call">
+                    <el-input placeholder=875643 type="password" v-model="user.checkWord" @keyup.enter.native="check" class="findback_call">
                         <template slot="prepend">
                             <span class="callfind">
                                 <strong>*</strong>请输入验证码:</span>
@@ -20,9 +20,6 @@
                     </el-input>
                     <div class="validation fr">
                         <el-button v-on:click="times">{{find}}</el-button>
-                    </div>
-                    <div class="validation call_fr">
-    
                     </div>
                 </el-form-item>
                 <el-col class="denglu">
@@ -49,10 +46,10 @@ export default {
             },
             rules: {
                 phone: [
-                    { required: true, message: '账号不能为空', trigger: 'blur,change' },
+                    { required: true, message: '账号不能为空', trigger: 'blur change' },
                 ],
                 checkWord: [
-                    { required: true, message: '验证码不能为空', trigger: 'blur,change' }
+                    { required: true, message: '验证码不能为空', trigger: 'blur change' }
                 ]
 
             },
@@ -98,7 +95,7 @@ export default {
                 self.find--;
                 if (self.find <= 0) {
                     clearInterval(timer)
-                    self.find = "发送验证码";
+                    self.find = "重新发送";
                 }
             }, 1000)
         }
@@ -109,10 +106,15 @@ export default {
 .findback {
 
     .findback_call {
-        padding-left: 217px;
+        padding-left: 230px;
+    }
+    .call{
+        color: #666;font-size: 16px;
     }
     .callfind {
         padding-left: 62px;
+        color: #666;
+        font-size: 16px;
     }
 
     input::-moz-placeholder {
@@ -139,14 +141,16 @@ export default {
         line-height: 1;
         padding-top: 4px;
         position: absolute;
-        top: 106%;
+        top: 44px;
         right: 215px;
     }
     .el-button {
         background: #fff;
         border: 1px solid #c4c4c4;
         color: #6ca96e;
-        padding: 10px 15px;
+        padding: 9px 15px;
+        width:100px;
+        text-align: center;
     }
     .fr .el-button[data-v-70332348] {
         display: inline-block;

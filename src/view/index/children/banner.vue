@@ -18,7 +18,7 @@
                 </li>
             </ul>
             <div class="btn-box">
-                <span v-for="(item, idx) in bannerList" :key="idx" :class=" idx === curIndex?'on':''" @click="setState(idx)"></span>
+                <span v-for="(item, idx) in bannerList" :key="idx" :class=" idx === curIndex?'on':''" @click="setState(idx)">{{idx+1}}</span>
             </div>
         </div>
       </div>
@@ -125,8 +125,9 @@ export default {
 }
 
 .el-carousel__button {
-    width: 50px;
-    height: 3px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
 }
 
 .carousel {
@@ -164,19 +165,24 @@ export default {
 
 .carousel .btn-box {
     position: absolute;
-    left: 50%;
+    left: 0%;
     bottom: 0;
     width: 100%;
-    margin-left: -200px;
+    margin-left: 0px;
+    text-align: center;
 }
 
 .carousel .btn-box span {
     display: inline-block;
-    width: 60px;
-    height: 3px;
-    border-radius: 10%;
+    width: 18px;
+    height: 18px;
+    color:  white;
+    font-size: 12px;
+    line-height: 19px;
+    text-align: center;
+    border-radius: 50%;
     background-color: #ccc;
-    margin-left: 20px;
+    margin-right: 20px;
     cursor: pointer;
 }
 

@@ -50,11 +50,9 @@
  .findback_detail .findback_icon{
      width: 25px;
      height: 25px;
-     display: block;
-     position: absolute;
-     top: 67px;
-     left: 395px;
-     border-radius: 13px;
+     display: inline-block;
+     margin: 0 10px;
+     border-radius: 50%;
      background-color: #6ca96e;
  }
 .findback_detail .findback_icon i{
@@ -63,7 +61,7 @@
      color: #fff;
 }
 .findback_a{
-    font-size: 14px;
+    font-size: 16px;
 }
 .findback_a a{
     color: #6ca96e;

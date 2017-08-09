@@ -84,10 +84,22 @@
                         </div> 
                          <!--证件上传-->
                         <div id="register_member_b_r">
-                            <div id="register_upload_t"><span>机构证件上传</span><a> </a></div>
-                            <div id="register_upload_b"> 
+                             <div id="register_upload_t">
+                                  <el-upload class="avatar-uploader" ref="upload" 
+                                        :action="uploadImg" 
+                                        :show-file-list="false" 
+                                        :on-remove="handleRemove" 
+                                        :on-success="handleSuccess" 
+                                        :on-error="handleError" 
+                                         >
+                                       <span>机构证件上传</span> <a></a>
+                                    </el-upload>
+                                 </div> 
+                            <div id="register_upload_b">
+                                 <img :src="imageUrl" v-if="imageUrl"/>  
                             </div>
                         </div>
+                      
              </el-form>
           </div>
           <!--底部-->
@@ -132,7 +144,11 @@ export default {
              }
          }
        return {
+           uploadImg:'/upload',
+           imageUrl:'',
+           dialogVisible:false,
           user: {
+                
                 username: '',//账户
                 nickname:'',//真实姓名
                 password: '',//密码
@@ -181,6 +197,22 @@ export default {
                     return false
                 }
             })
+       },
+       handlePictureCardPreview(file){
+            console.log(file)
+            // this.imageUrl = val.url
+            this.dialogVisible = true
+       },
+       handleRemove(){
+
+       },
+       handleSuccess(val){
+           console.log(val)
+           this.imageUrl = val[0]
+
+       },
+       handleError(){
+
        }
      }
 }
@@ -355,14 +387,16 @@ export default {
 }
 #register_upload_b{
     width: 480px;
-    height: 300px;
+    max-height: 400px;
+    min-height: 300px;
+    overflow: hidden;
     margin-top: 40px;
-    background-color: #333;
+    background-color: #F8F8F8;
    
 }
 #register_upload_b img{
       width:100%;
-      height:100%;
+      height:auto;
       border-radius:4px;
     }
 /*底部*/

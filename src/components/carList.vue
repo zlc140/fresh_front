@@ -2,10 +2,10 @@
    
     <div class="cart_box">
           <p class="top">
-            <el-checkbox @change="toggleSel(lists)"  v-model="checked">{{checked?'取消':'全选'}}</el-checkbox>
+            <el-checkbox @change="toggleSel(lists)" v-if="!isNull"  v-model="checked">{{checked?'取消':'全选'}}</el-checkbox>
                <router-link to="/shopCar">全屏查看</router-link></p>
         <!--列表-->
-        <div class="cart_list" >
+        <div class="cart_list"  v-if="!isNull">
             <el-table :data="lists" ref="carList"  :show-header="false"  v-loading="listLoading"  @selection-change="selsChange" style="width: 100%;">
                 <el-table-column type="selection" label="全选" width="30">
                 </el-table-column>
@@ -22,8 +22,10 @@
                 </template>
             </el-table-column>
         </el-table>
-        
         </div>
+        <div class="nullCar" v-if="isNull">
+           你的购物车还是空的，<a @click="closeCar">赶快去战斗吧~</a>
+         </div>
         <div class="car_footer">
           <p>已选<span>{{num}}</span>件<span class="price fr">￥{{total}}</span></p>
           <el-button @click="addOrder">加入预订单</el-button>
@@ -42,7 +44,8 @@ export default {
       num:0,
       listLoading:false,
       checked:false,
-      selList:[]
+      selList:[],
+      isNull:false
     }
   },
   computed:{
@@ -58,16 +61,21 @@ export default {
       }
   },
   methods:{
+    closeCar(){
+        this.$emit('closeBox')
+    },
      getList(){
         this.listLoading = true
         // this.lists =await carList()
         if(this.$store.state.shopCar.length == 0 ){
           this.$store.dispatch('getShopCar').then((res) => {
               this.listLoading = false
+              this.isNull = this.$store.state.shopCar.lists.length > 1?false:true
               return this.$store.state.shopCar.lists
           })
         }else{
               this.listLoading = false
+              this.isNull = this.$store.state.shopCar.lists.length > 1?false:true
               return this.$store.state.shopCar.lists
         }
         

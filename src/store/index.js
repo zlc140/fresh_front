@@ -37,6 +37,7 @@ const mutations = {
         shopCar.forEach((res) => {
             state.shopCar.lists.push(res)
         })
+        state.shopCar.length = state.shopCar.lists.length
 
     },
     DEL_CAR (state, prop) {
