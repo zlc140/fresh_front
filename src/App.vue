@@ -14,9 +14,9 @@ export default {
 <style>
  @import "./assets/reset.css";
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  /* font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale; */
   width:100%;
   height: 100%;
 }

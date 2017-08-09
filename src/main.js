@@ -17,7 +17,7 @@ Vue.config.productionTip = false
 Vue.use(elementUI)
 
 import Mock from './mock'
-// Mock.bootstrap()
+Mock.bootstrap()
 
 // 价格（保留两位小数）
 Vue.filter('currency',(value) => {
