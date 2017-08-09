@@ -11,7 +11,7 @@ import 'element-ui/lib/theme-default/index.css'
 import 'element-ui/lib/index.js'
 
 import '../static/css/bgPic.css'
-
+// 提交
 Vue.config.productionTip = false
 
 Vue.use(elementUI)
