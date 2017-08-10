@@ -32,7 +32,7 @@
 				</div>
 				<div class="cart">
 					<a class="goCar" @click="addCars(content.goodsId,$event)" :class="addBtn?'diss':''">加入购物车</a>
-					<a class="goOrder">加入预订单</a>
+					<a class="goOrder" @click="addOrder(content.goodsId)"> 加入预订单</a>
 				</div>
 			</div>
 		</div>
@@ -89,6 +89,15 @@ export default {
 			if (!reg.test(this.num)) {
 				this.num = 1
 			}
+		},
+		addOrder(val){
+				this.$router.push({
+					path:'/addOrder',
+					query:{
+							id:val,
+							num:this.num
+						}
+				})
 		},
 		addCars(val,event) {
 			console.log(this.num)

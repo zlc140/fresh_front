@@ -151,6 +151,7 @@ export default {
   font-size: 18px;
   color: #888;
   padding: 20px 5px;
+  font-weight: normal;
 }
 
 .addr_box {
@@ -160,6 +161,7 @@ export default {
   &>p {
     font-size: 16px;
     padding-right: 85px;
+    padding-left: 25px;
     .el-button {
       color: #666;
       .arrow {

@@ -12,7 +12,7 @@
                 <!--加入购物车-->
                 <div class="list_add">
                     <div class="list_add_cart" @click="addtoCar(item.goodsId,item.goodsPic[0].path,$event)">加入购物车</div>
-                    <div class="list_add_order">加入预订单</div>
+                    <div class="list_add_order" @click="addOrder(item.goodsId)">加入预订单</div>
                 </div>
             </div>
         </div>
@@ -76,6 +76,15 @@ export default {
         }
         _this.$store.dispatch('addCar',prop)
          
+    },
+    addOrder(val){
+        this.$router.push({
+            path:'/addOrder',
+            query:{
+                id:val,
+                num:1
+            }
+        })
     }
   }
 }

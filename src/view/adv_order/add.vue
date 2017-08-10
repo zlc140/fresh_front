@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <div class="cart_box order" :class="moreShow?'more':''">
-     <el-table :data="lists" ref="carList"   v-loading="listLoading"  style="width: 100%;" v-if="lists.length>0">
+    <div class="cart_box order" :class="moreShow?'more':''" v-if="shopList.length>0">
+     <el-table :data="shopList" ref="carList"   v-loading="listLoading"  style="width: 100%;" >
              <el-table-column  prop="goodsPic" label="" width="90"  label="商品" >
                <template scope="scope">
                    <a class="imgBox"><img :src="scope.row.goodsPic" /></a>
@@ -27,8 +27,8 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="null" v-if="lists.length<1">您还没有选择商品</div>
     </div>
+     <div class="null" v-if="shopList.length<1" style="height:100px;line-height:100px;">您还没有选择商品<router-link to="list">快去挑选吧~</router-link></div> 
     <div class="more_box" :class="moreShow?'addB':''" v-if="lists.length>1">
       <el-button type="text" @click="showMore">{{moreShow?'收起 ︽':'查看更多︾'}}</el-button>
       </div>
@@ -53,6 +53,8 @@
 import fullCalendar from '@/components/calendar'
 import {carList} from '@/service'
 import { getStore } from '@/config/storage'
+
+import { goodsDetail } from '@/service'
 let demoEvents = [
     {
       title    : 'Sunny 725-727',
@@ -82,7 +84,8 @@ export default {
         fcEvents:demoEvents,
         listLoading:false,
         checked:false,
-        selDay:[]
+        selDay:[],
+        shopList:[]
       }
     },
     components:{
@@ -91,22 +94,47 @@ export default {
     computed:{
       lists(){
         let list = []
-         if(this.getList()){
+        if( this.$route.query.ids && this.getList()){
+            
            this.getList().forEach((item) => {
             if(this.$route.query.ids && this.$route.query.ids.indexOf(item.goodsId) > -1){
                 list.push(item)
+                this.shopList = list
               }
             })
+            
+         }else if(this.$route.query.id){
+              this.getOne()
          }
         
-        return list
+         return list
       }
     },
     mounted(){
-       
-          
+        
     },
     methods:{
+      async getOne(){
+        console.log(0)
+        let _this = this
+          let para = {
+            id:this.$route.query.id
+          }
+          let content = await goodsDetail(para)
+          let num = this.$route.query.num
+          let good ={
+                goodsId:content.goodsId,
+                goodsTitle:content.goodsTitle,
+                price:content.price,
+                goodsPic:content.goodsPic[2].path,
+                num:num?num:1
+            }
+            _this.shopList = []
+            _this.shopList.push(good)
+           console.log('text',_this.shopList)
+            // return good
+           
+      },
       getList(){
         this.listLoading = true
         // this.lists =await carList()
@@ -139,6 +167,7 @@ export default {
           // console.log('moreCLick', day, events, jsEvent)
         },
         addOrder(){
+          this.$router.push('/editOrder')
           console.log(this.selDay)
         }
     }
