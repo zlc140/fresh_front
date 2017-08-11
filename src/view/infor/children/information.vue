@@ -81,6 +81,7 @@ data() {
         if(re.test(value)){
         	return callback(new Error('含有非法字符'));
         }
+       
       };
       var checkOldPass = (rule, value, callback) => {
         if (!value) {
@@ -158,8 +159,8 @@ data() {
         console.log('submit!');
       },
       getList(val){
-		this.select = val
-		},
+        this.select = val
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
