@@ -67,7 +67,7 @@ export default {
       }
     },
     async getList() {
-      // this.addrList = await getAddrList()
+      this.addrList = await getAddrList()
     },
     handAdd() {
       this.title = "新增收货地址"
@@ -124,7 +124,7 @@ export default {
     max-width: 650px
   }
   .detail_addr input {
-    width: 450px;
+    // width: 450px;
   }
 
   .detail p {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="info_change">
      <div class="top_select cl">
          <a @click="getList('one')" :class="select=='one'?'on':''">个人信息</a>
          <a @click="getList('two')" :class="select=='two'?'on':''">修改密码</a>
@@ -187,7 +187,8 @@ data() {
   }
 </script>
 
-<style>
+<style lang= 'scss'>
+.info_change{
   .form{
   	width: 100%;
   	height: 100%;
@@ -231,4 +232,5 @@ data() {
   	color: #fff;
   	border: 1px solid rgb(94,147,96);
   }
+   }
 </style>

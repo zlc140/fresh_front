@@ -119,7 +119,7 @@ export default {
 <style lang="scss">
 @import '../../assets/chang.scss'; 
 .dailog_addr .el-input__inner{
-            width:400px;
+            // width:400px;
 }
   .city{
   display: inline-block;
@@ -132,7 +132,7 @@ export default {
   margin-top: 1px;
 }
 .detail_addr .el-input__inner{
-    width:500px;
+    // width:500px;
 }
 .sel_addr .el-input__inner{
         width:250px;
