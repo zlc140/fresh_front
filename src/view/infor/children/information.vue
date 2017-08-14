@@ -5,7 +5,7 @@
          <a @click="getList('two')" :class="select=='two'?'on':''">修改密码</a>
       </div>
 	  <div class="form" v-show="select=='one'">
-	  	<el-form ref="form" :model="formData" :rules="rules" label-width="80px">
+	  	<el-form ref="ruleForm" :model="formData" :rules="rules" label-width="80px">
 		  <el-form-item label="姓名" prop="name">
 		    <el-input v-model="formData.name" placeholder="请输入你的姓名"></el-input>
 		  </el-form-item>
@@ -36,7 +36,7 @@
 		  </el-form-item>
 		  
 		  <el-form-item>
-		    <el-button type="primary" @click="submitForm('ruleForm2')">确认修改</el-button>
+		    <el-button type="primary" @click="onSubmit">确认修改</el-button>
 		  </el-form-item>
 		</el-form>
 	  </div>
@@ -54,6 +54,7 @@ data() {
         if(!re.test(value)){
           return callback(new Error('请输入合法的手机号码'));
         }
+        return callback()
       };
 	var validateEmail = (rule, value, callback) => {
         if (!value) {
@@ -63,6 +64,7 @@ data() {
         if(!re.test(value)){
           return callback(new Error('邮箱不符合规则,请输入合法的邮箱'));
         }
+        return callback()
       };
 	var validateAgency = (rule, value, callback) => {
         if (!value) {
@@ -72,6 +74,7 @@ data() {
         if(re.test(value)){
         	return callback(new Error('含有非法字符'));
         }
+        return callback()
       };
 	 var validateName = (rule, value, callback) => {
         if (!value) {
@@ -81,12 +84,13 @@ data() {
         if(re.test(value)){
         	return callback(new Error('含有非法字符'));
         }
-       
+        return callback()
       };
       var checkOldPass = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('旧密码不能为空'));
         }
+        return callback()
       };
       var validatePass = (rule, value, callback) => {
 
@@ -102,7 +106,7 @@ data() {
         	}
           	callback();
         }
-        
+        return callback()
       };
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
@@ -160,6 +164,12 @@ data() {
       },
       getList(val){
         this.select = val
+          if(this.select=='one'){
+            this.$refs.ruleForm.resetFields();
+          }
+          if(this.select=='two'){
+            this.$refs.ruleForm2.resetFields();
+          }
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -171,7 +181,9 @@ data() {
           }
         });
       }
-    }
+    
+	}
+
   }
 </script>
 
