@@ -43,11 +43,11 @@ export default {
     getName(name){
       this.breadname = name
     },
-    addFlew(pic,event){
+    addFlew(event){
       this.flewMove = true
       let _this = this
       clearInterval(_this.timer)
-      this.flewPic = pic
+      // this.flewPic = pic
       let Width = document.body.clientWidth
       let X = parseInt(Width-event.clientX)
       let Y = parseInt(event.clientY)

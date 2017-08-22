@@ -42,7 +42,7 @@
 		<div v-if='content == null' class="nothing">
 			该商品详情不存在
 		</div>
-			<div class="flew"  ref="flew" v-show="flewMove"><img :src="flewPic"/></div>
+			<div class="flew"  ref="flew" v-show="flewMove"><img /></div>
 	</div>
 </template>
 
@@ -69,17 +69,16 @@ export default {
 	async mounted() {
 
 		let para = {
-			id: this.$route.query.id
+			goodsId: this.$route.query.id
 		}
 
 		this.content = await goodsDetail(para)
-
 		if (!this.content) {
 			this.content = null
 			this.imgs = []
 			//   this.$alert('详情出错')
 		} else {
-			this.imgs = this.content.goodsPic
+			this.imgs = []
 		}
 		this.breadname = this.content.goodsTitle
 	},
@@ -100,7 +99,7 @@ export default {
 				})
 		},
 		addCars(val,event) {
-			console.log(this.num)
+			 
 			if( getStore('username') == null){
 				 this.$message('请先登录')
 				  this.$router.push({
@@ -109,27 +108,23 @@ export default {
 				  })
 				  return false
 			}
+			let prop;
 			if (!this.addBtn ) {
 					let _this = this
-					_this.addFlew(_this.imgs[0].path,event)
-					let prop = {
-						id:val,
-						num:this.num
+					_this.addFlew('',event)
+					prop = {
+						goodsId :val,
+						count :this.num,	
+						memberId:'M20170814170704005'
+					}
 			}
 			addCar(prop).then((res) => {
-				console.log(res)
-				_this.$store.dispatch('addCar',res).then((res) => {
-						this.$notify({
-							title: '',
-							message: '您已成功添加购物车',
-							type: 'success',
-							duration: 1000
-							});
-						this.addBtn = true
-				})
-				
+				if(res) {
+					
+					_this.$store.dispatch('getShopCar')
+				}
 			})
-			}
+			
 		},
 		add() {
 			this.num++

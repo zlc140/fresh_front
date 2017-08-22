@@ -16,9 +16,9 @@
              </el-table-column>
             <el-table-column  prop="goodsTitle" label="" width="190" >
                 <template scope="scope">
-                    <router-link :to="{path:'/detail',query:{id:scope.row.id}}" class="pro_title" >{{scope.row.goodsTitle}}</router-link>
-                    <span class="price fl">{{scope.row.price.GOODS_COST_PRICE | currency}}</span>
-                    <el-input-number size="small" v-model="scope.row.num" @change="handleChange(scope.row)" :min="1" :max="10" class="fr mgR10"></el-input-number>
+                    <router-link :to="{path:'/detail',query:{id:scope.row.goodsVoList[0].goods.goodsId}}" class="pro_title" >{{scope.row.goodsVoList[0].goods.goodsTitle}}</router-link>
+                    <span class="price fl">{{scope.row.goodsVoList[0].goods.price.GOODS_MARKET_PRICE | currency}}</span>
+                    <el-input-number size="small" v-model="scope.row.goodsVoList[0].number" @change="handleChange(scope.row)" :min="1" class="fr mgR10"></el-input-number>
                 </template>
             </el-table-column>
         </el-table>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {carList} from '@/service'
 import { getStore } from '@/config/storage'
 export default {
@@ -88,9 +89,9 @@ export default {
       if(this.selList.length>0){
         this.selList.forEach((item) =>{
           _this.total = parseFloat(_this.total)
-          _this.total += item.price.GOODS_COST_PRICE*item.num
+          _this.total += item.goodsVoList[0].goods.price.GOODS_MARKET_PRICE*item.goodsVoList[0].number
           _this.total =  _this.total.toFixed(2)
-          _this.num +=  item.num
+          _this.num +=  item.goodsVoList[0].number
         })
       }
        
@@ -120,17 +121,31 @@ export default {
       }
     },
     // 数量改变
-    handleChange(val){
-          this.$nextTick(function(){
-          this.caculate()
-      })
+    handleChange(item){
+         let prop = {
+            cartId :item.cartId,
+            goodsId :item.goodsVoList[0].goods.goodsId,
+            count:item.goodsVoList[0].number,
+          }
+          let _this = this
+              axios({
+                methods:'post',
+                url:'/cart/updateCart',
+                params:prop
+              }).then((res) => {
+                  _this.$nextTick(function(){
+                    _this.caculate()
+                })
+              }).catch((res) => {
+                console.log('error')
+              })
     },
     addOrder(){
       
       if(this.selList.length>0){
           let ids = []
           this.selList.forEach((res) => {
-              ids.push(res.goodsId)
+              ids.push(res.cartId)
           })
           this.$router.push({
             path:'/addOrder',

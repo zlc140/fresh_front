@@ -63,7 +63,7 @@
                   @click="eventClick(item, $event)">
                 {{item.goodsTitle}} 
               </li> -->
-              <pro-tem :proList="event.products" @editList="editList(event.products)"></pro-tem>
+              <pro-tem :proList="event.goodsVoList" @editList="editList(event.products)"></pro-tem>
             </div>
           </div>
         </div>
@@ -82,6 +82,8 @@
   import moment from 'moment';
   import EventCard from './components/eventCard.vue';
   import proTem from './components/pro.vue'
+
+  import tool from '@/config/tool'
   export default {
     props : {
       checkMore : {
@@ -195,22 +197,25 @@
         return calendar
       },
       slotEvents (date) {
-          
         // find all events start from this date
         //console.log('test',this.events)
         let cellIndexArr = [];
         let thisDayEvents = this.events.filter(day => {
-          if(day.start.indexOf('-')>-1){//传入的格式为YYYY-MM-DD
-              let st = moment(day.start)
-              let ed = moment(day.end ? day.end : day.start);
-              return date.isBetween(st, ed, null, '[]');
-          }else{//传入的时间格式为毫秒
-              let st = parseInt(day.start)
-              let ed = parseInt(day.end ? day.end : day.start);
-              let mid = parseInt(date.valueOf())
-              if(st == mid){  return true  }else{ return false }
+          if(!isNaN(day.deliverTime)){//将lang格式转化为格式YYYY-MM-DD
+            day.deliverTime = tool.formatDate.format((day.deliverTime),'yyyy-MM-dd')
           }
-          
+          if((day.deliverTime+'').indexOf('-')>-1){
+              let st = moment(day.deliverTime)
+              let ed = moment(day.end ? day.end : day.deliverTime);
+              return date.isBetween(st, ed, null, '[]');
+          }
+          // else{//传入的时间格式为毫秒
+          //     let st = parseInt(day.deliverTime)
+          //     let ed = parseInt(day.end ? day.end : day.deliverTime);
+          //     let mid = parseInt(date.valueOf())
+          //     // console.log(st,mid)
+          //     if(st == mid){  return true  }else{ return false }
+          // }
           // return date.isBetween(st, ed, null, '[]');
         });
         //console.log(thisDayEvents)
@@ -237,7 +242,7 @@
             isShow : false
           })
         }
-     
+        console.log(thisDayEvents)
         return thisDayEvents
       },
       selectThisDay (day, jsEvent) {

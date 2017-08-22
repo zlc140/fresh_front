@@ -1,32 +1,66 @@
 <template>
   <div class="container">
-    <div class="cart_box order" :class="moreShow?'more':''" v-if="shopList.length>0">
+    <div class="cart_box order" :class="moreShow?'more':''" v-if="$route.query.ids">
      <el-table :data="shopList" ref="carList"   v-loading="listLoading"  style="width: 100%;" >
-             <el-table-column  prop="goodsPic" label="" width="90"  label="商品" >
+             <el-table-column  prop="goodsVoList" label="" width="90"  label="商品" >
                <template scope="scope">
-                   <a class="imgBox"><img :src="scope.row.goodsPic" /></a>
+                   <a class="imgBox"><img  /></a>
                </template>
              </el-table-column>
-            <el-table-column  prop="goodsTitle" min-width="300" >
+            <el-table-column  prop="goodsVoList" min-width="300" >
                 <template scope="scope">
-                    <router-link class="fl title" :to="{path:'/detail',query:{id:scope.row.id}}" >{{scope.row.goodsTitle}}</router-link>
+                    <router-link class="fl title" :to="{path:'/detail',query:{id:scope.row.goodsVoList[0].goods.goodsId}}" >{{scope.row.goodsVoList[0].goods.goodsTitle}}</router-link>
                 </template>
             </el-table-column>
-            <el-table-column  prop="price" label="单价" width="120" >
+            <el-table-column  prop="goodsVoList" label="单价" width="120" >
                 <template scope="scope">
-                    <span class="price">{{scope.row.price.GOODS_COST_PRICE | currency}}</span>
+                    <span class="price">{{scope.row.goodsVoList[0].goods.price.GOODS_MARKET_PRICE | currency}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="num" label="数量" width="80" >
+            <el-table-column prop="goodsVoList" label="数量" width="80" >
+              <template scope="scope">
+                <span>{{scope.row.goodsVoList[0].number}}</span>
+              </template>
             </el-table-column>
             <el-table-column label="小计" width="120" >
                 <template scope="scope">
                     <div  class="price">
-                      {{scope.row.num*scope.row.price.GOODS_COST_PRICE | currency}}
+                      {{scope.row.goodsVoList[0].number*scope.row.goodsVoList[0].goods.price.GOODS_MARKET_PRICE | currency}}
                     </div>
                 </template>
             </el-table-column>
         </el-table>
+    </div>
+     <div class="cart_box order" :class="moreShow?'more':''" v-if="$route.query.id">
+        <el-table :data="shopList" ref="carList"   v-loading="listLoading"  style="width: 100%;" >
+              <el-table-column  prop="" label="" width="90"  label="商品" >
+                <template scope="scope">
+                    <a class="imgBox"><img  /></a>
+                </template>
+              </el-table-column>
+              <el-table-column  prop="goodsTitle" min-width="300" >
+                  <template scope="scope">
+                      <router-link class="fl title" :to="{path:'/detail',query:{id:scope.row.goodsId}}" >{{scope.row.goodsTitle}}</router-link>
+                  </template>
+              </el-table-column>
+              <el-table-column  prop="price" label="单价" width="120" >
+                  <template scope="scope">
+                      <span class="price">{{scope.row.price.GOODS_MARKET_PRICE | currency}}</span>
+                  </template>
+              </el-table-column>
+              <el-table-column prop="number" label="数量" width="80" >
+                <template scope="scope">
+                  <span>{{scope.row.number}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="小计" width="120" >
+                  <template scope="scope">
+                      <div  class="price">
+                        {{scope.row.number*scope.row.price.GOODS_MARKET_PRICE | currency}}
+                      </div>
+                  </template>
+              </el-table-column>
+          </el-table>
     </div>
      <div class="null" v-if="shopList.length<1" style="height:100px;line-height:100px;">您还没有选择商品<router-link to="list">快去挑选吧~</router-link></div> 
     <div class="more_box" :class="moreShow?'addB':''" v-if="lists.length>1">
@@ -50,38 +84,17 @@
 </template>
 
 <script>
-import fullCalendar from '@/components/calendar'
-import {carList} from '@/service'
-import { getStore } from '@/config/storage'
 
-import { goodsDetail } from '@/service'
-let demoEvents = [
-    {
-      title    : 'Sunny 725-727',
-      start    : '1499443200000',
-      end      : '',
-      cssClass : 'family'
-    },
-    {
-      title    : 'Lun 725-727',
-      start    : '1499443200000',
-      end      : '',
-      cssClass : 'family2'
-    },
-     {
-      title    : 'Lun 725-727',
-      start    : '2017-07-09',
-      end      : '',
-      cssClass : 'family2'
-    }
-    
-  ];
+import fullCalendar from '@/components/calendar'
+import {carList,saveDayOrder,goodsDetail } from '@/service'
+import { getStore } from '@/config/storage'
+ 
 export default {
   data(){
       return{
         moreShow:false,
-        name:'Sunny!',
-        fcEvents:demoEvents,
+        name:'生鲜日历',
+        fcEvents:[],
         listLoading:false,
         checked:false,
         selDay:[],
@@ -97,7 +110,7 @@ export default {
         if( this.$route.query.ids && this.getList()){
             
            this.getList().forEach((item) => {
-            if(this.$route.query.ids && this.$route.query.ids.indexOf(item.goodsId) > -1){
+            if(this.$route.query.ids && this.$route.query.ids.indexOf(item.cartId) > -1){
                 list.push(item)
                 this.shopList = list
               }
@@ -118,7 +131,7 @@ export default {
         console.log(0)
         let _this = this
           let para = {
-            id:this.$route.query.id
+            goodsId:this.$route.query.id
           }
           let content = await goodsDetail(para)
           let num = this.$route.query.num
@@ -126,8 +139,8 @@ export default {
                 goodsId:content.goodsId,
                 goodsTitle:content.goodsTitle,
                 price:content.price,
-                goodsPic:content.goodsPic[2].path,
-                num:num?num:1
+                goodsPic:'',
+                number:num?num:1
             }
             _this.shopList = []
             _this.shopList.push(good)
@@ -167,8 +180,37 @@ export default {
           // console.log('moreCLick', day, events, jsEvent)
         },
         addOrder(){
-          this.$router.push('/editOrder')
-          console.log(this.selDay)
+          if(this.selDay.length < 1){
+            this.$message('请选择预订日期')
+              return false
+          }
+           let para = {
+              goodsId:'',
+              count:'',
+              deliverTime:this.selDay,
+              memberId:'M20170814170704005'
+            }
+            let _this = this
+          this.lists.forEach( (v,index) => {
+             if(index == _this.lists.length-1){
+                para.goodsId = para.goodsId+v.goodsVoList[0].goods.goodsId
+                para.count =para.count + v.goodsVoList[0].number
+             }else{
+                para.goodsId = para.goodsId+v.goodsVoList[0].goods.goodsId+','
+                para.count =para.count + v.goodsVoList[0].number+','
+             }
+          })
+          // para.goodsId = para.goodsId.Substring(0,para.goodsId.length-1)
+          // para.count =para.count.Substring(0,para.count.length-1)
+          para.deliverTime = para.deliverTime.join(',')
+          console.log(para)
+          saveDayOrder(para).then((res) => {
+            if(res.data.state == 200) {
+                this.$router.push('/editOrder')
+            }
+            console.log(res.data)
+          })
+          
         }
     }
 }

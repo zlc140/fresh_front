@@ -2,19 +2,19 @@
      <div class="cart_box proList"> 
    <el-table :data="proList" ref="proList" :show-header="false"   height="120" style="width: 100%;">
              
-            <el-table-column  prop="goodsTitle" label="商品" width="160" >
+            <el-table-column  prop="goods" label="商品" width="160" >
                 <template scope="scope">
-                     <span class="title" >{{scope.row.goodsTitle}}</span>
+                     <span class="title" >{{scope.row.goods.goodsTitle}}</span>
                 </template>
             </el-table-column>
-             <el-table-column prop="num" label="数量" width="80" >
+             <el-table-column prop="number" label="数量" width="80" >
                <template scope="scope">
-                 <el-input-number size="small" v-model="scope.row.num" @change="handleChange(scope.row)" :min="0" :max="10"></el-input-number>
+                 <el-input-number size="small" v-model="scope.row.number" @change="handleChange(scope.row)" :min="0" ></el-input-number>
                 </template>
             </el-table-column>
-            <el-table-column  prop="price" label="价格" min-width="80" >
+            <el-table-column  prop="goodsprice.GOODS_MARKET_PRICE" label="价格" min-width="80" >
                 <template scope="scope">
-                    <span class="price">{{scope.row.price.GOODS_COST_PRICE | currency}}</span>
+                    <span class="price">{{scope.row.goodsprice.GOODS_MARKET_PRICE | currency}}</span>
                 </template>
             </el-table-column>
              

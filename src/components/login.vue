@@ -74,9 +74,7 @@
             }
         },
         mounted() {
-            console.log(this.user)
-            let url = decodeURIComponent(window.location.search)
-            console.log(this.getValue(url))
+
         },
         methods: {
              getValue (url) {

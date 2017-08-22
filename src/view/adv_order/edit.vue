@@ -9,16 +9,22 @@
       </p>
       <div class="addr_list" :class="moreShow?'more':''">
         <ul>
-          <li v-for="(item,index) in addrs" :class="defaultAddr ==item.id ?'selDefault':''" @click="selAddr(item.id)" :key="index">
+          <li v-for="(item,index) in addrs" v-if="item.isdefault" class="selDefault" @click="selAddr(item.orderDaddressId)" :key="index">
+            <span class="checkBtn">{{item.name}}</span>
+            <span class="addr">{{item.address}}</span>
+            <span>{{item.phone}}</span>
+          </li>
+           <li v-for="(item,index) in addrs"  v-if="!item.isdefault" @click="selAddr(item.orderDaddressId)" :key="index">
             <span class="checkBtn">{{item.name}}</span>
             <span class="addr">{{item.address}}</span>
             <span>{{item.phone}}</span>
           </li>
         </ul>
       </div>
-      <div class="more_box">
+      <div class="more_box " v-if="addrs.length>1">
         <el-button type="text" @click="showMore">{{moreShow?'收起 ︽':'查看更多︾'}}</el-button>
       </div>
+      <div class="nullAddr"  v-if="addrs.length<1 ||　!addrs.length">您还没有添加收货地址！ </div>
     </div>
     
     <full-calendar class="test-fc" 
@@ -47,7 +53,7 @@
 <script>
 import fullCalendar from '@/components/calendar'
 import addAddress from '../common/addr'
-import {advOrderList} from '@/service'
+import { advOrderList,orderAddress,selAddress } from '@/service'
 let demoEvents = [
   {
     title: 'Sunny 725-727',
@@ -85,28 +91,31 @@ export default {
         },
       defaultAddr: '0011',
       moreShow: false,
-      addrs: [
-        { id: '0011', name: '收货人1', address: '我的收货地址我也不知道，', phone: '18653215215' },
-        { id: '0021', name: '收货人2', address: '我的收货地址我也不知道，', phone: '18653215215' },
-        { id: '0201', name: '收货人3', address: '我的收货地址我也不知道，', phone: '18653215215' },
-        { id: '0031', name: '收货人4', address: '我的收货地址我也不知道，', phone: '18653215215' }
-      ]
+      addrs: []
     }
   },
   components: {
     fullCalendar,addAddress
   },
-  async mounted() {
-    let lists = await advOrderList()
-    this.flag = true
-    this.fcEvents = lists
+   mounted() {
+    this.getAddr()
+    this.getList()
   },
   methods: {
+    async getAddr(){
+        this.addrs = await orderAddress()
+    },
+    async getList(){ 
+        let lists = await advOrderList()
+        this.flag = true
+        this.fcEvents = lists
+        console.log(this.fcEvents)
+    },
     closeDailog(val){
-      console.log(val)
         if(val == false){
           this.addFormVisible = false
         }
+        this.getAddr()
     },
     addEvent(){
         this.addFormVisible = true
@@ -132,7 +141,17 @@ export default {
       // console.log('moreCLick', day, events, jsEvent)
     },
     selAddr(val) {
-      this.defaultAddr = val
+      let _this = this
+      let prop = {
+        memberId : 'M20170814170704005',
+        orderDaddressId :val
+      }
+      selAddress(prop).then((res) => {
+        if(res.data.state == 200){
+          _this.getAddr()
+        }
+      })
+      
     },
     showMore() {
       this.moreShow = !this.moreShow
@@ -147,6 +166,12 @@ export default {
 
 <style lang="scss">
 @import '../../assets/chang.scss';
+.nullAddr{
+  text-align: center;
+  line-height: 100px;
+  font-size: 20px;
+  color: #ccc;
+}
 .pageTitle {
   font-size: 18px;
   color: #888;
@@ -188,7 +213,6 @@ export default {
     overflow: hidden;
     width: 1080px;
     li {
-      display: none;
       height: 43px;
       line-height: 43px;
       padding: 3px 10px;

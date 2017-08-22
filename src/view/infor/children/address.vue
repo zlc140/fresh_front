@@ -9,9 +9,9 @@
     <div class="detail" v-if="addrList.length>0">
       <p v-for="(item,id) in addrList" :key="id">
         <span class="name">{{item.name}}</span>
-        <span class="addr">{{'上海市'+item.county}}{{item.addrDetail}}</span>
+        <span class="addr">{{item.address}}</span>
         <span class="tel">{{item.phone | phone}}</span>
-        <a href="javascript:" title="" @click="handEdit(item)" class="arrow del"> 删除</a>
+        <a href="javascript:" title="" @click="handDel(item.orderDaddressId)" class="arrow del"> 删除</a>
         <a href="javascript:" title="" @click="handEdit(item)" class="arrow edit"> 编辑</a>
       </p>
     </div>
@@ -28,7 +28,7 @@
 
 <script>
 import addAddress from '@/view/common/addr'
-import { getAddrList, editAddr, addAddr } from '@/service'
+import { orderAddress,selAddress,delAddress } from '@/service'
 export default {
   data() {
     return {
@@ -67,7 +67,7 @@ export default {
       }
     },
     async getList() {
-      this.addrList = await getAddrList()
+      this.addrList = await orderAddress()
     },
     handAdd() {
       this.title = "新增收货地址"
@@ -80,6 +80,17 @@ export default {
       this.editForm = Object.assign({}, val)
 
     },
+    handDel(val){
+      let prop ={
+          orderDaddressId:val
+      }
+      let _this = this
+        delAddress(prop).then((res) => {
+          if(res.data.state == 200){
+              _this.getList()
+          }
+        })
+    }
 
   }
 

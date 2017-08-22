@@ -1,17 +1,19 @@
 <template>
    <div class="content">
        <div class="productlist_list cl" v-if="isNull">
-         <div class="list_one" v-for="(item,id) in goods.list" :key="id">
+         <div class="list_one" v-for="(item,id) in goods.content" :key="id">
                 <div class="list_one_img">
-                   <router-link :to="{path:'detail',query:{id:`${item.goodsId}`}}"> <img :src="item.goodsPic[0].path" alt=""/></router-link>
+                   <router-link :to="{path:'detail',query:{id:`${item.goodsId}`}}"> 
+                       <!-- <img :src="item.goodsPic[0].path" alt=""/> -->
+                       </router-link>
                     </div>
                 <div class="list_one_word">
-                    <a>{{item.goodsTitle}}</a>
-                    <p>￥{{item.price.GOODS_COST_PRICE}}<span>（约2.5元/500g）</span></p>
+                    <router-link :to="{path:'detail',query:{id:`${item.goodsId}`}}" >{{item.goodsTitle}}</router-link>
+                    <p>￥{{item.price.GOODS_MARKET_PRICE}}<span>（约2.5元/500g）</span></p>
                 </div>
                 <!--加入购物车-->
                 <div class="list_add">
-                    <div class="list_add_cart" @click="addtoCar(item.goodsId,item.goodsPic[0].path,$event)">加入购物车</div>
+                    <div class="list_add_cart" @click="addtoCar(item.goodsId,$event)">加入购物车</div>
                     <div class="list_add_order" @click="addOrder(item.goodsId)">加入预订单</div>
                 </div>
             </div>
@@ -53,11 +55,13 @@ export default {
     async getList(){
         let para = {
             page: this.page,
-            pageSize: this.pageSize
+            pageSize: this.pageSize,
+            goodsShow:2
         }
         this.goods = await goodsList(para)
-        this.total = this.goods.total
-        this.isNull = this.goods.list.length>1?true:false
+        console.log('test',this.goods)
+        this.total = this.goods.totalElements
+        this.isNull = this.goods.totalElements>1?true:false
     },
     handleCurrentChange(val){
        this.page=val
@@ -71,10 +75,16 @@ export default {
         let _this = this
         _this.$emit('addFlew',pic,event)
         let prop = {
-            id:val,
-            num:1
+            goodsId :val,
+            count :1,
+            memberId:'M20170814170704005'
         }
-        _this.$store.dispatch('addCar',prop)
+        addCar(prop).then((res) => {
+            if(res) {
+                _this.$store.dispatch('getShopCar')
+            }
+        })
+        
          
     },
     addOrder(val){

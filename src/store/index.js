@@ -31,7 +31,6 @@ const mutations = {
         state.classList = lists
     },
     GET_CAR (state,shopCar) {
-
         state.shopCar.length = shopCar.length                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
         state.shopCar.lists = []
         shopCar.forEach((res) => {
@@ -42,7 +41,7 @@ const mutations = {
     },
     DEL_CAR (state, prop) {
         state.shopCar.lists.forEach((item,index) => {
-            if(item.goodsId == prop.id) {
+            if(item.cartId == prop.cartIds) {
                 state.shopCar.lists.splice(index,1)
             }
         })
