@@ -1,8 +1,8 @@
 <template>
-  <div class="content cl">
+  <div class="content cl" v-if="classList.length>0">
          <dl  v-for="(child,index) in classList" :key="index">
             <dd v-for="(cate,id) in child" :key="id" >
-                <a   :title="cate.classTitle">{{cate.classTitle}}</a>
+                <router-link :to="{path:'/list',query:{'classId':cate.classId}}" :title="cate.classTitle">{{cate.classTitle}}</router-link>
             </dd>
         </dl> 
   </div>
@@ -24,14 +24,17 @@ export default {
     mounted(){
         let getClass = this.lists
         let arrTemp=[];
-        let index = 0;
-        let sectionCount = 10;
-        for(let i=0;i<getClass.length;i++){
-                index = parseInt(i / sectionCount);  
-                if (arrTemp.length <= index) {  
-                    arrTemp.push([]);  
-                }  
-                arrTemp[index].push(getClass[i]);  
+        if(getClass != null && getClass.length>0){
+            let index = 0;
+            let sectionCount = 10;
+            for(let i=0;i<getClass.length;i++){
+                    index = parseInt(i / sectionCount);  
+                    if (arrTemp.length <= index) {  
+                        arrTemp.push([]);  
+                    }  
+                    arrTemp[index].push(getClass[i]);  
+            }
+        
         }
         this.classList = arrTemp
                     

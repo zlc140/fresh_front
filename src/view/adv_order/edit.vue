@@ -258,17 +258,6 @@ export default {
   }
 }
 
- 
-.more_box {
-  text-align: left;
-  background-color: white;
-  padding-left:80px;
-  border: 1px solid white;
-  .el-button--text {
-    color: #888;
-  }
-}
-
 .addB {
   border-top: 1px solid $baseColor;
 }

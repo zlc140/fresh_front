@@ -36,10 +36,10 @@
                         <div class="list_banner" v-show="cateShow">
                             <div class="list_left">
                                 <dl>
-                                    <dd v-for="(item,id) in classList" :key="id">
+                                    <dd v-for="(item,index) in classList" :key="index" v-if="index < 9">
                                         <span></span><router-link :to="{path:'/list',query:{'classId':item.classId}}">{{item.classTitle}}</router-link>
                                         <div class="moreList">
-                                            <list-tem :lists = 'item.childClass'></list-tem>
+                                            <list-tem :lists = 'item.childClass?item.childClass:null'></list-tem>
                                         </div>
                                     </dd>
                                 </dl>
@@ -106,6 +106,7 @@ export default {
     methods:{
         async getClass(){
             this.classList = await cateList()
+
             this.$store.commit('SAVE_CLASS',this.classList)
         },
         collapse() {

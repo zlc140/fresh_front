@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="cart_box order" :class="moreShow?'more':''" v-if="$route.query.ids">
+    <div class="cart_box order2" :class="moreShow?'more':''" v-if="$route.query.ids">
      <el-table :data="shopList" ref="carList"   v-loading="listLoading"  style="width: 100%;" >
              <el-table-column  prop="goodsVoList" label="" width="90"  label="商品" >
                <template scope="scope">
@@ -193,8 +193,8 @@ export default {
             let _this = this
           this.lists.forEach( (v,index) => {
              if(index == _this.lists.length-1){
-                para.goodsId = para.goodsId+v.goodsVoList[0].goods.goodsId
-                para.count =para.count + v.goodsVoList[0].number
+                para.goodsId = para.goodsId+(v.goodsVoList[0].goods.goodsId || v.goodsId)
+                para.count =para.count + (v.goodsVoList[0].number || v.number)
              }else{
                 para.goodsId = para.goodsId+v.goodsVoList[0].goods.goodsId+','
                 para.count =para.count + v.goodsVoList[0].number+','
@@ -218,7 +218,7 @@ export default {
 
 <style lang="scss">
 @import '../../assets/chang.scss';
-.order{
+.order2{
   .el-table{
     overflow: visible;
   }
@@ -264,7 +264,7 @@ th{
    font-size: 14px;
  }
  }
- .order.more{
+ .order2.more{
    .el-table__body-wrapper{
      height: auto;
     }
@@ -273,15 +273,7 @@ th{
    }
   
  }
-.more_box{
-   text-align: right;
-   background-color: white;
-   padding: 20px 30px;
-   border: 1px solid white;
-   .el-button--text{
-     color: #888;
-     }
- }
+
  .addB{
    border-top: 1px solid $baseColor;
  }

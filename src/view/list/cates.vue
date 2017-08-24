@@ -45,9 +45,16 @@ export default {
    }else{
       this.cates = await cateList()
    }
+   console.log(this.cates)
     let childCates=[]
     this.cates.forEach(function(item) {
-      childCates= childCates.concat(item.childClass)
+      childCates.push({
+        classId:item.classId,
+        classTitle:item.classTitle
+      })
+      if(item.childClass){
+          childCates= childCates.concat(item.childClass)
+      }
     }, this);
     this.cates = childCates
     

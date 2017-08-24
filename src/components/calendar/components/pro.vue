@@ -1,6 +1,6 @@
 <template>
      <div class="cart_box proList"> 
-   <el-table :data="proList" ref="proList" :show-header="false"   height="120" style="width: 100%;">
+   <el-table :data="proList" ref="proList" :show-header="false"  style="width: 100%;">
              
             <el-table-column  prop="goods" label="商品" width="160" >
                 <template scope="scope">

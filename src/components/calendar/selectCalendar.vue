@@ -59,10 +59,6 @@
           <div class="more-body">
             <div   v-for="(event,index) in selectDay.events" :key="index"
                   v-show="event.isShow">
-              <!-- <li class="body-item" v-for="(item,id) in event.products" :key="id"
-                  @click="eventClick(item, $event)">
-                {{item.goodsTitle}} 
-              </li> -->
               <pro-tem :proList="event.goodsVoList" @editList="editList(event.products)"></pro-tem>
             </div>
           </div>
@@ -242,7 +238,7 @@
             isShow : false
           })
         }
-        console.log(thisDayEvents)
+        // console.log(thisDayEvents)
         return thisDayEvents
       },
       selectThisDay (day, jsEvent) {

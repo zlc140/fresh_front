@@ -4,10 +4,10 @@ import axios from 'axios'
 export const cateList = () => {
     return axios({
         method:'post',
-        url:'/classList',
+        url:'/gc/findShowGcList'
     }).then((res) => {
-        if(res.data.code == 200){
-            return res.data.goodsClass
+        if(res.data.state == 200){
+            return res.data.content
         }else{
             return []
         }

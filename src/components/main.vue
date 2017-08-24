@@ -53,6 +53,17 @@ export default {
   width:100%;
   min-height:calc(100% - 564px); 
 }
+.more_box{
+  
+   text-align: right;
+   background-color: white;
+   padding: 20px 30px;
+   border: 1px solid white;
+   .el-button--text{
+     color: #888;
+     }
+ 
+}
 .checkBox{
         width:180px;
 }
