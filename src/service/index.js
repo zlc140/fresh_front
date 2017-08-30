@@ -107,7 +107,7 @@ export const advOrderList = () => {
 // 保存天订单
 export const saveDayOrder = (para) => {
     return axios({
-        methods:'post',
+        method:'post',
         url:'/dayOrder/savaDayOrder',
         // headers : {
         //     'Accept' : 'application/json',
@@ -156,7 +156,7 @@ export const orderAddress = () => {
 // 选择默认地址
 export const selAddress = (prop) => {
     return axios({
-        methods:'post',
+        method:'post',
         url:'/orderDaddress/updateorderDaddressDef',
         params:prop
     })
@@ -164,7 +164,7 @@ export const selAddress = (prop) => {
 // 新增地址
 export const addOrderAddr = (prop) => {
     return axios({
-        methods:'post',
+        method:'post',
         url:'/orderDaddress/saveOrderDaddress',
         params:prop
     })
@@ -172,7 +172,7 @@ export const addOrderAddr = (prop) => {
 // 编辑地址
 export const editOrderAddr = (prop) => {
     return axios({
-        methods:'post',
+        method:'post',
         url:'/orderDaddress/updateorderDaddress',
         params:prop
     })
@@ -180,8 +180,27 @@ export const editOrderAddr = (prop) => {
 // 删除地址
 export const delAddress = (prop) => {
     return axios({
-        methods:'post',
+        method:'post',
         url:'/orderDaddress/deleteOrderDaddressByorderDaddressId',
         params:prop
     })
 }
+// 首页
+// banner
+export const getBanner = () => {
+    
+    return axios({
+        method:'POST',
+        url:'/adv/findAll'
+    })
+}
+// floor
+export const getFloor = () => {
+     
+    return axios({
+        method:'POST',
+        url:'/floor/findAll'
+    })
+}
+
+

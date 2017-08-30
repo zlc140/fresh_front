@@ -12,9 +12,9 @@
                  <el-input-number size="small" v-model="scope.row.number" @change="handleChange(scope.row)" :min="0" ></el-input-number>
                 </template>
             </el-table-column>
-            <el-table-column  prop="goodsprice.GOODS_MARKET_PRICE" label="价格" min-width="80" >
+            <el-table-column  prop="goods" label="价格" min-width="80" >
                 <template scope="scope">
-                    <span class="price">{{scope.row.goodsprice.GOODS_MARKET_PRICE | currency}}</span>
+                    <span class="price">{{scope.row.goods.price.GOODS_MARKET_PRICE | currency}}</span>
                 </template>
             </el-table-column>
              
@@ -29,6 +29,9 @@ export default {
             type:Array,
             default:[]
         }
+    },
+    mounted(){
+        console.log('test',this.proList)
     },
     methods:{
         handleChange(val){
