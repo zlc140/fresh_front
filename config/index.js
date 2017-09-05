@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/upload':'http://192.168.0.9:8090//imageBase',
-
+      
       '/cart' : 'http://192.168.0.17:8080/fresh-order',
       '/makeOrder':'http://192.168.0.17:8080/fresh-order',
       '/dayOrder':'http://192.168.0.17:8080/fresh-order',
