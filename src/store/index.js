@@ -9,7 +9,8 @@ const state = {
     username:'',
     shopCar : {
         length : 0,
-        lists : []
+        lists : [],
+        islose:[]
     },
     classList:[]
     
@@ -31,22 +32,36 @@ const mutations = {
         state.classList = lists
     },
     GET_CAR (state,shopCar) {
-
         state.shopCar.length = shopCar.length                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
         state.shopCar.lists = []
+        state.shopCar.islose = []
         shopCar.forEach((res) => {
-            state.shopCar.lists.push(res)
+            if(!res.goodsVoList[0].islose){
+                state.shopCar.lists.push(res)
+            }else{
+                state.shopCar.islose.push(res)
+            }
         })
         state.shopCar.length = state.shopCar.lists.length
 
     },
     DEL_CAR (state, prop) {
-        state.shopCar.lists.forEach((item,index) => {
-            if(item.goodsId == prop.id) {
-                state.shopCar.lists.splice(index,1)
-            }
-        })
-        console.log(state.shopCar.lists.length)
+        if(!prop.islose){
+            state.shopCar.lists.forEach((item,index) => {
+                if(item.cartId == prop.cartIds) {
+                    state.shopCar.lists.splice(index,1)
+                }
+            })
+            state.shopCar.length = state.shopCar.lists.length
+        }else{
+            state.shopCar.islose.forEach((item,index) => {
+                if(item.cartId == prop.cartIds) {
+                    state.shopCar.islose.splice(index,1)
+                }
+            })
+        }
+       
+     
     }
 
 }

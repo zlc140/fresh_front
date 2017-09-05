@@ -5,6 +5,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
+import tool from './config/tool'
 
 import elementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
@@ -16,9 +17,17 @@ Vue.config.productionTip = false
 
 Vue.use(elementUI)
 
-import Mock from './mock'
-Mock.bootstrap()
+// import Mock from './mock'
+// Mock.bootstrap()
 
+// 时间格式化
+Vue.filter('formatDate',function(value) {
+  if(value == 0 || value == '' || value =='undefined'){
+    return null
+  }
+  return tool.formatDate.format((value),'yyyy-MM-dd')
+
+})
 // 价格（保留两位小数）
 Vue.filter('currency',(value) => {
   value = parseFloat(value)
@@ -43,6 +52,18 @@ Vue.filter('phone',(value) => {
       phone += '****'
       phone += value.substr(8,3)
     return phone
+  }
+})
+
+// 订单状态
+Vue.filter('filterState',(value)=>{
+  value = parseInt(value)
+  if(value==20){
+      return '待发货'
+  }else if(value==30){
+      return '待收货'
+  }else{
+      return '已签收'
   }
 })
 /* eslint-disable no-new */

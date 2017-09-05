@@ -9,16 +9,16 @@
             <el-table :data="lists" ref="carList"  :show-header="false"  v-loading="listLoading"  @selection-change="selsChange" style="width: 100%;">
                 <el-table-column type="selection" label="全选" width="30">
                 </el-table-column>
-             <el-table-column  prop="goodsPic" label="" width="60"  >
+              <el-table-column  prop="goodsVoList" label="" width="60"  >
                <template scope="scope">
-                   <a class="imgBox"><img :src="scope.row.goodsPic" /></a>
+                   <a class="imgBox"><img :src="scope.row.goodsVoList[0].goods.goodsPic[0].path" /></a>
                </template>
              </el-table-column>
             <el-table-column  prop="goodsTitle" label="" width="190" >
                 <template scope="scope">
-                    <router-link :to="{path:'/detail',query:{id:scope.row.id}}" class="pro_title" >{{scope.row.goodsTitle}}</router-link>
-                    <span class="price fl">{{scope.row.price.GOODS_COST_PRICE | currency}}</span>
-                    <el-input-number size="small" v-model="scope.row.num" @change="handleChange(scope.row)" :min="1" :max="10" class="fr mgR10"></el-input-number>
+                    <router-link :to="{path:'/detail',query:{id:scope.row.goodsVoList[0].goods.goodsId}}" class="pro_title" >{{scope.row.goodsVoList[0].goods.goodsTitle}}</router-link>
+                    <span class="price fl">{{scope.row.goodsVoList[0].goods.price.GOODS_MARKET_PRICE | currency}}</span>
+                    <el-input-number size="small" v-model="scope.row.goodsVoList[0].number" @change="handleChange(scope.row)" :min="1" class="fr mgR10"></el-input-number>
                 </template>
             </el-table-column>
         </el-table>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {carList} from '@/service'
 import { getStore } from '@/config/storage'
 export default {
@@ -48,16 +49,16 @@ export default {
       isNull:false
     }
   },
-  computed:{
-      
-  },
   mounted(){
+     
     this.caculate()
-    // console.log(this.lists)
+   
   },
  computed:{
       lists(){
+        
           return this.getList()
+
       }
   },
   methods:{
@@ -67,15 +68,16 @@ export default {
      getList(){
         this.listLoading = true
         // this.lists =await carList()
+        console.log('side',this.$store.state.shopCar)
         if(this.$store.state.shopCar.length == 0 ){
           this.$store.dispatch('getShopCar').then((res) => {
               this.listLoading = false
-              this.isNull = this.$store.state.shopCar.lists.length > 1?false:true
+              this.isNull = this.$store.state.shopCar.lists.length > 0?false:true
               return this.$store.state.shopCar.lists
           })
         }else{
               this.listLoading = false
-              this.isNull = this.$store.state.shopCar.lists.length > 1?false:true
+              this.isNull = this.$store.state.shopCar.lists.length > 0?false:true
               return this.$store.state.shopCar.lists
         }
         
@@ -88,9 +90,9 @@ export default {
       if(this.selList.length>0){
         this.selList.forEach((item) =>{
           _this.total = parseFloat(_this.total)
-          _this.total += item.price.GOODS_COST_PRICE*item.num
+          _this.total += item.goodsVoList[0].goods.price.GOODS_MARKET_PRICE*item.goodsVoList[0].number
           _this.total =  _this.total.toFixed(2)
-          _this.num +=  item.num
+          _this.num +=  item.goodsVoList[0].number
         })
       }
        
@@ -120,17 +122,31 @@ export default {
       }
     },
     // 数量改变
-    handleChange(val){
-          this.$nextTick(function(){
-          this.caculate()
-      })
+    handleChange(item){
+         let prop = {
+            cartId :item.cartId,
+            goodsId :item.goodsVoList[0].goods.goodsId,
+            count:item.goodsVoList[0].number,
+          }
+          let _this = this
+              axios({
+                methods:'post',
+                url:'/cart/updateCart',
+                params:prop
+              }).then((res) => {
+                  _this.$nextTick(function(){
+                    _this.caculate()
+                })
+              }).catch((res) => {
+                console.log('error')
+              })
     },
     addOrder(){
       
       if(this.selList.length>0){
           let ids = []
           this.selList.forEach((res) => {
-              ids.push(res.goodsId)
+              ids.push(res.cartId)
           })
           this.$router.push({
             path:'/addOrder',

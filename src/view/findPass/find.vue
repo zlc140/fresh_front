@@ -19,7 +19,7 @@
                         </template>
                     </el-input>
                     <div class="validation fr">
-                        <el-button v-on:click="times">{{find}}</el-button>
+                        <el-button v-on:click="times" :disabled="disable">{{find}}</el-button>
                     </div>
                 </el-form-item>
                 <el-col class="denglu">
@@ -38,6 +38,7 @@ export default {
     data() {
         return {
             find: "发送验证码",
+            disable:false,
             checked: false,
             loginLoading: false,
             user: {
@@ -88,26 +89,31 @@ export default {
             })
         },
         times() {
-            var self = this;
-            var count = 60;
-            self.find = count;
-            var timer = setInterval(function () {
-                self.find--;
-                if (self.find <= 0) {
-                    clearInterval(timer)
-                    self.find = "重新发送";
-                }
-            }, 1000)
-        }
+            if(this.disable == false){
+                let self = this;
+                let count = 60;
+                self.find = '('+count +'s)后重新发送'
+                self.disable = true
+                let timer = setInterval(function () {
+                    count--
+                    self.find = '('+count +'s)后重新发送'
+                    if (count <= 0) {
+                        clearInterval(timer)
+                        self.disable = false
+                        self.find = "重新发送";
+                    }
+                }, 1000)
+               
+            }
+        },
+
+
     }
 }
 </script>
 <style  lang= "scss">
-.findback {
 
-    .findback_call {
-        padding-left: 230px;
-    }
+.findback {
     .call{
         color: #666;font-size: 16px;
     }
@@ -149,8 +155,11 @@ export default {
         border: 1px solid #c4c4c4;
         color: #6ca96e;
         padding: 9px 15px;
-        width:100px;
+        width:175px;
         text-align: center;
+    }
+    .is-disabled{
+        color:#aaa;
     }
     .fr .el-button[data-v-70332348] {
         display: inline-block;
@@ -192,6 +201,10 @@ export default {
         display: inline-table;
         width: 42%;
         border-collapse: separate;
+    }
+     .findback_call {
+        padding-left: 210px;
+        width:35%;
     }
 }
 </style>

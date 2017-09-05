@@ -15,7 +15,7 @@ import floorTem from './children/floor'
 export default {
   data(){
     return {
-        type:"slide"//slide,fade,kong
+        type:"fade"//slide,fade,kong
     }
   },
   components:{

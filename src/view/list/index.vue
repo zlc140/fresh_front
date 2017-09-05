@@ -5,7 +5,7 @@
       <cate-tem @getName="getName"></cate-tem> 
       <pro-list @addFlew="addFlew"></pro-list>
     </div>
-    <div class="flew"  ref="flew" v-show="flewMove"><img :src="flewPic"/></div>
+    <div class="flew"   ref="flew" v-show="flewMove"><img :src="flewPic"/></div>
   </div>
 </template>
 
@@ -61,7 +61,6 @@ export default {
     },
     pos(changeX,changeY,X,Y){
           let [opa,goTop,_this,num] = [1,goTop,this,0]
-          console.log(changeY)
           this.timer = setInterval(function(){
             if(changeY > 10){
                 if(num < 4){

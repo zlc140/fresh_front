@@ -4,14 +4,14 @@
      <div class="findback_detail">
        <el-form :model="user" :rules="rules" ref="ruleForm" label-position="center" v-loading="loginLoading" class="demo-ruleForm login-container" >
                     <el-form-item prop="password">
-                    <el-input placeholder = "请设置6-12位长度的密码，包括数字,符号，英文" v-model="user.password" @keyup.enter.native="check" class="call_phone">
+                    <el-input type="password" placeholder = "请设置6-12位长度的密码，包括数字,符号，英文" v-model="user.password" @keyup.enter.native="check" class="call_phone">
                       <template slot="prepend"> 
                               <span class="callfind"><strong>*</strong>请设置密码:</span>
                       </template>    
                     </el-input>
                     </el-form-item>
                     <el-form-item>
-                  <el-input placeholder="请再次输入密码" type="password" v-model="user.confirmPassword" @keyup.enter.native="check" class="findback_call">
+                  <el-input placeholder="请再次输入密码" type="password" v-model="user.confirmPassword" @keyup.enter.native="check" class="call_phone">
                     <template slot="prepend"> 
                               <span class="callfind"><strong>*</strong>请确认密码:</span>
                       </template>   
@@ -56,15 +56,6 @@
             },
             }
         },
-        components:{
-            
-        },
-         computed: {
-           
-        },
-        mounted() {
-            
-        },
         methods: {
            check(){
                 this.$refs.ruleForm.validate((valid) => {
@@ -95,8 +86,8 @@ input::-moz-placeholder{
     text-align: left;
 }
 .call_phone{
-    width: 380px;
-    height: 50px;
+    width: 425px;
+    height: 40px;
     position: relative;
     display: inline-block;
 }
@@ -108,15 +99,7 @@ input::-moz-placeholder{
   left: -100px;
   color:#666;
 }
-.findback_call{
-  width: 380px;
-  display: inline-block;
-  position: relative;
-  position: absolute;
-  top: 5px;
-  left: 370px;
 
-}
 .el-input-group>.el-input__inner {
     vertical-align: middle;
     display: table-cell;

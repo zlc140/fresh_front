@@ -12,7 +12,7 @@
 				</div>
 				<div class="price">
 					价格：
-					<strong>￥{{content.price.GOODS_COST_PRICE}}</strong>
+					<strong>￥{{content.price.GOODS_MARKET_PRICE}}</strong>
 					(约2.5/500g)
 				</div>
 				<div class="place">
@@ -31,12 +31,12 @@
 					<p>(当前库存9996件)</p>
 				</div>
 				<div class="cart">
-					<a class="goCar" @click="addCars(content.goodsId,$event)" :class="addBtn?'diss':''">加入购物车</a>
-					<a class="goOrder">加入预订单</a>
+					<a class="goCar" @click="addCars(content,$event)" :class="addBtn?'diss':''">加入购物车</a>
+					<a class="goOrder" @click="addOrder(content.goodsId)"> 加入预订单</a>
 				</div>
 			</div>
 		</div>
-		<div class="container" v-if='content != null' v-html="content.goodsBody">
+		<div class="container Prodetail" v-if='content != null' v-html="content.goodsBody">
 	
 		</div>
 		<div v-if='content == null' class="nothing">
@@ -69,11 +69,9 @@ export default {
 	async mounted() {
 
 		let para = {
-			id: this.$route.query.id
+			goodsId: this.$route.query.id
 		}
-
 		this.content = await goodsDetail(para)
-
 		if (!this.content) {
 			this.content = null
 			this.imgs = []
@@ -90,8 +88,17 @@ export default {
 				this.num = 1
 			}
 		},
+		addOrder(val){
+				this.$router.push({
+					path:'/addOrder',
+					query:{
+							id:val,
+							num:this.num
+						}
+				})
+		},
 		addCars(val,event) {
-			console.log(this.num)
+			 
 			if( getStore('username') == null){
 				 this.$message('请先登录')
 				  this.$router.push({
@@ -100,27 +107,24 @@ export default {
 				  })
 				  return false
 			}
+			let prop
+			let _this = this
 			if (!this.addBtn ) {
-					let _this = this
+					
 					_this.addFlew(_this.imgs[0].path,event)
-					let prop = {
-						id:val,
-						num:this.num
+					prop = {
+						goodsId :val.goodsId,
+						count :this.num,	
+						memberId:'M20170814170704005'
+					}
 			}
+			console.log(prop)
 			addCar(prop).then((res) => {
-				console.log(res)
-				_this.$store.dispatch('addCar',res).then((res) => {
-						this.$notify({
-							title: '',
-							message: '您已成功添加购物车',
-							type: 'success',
-							duration: 1000
-							});
-						this.addBtn = true
-				})
-				
+				if(res) {
+					_this.$store.dispatch('getShopCar')
+				}
 			})
-			}
+			
 		},
 		add() {
 			this.num++
@@ -148,7 +152,6 @@ export default {
 		},
 		pos(changeX,changeY,X,Y){
 			let [opa,goTop,_this,num] = [1,goTop,this,0]
-			console.log(changeY)
 			this.timer = setInterval(function(){
 				if(changeY > 10){
 					if(num < 4){
@@ -194,6 +197,13 @@ export default {
 </script>
 
 <style scoped>
+.Prodetail{
+	overflow: hidden;
+	padding-bottom: 50px;
+}
+.Prodetail img{
+	max-width: 1200px;
+}
 .nothing {
 	text-align: center;
 	line-height: 200px;

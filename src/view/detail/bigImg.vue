@@ -5,9 +5,9 @@
         <div class="hoverBox" ref="hoverBox" @mouseenter="enter($event)" @mousemove="changMouse" v-show="hoverShow"></div>
     </div>
     <div class="big_box"  v-show="hoverShow"><img :src="mid_url" ref="bigImg"/></div>
-    <div class="small_box">
+    <div class="small_box" v-if="imgs.length>1">
         <div class="img_view">
-        <ul :style="Width" ref="movebox">
+        <ul :style="Width" ref="movebox" >
             <li v-for="(item,index) in imgs" :key="index" >
                 <!-- :class="item.sel?'bod':''" -->
                 <img :src="item.path"  @mousemove="changImg(item.path)" />
@@ -29,7 +29,9 @@ export default {
      props:{
         imgs:{
             type:Array,
-            default:[]
+            default:[
+                
+            ]
         }
      },
     data() {
@@ -54,13 +56,10 @@ export default {
 
         }
     },
-    computed:{
-        
-    },
     mounted(){
-        
+        // console.log('sss',this.imgs)
         this.mid_url = this.imgs[0].path
-        console.log(this.mid_url)
+        // console.log(this.mid_url)
         this.Width = {
             'width':this.imgs.length*90+'px'
              

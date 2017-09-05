@@ -2,19 +2,19 @@
      <div class="content">
          <!--图片只有一张时  -->
           <div class="img_box" v-if="bannerList.length == 1">
-              <img :src='bannerList[0].path' :alt="bannerList[0].title" />
+              <img :src='bannerList[0].advImage.path' :alt="bannerList[0].advTitle" />
           </div>
           <!--滑动  -->
           <el-carousel v-if="type=='slide' && bannerList.length > 1 " :autoplay='false' trigger="click" indicator-position="outside" :interval="9000"   arrow="never" height="470px">
-                <el-carousel-item v-for="item in 4" :key="item">
-                 <img :src='bannerList[0].path' :alt="bannerList[0].title"/>
+                <el-carousel-item  v-for="(item,idx) in bannerList" :key="idx">
+                <img :src="item.advImage.path" :aly="item.advTitle"/>
                 </el-carousel-item>
           </el-carousel>
      <!--淡入淡出  -->
         <div class="carousel" v-if="type=='fade' && bannerList.length > 1 ">
             <ul>
                 <li v-for="(item,idx) in bannerList" :key="idx" :class="idx === curIndex?'on':''" @mouseover="Over" @mouseout="autoPlay">
-                    <img :src="item.path" />
+                    <img :src="item.advImage.path" :aly="item.advTitle"/>
                 </li>
             </ul>
             <div class="btn-box">
@@ -26,28 +26,26 @@
 
 <script>
 import banner from '@/assets/images/banner.jpg'
+import {getBanner} from '@/service'
 export default {
     props:['type'],
     data() {
         return {
             timer: null,
             curIndex: 0,
-            bannerList: [
-                {
-                    path: banner,
-                    title: '首页banner图'
-                },
-                {
-                    path: banner,
-                    title: '首页banner图'
-                },
-                {
-                    path: banner,
-                    title: '首页banner图'
-                }
-
-            ]
+            bannerList: []
         }
+    },
+    mounted() {
+        const vm = this
+        vm.$nextTick(function () {
+            vm.autoPlay()
+        })
+        getBanner().then((res) => {
+            if(res.data.state == 200){
+                vm.bannerList = res.data.content
+            }
+        })
     },
     methods: {
         setState(idx) {
@@ -71,13 +69,8 @@ export default {
         Over() {
             clearInterval(this.timer)
         }
-    },
-    mounted() {
-        const vm = this
-        vm.$nextTick(function () {
-            vm.autoPlay()
-        })
     }
+   
 }
 </script>
 

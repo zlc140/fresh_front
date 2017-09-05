@@ -9,26 +9,25 @@
         <div class="el-input">
             <span class="city">上海市</span> 
             <el-select v-model="addForm.county" placeholder="请选择区">
-              <el-option label="杨浦区" value="1"></el-option>
-              <el-option label="浦东新区" value="2"></el-option>
+              <el-option v-for="(item,index) in areasList" :key="index" :label="item.name" :value="item.name"></el-option>
             </el-select>
         </div>
       </el-form-item>
       <el-form-item label="详细地址" class="detail_addr" prop="addrDetail">
         <el-input v-model="addForm.addrDetail" placeholder="请填写详细地址" auto-complete="off"></el-input>
       </el-form-item>
-     <el-row :gutter="20">
-       <el-col :span="12">
-          <el-form-item label="手机号码" >
+     <!-- <el-row :gutter="20"> -->
+       <!-- <el-col :span="12"> -->
+          <el-form-item prop="phone" label="手机号码" >
             <el-input v-model="addForm.phone" placeholder="请填写收货人手机号码" auto-complete="off"></el-input>
           </el-form-item>
-       </el-col>
-        <el-col :span="12" >
+       <!-- </el-col> -->
+        <!-- <el-col :span="12" >
           <el-form-item label="固定电话" >
             <el-input v-model="addForm.tel" auto-complete="off"></el-input>
           </el-form-item>
-       </el-col>
-     </el-row>
+       </el-col> -->
+     <!-- </el-row> -->
     </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="success" @click.native="addSubmit" :loading="addLoading">保存地址</el-button>
@@ -38,7 +37,7 @@
 </template>
 
 <script>
-import {editAddr,addAddr } from '@/service'
+import {editOrderAddr,addOrderAddr } from '@/service'
 export default {
     props:{
         formData:{
@@ -51,12 +50,30 @@ export default {
             // 添加
             addLoading:false,
             addForm:{
-            name:'',
-            county:'',
-            addrDetail:'',
-            phone:'',
-            tel:''
+                name:'',
+                county:'',
+                addrDetail:'',
+                phone:'',
+                tel:''
             },
+            areasList:[
+                { name:'黄埔区' },
+                { name:'徐汇区' },
+                { name:'长宁区' },
+                { name:'静安区' },
+                { name:'普陀区' },
+                { name:'虹口区' },
+                { name:'杨浦区' },
+                { name:'闵行区' },
+                { name:'宝山区' },
+                { name:'嘉定区' },
+                { name:'浦东新区' },
+                { name:'金山区' },
+                { name:'松江区' },
+                { name:'青浦区' },
+                { name:'奉贤区' }
+                
+            ],
             addFormRules:{
             name:[
                 { required: true, message: '姓名不能为空', trigger: 'blur' }
@@ -76,7 +93,14 @@ export default {
     },
     mounted(){
          if(this.formData != null){
-             this.addForm = this.formData
+             let adds = this.formData.address.split(',')
+             this.addForm = {
+                 name : this.formData.name,
+                 county:adds[1],
+                 addrDetail:adds[2],
+                 phone:this.formData.phone,
+                 orderDaddressId :this.formData.orderDaddressId 
+             }
          }
     },
     methods:{
@@ -87,25 +111,35 @@ export default {
                 if(valid) {
                     _this.addLoading = true
                     if(_this.formData == null){
-
-                        let res = addAddr(this.addForm).then((res) => {
-                            console.log(res)
-                            if(res == true){
-                            _this.addLoading = false
-                            this.$message('添加成功')
-                           _this.$emit('closeDailog',false)
+                        let prop = {
+                            memberId : 'M20170814170704005',
+                            address:'上海市,'+this.addForm.county+','+this.addForm.addrDetail,
+                            phone:this.addForm.phone,
+                            name:this.addForm.name
+                        }
+                        let res = addOrderAddr(prop).then((res) => {
+                            if(res.data.state == 200){
+                                _this.addLoading = false
+                                _this.$emit('closeDailog',false)
+                                this.$message('添加成功')
                             }
-                            console.log(this.addForm)
                         })
                     }else{
-                         let res = editAddr(this.addForm).then((res) => {
-                            console.log(res)
-                            if(res == true){
-                            _this.addLoading = false
-                            this.$message('编辑成功')
-                           _this.$emit('closeDailog',false)
+                         let prop = {
+                                memberId : 'M20170814170704005',
+                                address:'上海市,'+this.addForm.county+','+this.addForm.addrDetail,
+                                phone:this.addForm.phone,
+                                name:this.addForm.name,
+                                orderDaddressId :this.addForm.orderDaddressId 
                             }
-                            console.log(this.addForm)
+                         let res = editOrderAddr(prop).then((res) => {
+                            console.log(res)
+                            if(res.data.state == 200){
+                             _this.addLoading = false
+                             this.$message('编辑成功')
+                            _this.$emit('closeDailog',false)
+                            }
+                           
                         })
                     }
                 }
@@ -119,7 +153,7 @@ export default {
 <style lang="scss">
 @import '../../assets/chang.scss'; 
 .dailog_addr .el-input__inner{
-            width:400px;
+            // width:400px;
 }
   .city{
   display: inline-block;
@@ -132,7 +166,7 @@ export default {
   margin-top: 1px;
 }
 .detail_addr .el-input__inner{
-    width:500px;
+    // width:500px;
 }
 .sel_addr .el-input__inner{
         width:250px;
