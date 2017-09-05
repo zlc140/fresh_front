@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+const baseUrl = 'fresh-order'
 export default {
     login({ commit } ,user) {
         commit('REMEMBER_NAME','admin')
@@ -30,7 +30,7 @@ export default {
         }
        return axios({
             method:'post',
-            url:'/cart/findcart',
+            url:baseUrl+'/cart/findcart',
             params:prop
         }).then((res) => {
             console.log(res)
@@ -54,7 +54,7 @@ export default {
     saveCar ({ commit },prop) {
         return axios({
             method:'post',
-            url:'/saveCar',
+            url:baseUrl+'/saveCar',
             data:prop
         }).then((res) => {
             commit('SAVE_CAR',prop)

@@ -1,10 +1,12 @@
 import axios from 'axios'
  
+// 商品模块
+const proUrl = "fresh-goods"
 // 获取商品分类
 export const cateList = () => {
     return axios({
         method:'post',
-        url:'/gc/findShowGcList'
+        url:proUrl+'/gc/findShowGcList'
     }).then((res) => {
         if(res.data.state == 200){
             return res.data.content
@@ -17,7 +19,7 @@ export const cateList = () => {
 export const goodsList = (para) => {
     return axios({
         method:'post',
-        url:'/goods/findGoods',
+        url:proUrl+'/goods/findGoods',
         params:para,
     }).then((res) => {
         
@@ -33,7 +35,7 @@ export const goodsList = (para) => {
 export const goodsDetail = (para) => {
     return axios({
         method:'post',
-        url:'/goods/findById',
+        url:proUrl+'/goods/findById',
         params:para,
     }).then((res) => {
         if(res.data.state == 200){
@@ -44,11 +46,13 @@ export const goodsDetail = (para) => {
     })
 }
  
+// 购物车订单模块
+const orderUrl = 'fresh-order'
 // 加入购物车
 export const addCar = (prop) => {
     return axios({
         method:'post',
-        url:'/cart/saveCart',
+        url:orderUrl+'/cart/saveCart',
         params:prop,
     }).then((res) => {
         if(res.data.state == 200){
@@ -62,7 +66,7 @@ export const addCar = (prop) => {
 export const delCar = (prop) => {
     return axios({
         method:'post',
-        url:'/cart/deleteCartByCartId',
+        url:orderUrl+'/cart/deleteCartByCartId',
         params:prop,
     }).then((res) => {
         if(res.data.state == 200){
@@ -76,7 +80,7 @@ export const delCar = (prop) => {
 export const editCar = (prop) => {
     return axios({
         method:'post',
-        url:'/cart/updateCart',
+        url:orderUrl+'/cart/updateCart',
         params:prop,
     }).then((res) => {
         if(res.data.state == 200){
@@ -93,7 +97,7 @@ export const advOrderList = () => {
     }
     return axios({
         method:'post',
-        url:'/makeOrder/findAllMakeOrders',
+        url:orderUrl+'/makeOrder/findAllMakeOrders',
        params:prop
     }).then((res) => { 
         console.log(res)
@@ -108,7 +112,7 @@ export const advOrderList = () => {
 export const saveDayOrder = (para) => {
     return axios({
         method:'post',
-        url:'/dayOrder/savaDayOrder',
+        url:orderUrl+'/dayOrder/savaDayOrder',
         // headers : {
         //     'Accept' : 'application/json',
         //     'Content-Type' : 'application/x-www-form-urlencoded'
@@ -130,7 +134,7 @@ export const saveDayOrder = (para) => {
 export const editadvOrder = (para) => {
     return axios({
         method:'post',
-        url:'/makeOrder/update',
+        url:orderUrl+'/makeOrder/update',
         // headers : {
         //     'Accept' : 'application/json',
         //     'Content-Type' : 'application/x-www-form-urlencoded'
@@ -157,15 +161,15 @@ export const getSummary = () => {
        return res.data._summary
     })
 }
+
 // 获取我的订单
 export const orderlist = (prop) => {
     return axios({
         method:'post',
-        url:'/order/findAllOrders',
+        url:orderUrl+'/order/findAllOrders',
         params:prop
     })
 }
-
 
 /////////////////-----地址---------///////////
 // 预订单地址
@@ -175,7 +179,7 @@ export const orderAddress = () => {
     }
     return axios({
         method:'post',
-        url:'/orderDaddress/findOrderAddress'
+        url:orderUrl+'/orderDaddress/findOrderAddress'
     }).then((res) => {
         if(res.data.state == 200) {
             return res.data.content.content
@@ -189,7 +193,7 @@ export const orderAddress = () => {
 export const selAddress = (prop) => {
     return axios({
         method:'post',
-        url:'/orderDaddress/updateorderDaddressDef',
+        url:orderUrl+'/orderDaddress/updateorderDaddressDef',
         params:prop
     })
 }
@@ -197,7 +201,7 @@ export const selAddress = (prop) => {
 export const addOrderAddr = (prop) => {
     return axios({
         method:'post',
-        url:'/orderDaddress/saveOrderDaddress',
+        url:orderUrl+'/orderDaddress/saveOrderDaddress',
         params:prop
     })
 }
@@ -205,7 +209,7 @@ export const addOrderAddr = (prop) => {
 export const editOrderAddr = (prop) => {
     return axios({
         method:'post',
-        url:'/orderDaddress/updateorderDaddress',
+        url:orderUrl+'/orderDaddress/updateorderDaddress',
         params:prop
     })
 }
@@ -213,25 +217,25 @@ export const editOrderAddr = (prop) => {
 export const delAddress = (prop) => {
     return axios({
         method:'post',
-        url:'/orderDaddress/deleteOrderDaddressByorderDaddressId',
+        url:orderUrl+'/orderDaddress/deleteOrderDaddressByorderDaddressId',
         params:prop
     })
 }
 // 首页
 // banner
+
+const firstPage = 'fresh-front'
 export const getBanner = () => {
-    
     return axios({
         method:'POST',
-        url:'/adv/findAll'
+        url:firstPage+'/adv/findAll'
     })
 }
 // floor
 export const getFloor = () => {
-     
     return axios({
         method:'POST',
-        url:'/floor/findAll'
+        url:firstPage+'/floor/findAll'
     })
 }
 

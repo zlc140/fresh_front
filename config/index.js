@@ -28,21 +28,19 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/upload':'http://192.168.0.9:8090//imageBase',
+      '/image-base':'http://192.168.0.111:9090',//图片
 
-      '/cart' : 'http://192.168.0.17:8080/fresh-order',
-      '/makeOrder':'http://192.168.0.17:8080/fresh-order',
-      '/dayOrder':'http://192.168.0.17:8080/fresh-order',
-      '/order':'http://192.168.0.17:8080/fresh-order',
-      '/orderDaddress':'http://192.168.0.17:8080/fresh-order',
+      '/fresh-order' : 'http://192.168.0.111:9090',//订单
+       
+      '/fresh-goods':'http://192.168.0.111:9090',//商品
+       
+      '/fresh-front':'http://192.168.0.111:9090',//首页
 
-      '/goods':'http://192.168.0.12:8080',
-      '/gc':'http://192.168.0.12:8080',
-      '/brand':'http://192.168.0.12:8080',//品牌
-      '/comment':'http://192.168.0.12:8080',//商品评论
+      '/fresh-voucher':'http://192.168.0.111:9090',//优惠券
+       
+      '/fresh-bills':'http://192.168.0.111:9090',//账单
 
-      '/adv':'http://192.168.0.9:8080',//首页banner广告
-      '/floor':'http://192.168.0.9:8080'//首页楼层
+      '/user-center':'http://192.168.0.111:9090',//用户中心
      
     },
 

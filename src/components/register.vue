@@ -144,7 +144,7 @@ export default {
              }
          }
        return {
-           uploadImg:'/upload',
+           uploadImg:'/image-base/upload',
            imageUrl:'',
            dialogVisible:false,
           user: {
