@@ -9,9 +9,9 @@
             <el-table :data="lists" ref="carList"  :show-header="false"  v-loading="listLoading"  @selection-change="selsChange" style="width: 100%;">
                 <el-table-column type="selection" label="全选" width="30">
                 </el-table-column>
-             <el-table-column  prop="goodsPic" label="" width="60"  >
+              <el-table-column  prop="goodsVoList" label="" width="60"  >
                <template scope="scope">
-                   <a class="imgBox"><img :src="scope.row.goodsPic" /></a>
+                   <a class="imgBox"><img :src="scope.row.goodsVoList[0].goods.goodsPic[0].path" /></a>
                </template>
              </el-table-column>
             <el-table-column  prop="goodsTitle" label="" width="190" >
@@ -49,16 +49,16 @@ export default {
       isNull:false
     }
   },
-  computed:{
-      
-  },
   mounted(){
+     
     this.caculate()
-    // console.log(this.lists)
+   
   },
  computed:{
       lists(){
+        
           return this.getList()
+
       }
   },
   methods:{
@@ -68,15 +68,16 @@ export default {
      getList(){
         this.listLoading = true
         // this.lists =await carList()
+        console.log('side',this.$store.state.shopCar)
         if(this.$store.state.shopCar.length == 0 ){
           this.$store.dispatch('getShopCar').then((res) => {
               this.listLoading = false
-              this.isNull = this.$store.state.shopCar.lists.length > 1?false:true
+              this.isNull = this.$store.state.shopCar.lists.length > 0?false:true
               return this.$store.state.shopCar.lists
           })
         }else{
               this.listLoading = false
-              this.isNull = this.$store.state.shopCar.lists.length > 1?false:true
+              this.isNull = this.$store.state.shopCar.lists.length > 0?false:true
               return this.$store.state.shopCar.lists
         }
         

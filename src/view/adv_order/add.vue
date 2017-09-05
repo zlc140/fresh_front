@@ -119,7 +119,6 @@ export default {
          }else if(this.$route.query.id){
               this.getOne()
          }
-        
          return list
       }
     },

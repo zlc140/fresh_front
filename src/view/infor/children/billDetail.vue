@@ -103,22 +103,7 @@ export default {
     position: fixed;
     width: 100%;
     height: 100%;
-::-webkit-scrollbar {
-    width: 4px;
-}
-
- ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-}
-
- ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: rgb(139, 186, 142);
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
-}
   
-
 .drop-enter-active {
     transition: all .5s ease;
 }

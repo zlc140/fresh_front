@@ -5,7 +5,7 @@
       <cate-tem @getName="getName"></cate-tem> 
       <pro-list @addFlew="addFlew"></pro-list>
     </div>
-    <div class="flew"  ref="flew" v-show="flewMove"><img :src="flewPic"/></div>
+    <div class="flew"   ref="flew" v-show="flewMove"><img :src="flewPic"/></div>
   </div>
 </template>
 
@@ -43,11 +43,11 @@ export default {
     getName(name){
       this.breadname = name
     },
-    addFlew(event){
+    addFlew(pic,event){
       this.flewMove = true
       let _this = this
       clearInterval(_this.timer)
-      // this.flewPic = pic
+      this.flewPic = pic
       let Width = document.body.clientWidth
       let X = parseInt(Width-event.clientX)
       let Y = parseInt(event.clientY)
@@ -61,7 +61,6 @@ export default {
     },
     pos(changeX,changeY,X,Y){
           let [opa,goTop,_this,num] = [1,goTop,this,0]
-          console.log(changeY)
           this.timer = setInterval(function(){
             if(changeY > 10){
                 if(num < 4){

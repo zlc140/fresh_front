@@ -4,7 +4,7 @@
          <div class="list_one" v-for="(item,id) in goods.content" :key="id">
                 <div class="list_one_img">
                    <router-link :to="{path:'detail',query:{id:`${item.goodsId}`}}"> 
-                       <!-- <img :src="item.goodsPic[0].path" alt=""/> -->
+                       <img :src="item.goodsPic[0].path" alt=""/>
                        </router-link>
                     </div>
                 <div class="list_one_word">
@@ -13,7 +13,7 @@
                 </div>
                 <!--加入购物车-->
                 <div class="list_add">
-                    <div class="list_add_cart" @click="addtoCar(item.goodsId,$event)">加入购物车</div>
+                    <div class="list_add_cart" @click="addtoCar(item,$event)">加入购物车</div>
                     <div class="list_add_order" @click="addOrder(item.goodsId)">加入预订单</div>
                 </div>
             </div>
@@ -67,15 +67,15 @@ export default {
        this.page=val
        this.getList()
     },
-    addtoCar(val,pic,event){
+    addtoCar(val,event){
         if(getStore('username') == null){
             this.$router.push('/login')
             return false
         }
         let _this = this
-        _this.$emit('addFlew',pic,event)
+        _this.$emit('addFlew',val.goodsPic[0].path,event)
         let prop = {
-            goodsId :val,
+            goodsId :val.goodsId,
             count :1,
             memberId:'M20170814170704005'
         }
@@ -103,28 +103,6 @@ export default {
 <style>
  /*商品列表*/
 
- .pagination_box{
-     padding: 10px 0 30px;
-     text-align: center;
- }
- .el-pagination .btn-next .el-icon, .el-pagination .btn-prev .el-icon{
-     font-size: 16px;
- }
- .el-pagination button, .el-pagination span{
-     font-size: 14px;
- }
- .el-pagination--small .btn-next, .el-pagination--small .btn-prev, .el-pagination--small .el-pager li, .el-pagination--small .el-pager li:last-child{
-     font-size: 18px;
-     min-width: 30px;
- }
- .el-pager li.active{
-     border-color: white;
-     background-color: #fff;
-     color:#6CA96E;
- }
- .el-pager li:hover{
-      color:#6CA96E;
- }
 .productlist_list{
     width: 100%;
     margin-top:30px;
@@ -151,9 +129,9 @@ export default {
 .list_one_img img{
     position: absolute;
     top: 50%;
-    left: 0;
+    left: 2%;
     transform: translateY(-50%);
-    width: 100%;
+    width: 96%;
     height: auto;
 }
 .list_one_word{
@@ -195,7 +173,6 @@ export default {
 .productlist_list .list_one:hover .list_one_word p{
     margin-top: 3px;
 }
-
  
 /*<!--加入购物车-->*/
 .list_add{
@@ -207,7 +184,6 @@ export default {
     text-align: center;
     border: 1px solid #6ca96e;
     cursor: pointer;
-    background-color:  #6ca96e;
     position: relative;
 }
 .list_add div{

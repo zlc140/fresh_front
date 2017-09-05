@@ -1,14 +1,14 @@
 <template>
   <el-col :span="24" class="content">
         
-        <head-bar ></head-bar>
-        <el-col  :span="24" class="main">
+        <head-bar></head-bar>
+        <el-col :span="24" class="main">
             <router-view></router-view>
         </el-col> 
         <el-col :span="24">
             <foot-bar></foot-bar>
         </el-col>
-        <right-nav v-if="rightShow"></right-nav>
+        <right-nav v-if="rightShow" ></right-nav>
   </el-col>
 </template>
 
@@ -20,7 +20,8 @@ import rightNav from './r_nav'
 export default {
     data(){
         return{
-          rightShow:true
+          rightShow:true,
+          closeBox:false
         }
     },
     components:{
@@ -42,13 +43,38 @@ export default {
          }else{
            this.rightShow = true
          }
-      }
+      },
+      
     }
 }
 </script>
 
 <style lang="scss">
 @import '../assets/chang.scss';
+// 分页
+ .pagination_box{
+     padding: 10px 0 30px;
+     text-align: center;
+ }
+ .el-pagination .btn-next .el-icon, .el-pagination .btn-prev .el-icon{
+     font-size: 16px;
+ }
+ .el-pagination button, .el-pagination span{
+     font-size: 14px;
+ }
+ .el-pagination--small .btn-next, .el-pagination--small .btn-prev, .el-pagination--small .el-pager li, .el-pagination--small .el-pager li:last-child{
+     font-size: 18px;
+     min-width: 30px;
+ }
+ .el-pager li.active{
+     border-color: white;
+     background-color: #fff;
+     color:#6CA96E;
+ }
+ .el-pager li:hover{
+      color:#6CA96E;
+ }
+ 
   .main{
   width:100%;
   min-height:calc(100% - 564px); 
@@ -316,4 +342,20 @@ export default {
   from{-webkit-transform: rotate(0deg);}
   to{-webkit-transform: rotate(360deg);}
  }
+
+//  滚动条
+div{
+    ::-webkit-scrollbar {
+        width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: rgb(139, 186, 142);
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    }
+}
 </style>

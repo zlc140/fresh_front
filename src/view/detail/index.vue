@@ -12,7 +12,7 @@
 				</div>
 				<div class="price">
 					价格：
-					<strong>￥{{content.price.GOODS_COST_PRICE}}</strong>
+					<strong>￥{{content.price.GOODS_MARKET_PRICE}}</strong>
 					(约2.5/500g)
 				</div>
 				<div class="place">
@@ -31,18 +31,18 @@
 					<p>(当前库存9996件)</p>
 				</div>
 				<div class="cart">
-					<a class="goCar" @click="addCars(content.goodsId,$event)" :class="addBtn?'diss':''">加入购物车</a>
+					<a class="goCar" @click="addCars(content,$event)" :class="addBtn?'diss':''">加入购物车</a>
 					<a class="goOrder" @click="addOrder(content.goodsId)"> 加入预订单</a>
 				</div>
 			</div>
 		</div>
-		<div class="container" v-if='content != null' v-html="content.goodsBody">
+		<div class="container Prodetail" v-if='content != null' v-html="content.goodsBody">
 	
 		</div>
 		<div v-if='content == null' class="nothing">
 			该商品详情不存在
 		</div>
-			<div class="flew"  ref="flew" v-show="flewMove"><img /></div>
+			<div class="flew"  ref="flew" v-show="flewMove"><img :src="flewPic"/></div>
 	</div>
 </template>
 
@@ -71,14 +71,13 @@ export default {
 		let para = {
 			goodsId: this.$route.query.id
 		}
-
 		this.content = await goodsDetail(para)
 		if (!this.content) {
 			this.content = null
 			this.imgs = []
 			//   this.$alert('详情出错')
 		} else {
-			this.imgs = []
+			this.imgs = this.content.goodsPic
 		}
 		this.breadname = this.content.goodsTitle
 	},
@@ -108,19 +107,20 @@ export default {
 				  })
 				  return false
 			}
-			let prop;
+			let prop
+			let _this = this
 			if (!this.addBtn ) {
-					let _this = this
-					_this.addFlew('',event)
+					
+					_this.addFlew(_this.imgs[0].path,event)
 					prop = {
-						goodsId :val,
+						goodsId :val.goodsId,
 						count :this.num,	
 						memberId:'M20170814170704005'
 					}
 			}
+			console.log(prop)
 			addCar(prop).then((res) => {
 				if(res) {
-					
 					_this.$store.dispatch('getShopCar')
 				}
 			})
@@ -152,7 +152,6 @@ export default {
 		},
 		pos(changeX,changeY,X,Y){
 			let [opa,goTop,_this,num] = [1,goTop,this,0]
-			console.log(changeY)
 			this.timer = setInterval(function(){
 				if(changeY > 10){
 					if(num < 4){
@@ -198,6 +197,13 @@ export default {
 </script>
 
 <style scoped>
+.Prodetail{
+	overflow: hidden;
+	padding-bottom: 50px;
+}
+.Prodetail img{
+	max-width: 1200px;
+}
 .nothing {
 	text-align: center;
 	line-height: 200px;

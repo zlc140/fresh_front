@@ -7,6 +7,7 @@
             </li>
             <li class="car">
                 <i @click="carShow"></i>
+                <div class="addOne" v-if="addActive">+1</div>
             </li>
             <li class="ewm">
                 <i></i>
@@ -19,7 +20,7 @@
             </li>
         </ul>
         <div class="carList">
-            <shop-car v-if="showCar" @closeBox="closeBox"></shop-car>
+            <shop-car v-if="showCar && carBoxShow" @closeBox="closeBox"></shop-car>
              <div class="nullCar" v-if="!showCar">
                 您还没有登录，<router-link to="/login">快去登录吧！</router-link>
             </div>
@@ -34,8 +35,13 @@ export default {
     data() {
         return {
             carBoxShow: false,
-            showCar:false
-
+            showCar:false,
+            addActive:false
+        }
+    },
+    computed:{
+        lists(){
+            return this.$store.state.shopCar.lists
         }
     },
     components: {
@@ -56,11 +62,22 @@ export default {
                 this.carBoxShow = false
             }
 
+        },
+        'lists'(oldval,newval) {
+           if(oldval != newval && !this.carBoxShow){
+               let _this = this
+               _this.addActive = true
+               console.log(this.addActive)
+               setTimeout(function(){
+                    _this.addActive = false
+               },1000)
+           }
         }
+
     },
     methods: {
         closeBox(){
-                this.carBoxShow = false
+            this.carBoxShow = false
         },
         goTop() {
             if (document.documentElement.scrollTop) {
@@ -149,6 +166,18 @@ export default {
                     background-color: green;
                 }
             }
+            .addOne{
+                position: absolute;
+                z-index: 999;
+                background-color: red;
+                border-radius: 50%;
+                text-align: center;
+                width:20px;
+                height: 20px;
+                color:white;
+                top: 0px;
+                animation: addNum 1s ease 1;
+            }
         }
         .ewm {
             span {
@@ -164,11 +193,14 @@ export default {
         }
     }
 }
-
 .showCar {
     right: 0;
     background-color: #333; //   .carList{
     //       display: block;
     //   }
+}
+@keyframes addNum {
+    0%{ opacity: 1;top:0px;}
+    100%{opacity: 0;top:-30px;}
 }
 </style>

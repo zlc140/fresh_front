@@ -98,7 +98,7 @@ export const advOrderList = () => {
     }).then((res) => { 
         console.log(res)
         if(res.data.state == 200){
-            return res.data.content.content[0].dayOrderList
+            return res.data.content.content
         }else{
             return []
         }
@@ -126,6 +126,28 @@ export const saveDayOrder = (para) => {
     })
 }
 
+// 编辑预订单
+export const editadvOrder = (para) => {
+    return axios({
+        method:'post',
+        url:'/makeOrder/update',
+        // headers : {
+        //     'Accept' : 'application/json',
+        //     'Content-Type' : 'application/x-www-form-urlencoded'
+        // },
+        // transformRequest: [function (data) {
+        //     // Do whatever you want to transform the data
+        //     let ret = ''
+        //     for (let it in data) {
+        //             ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+        //     }
+        //     ret = ret.substring(0,ret.length-1)
+        //     return ret
+        // }],
+        params:para
+    })
+}
+
 // 个人中心   这里的页面只有在登录以后才会获取数据
 export const getSummary = () => {
     return axios({
@@ -135,6 +157,16 @@ export const getSummary = () => {
        return res.data._summary
     })
 }
+// 获取我的订单
+export const orderlist = (prop) => {
+    return axios({
+        method:'post',
+        url:'/order/findAllOrders',
+        params:prop
+    })
+}
+
+
 /////////////////-----地址---------///////////
 // 预订单地址
 export const orderAddress = () => {

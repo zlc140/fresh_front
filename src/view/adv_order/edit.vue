@@ -53,28 +53,8 @@
 <script>
 import fullCalendar from '@/components/calendar'
 import addAddress from '../common/addr'
-import { advOrderList,orderAddress,selAddress } from '@/service'
-let demoEvents = [
-  {
-    title: 'Sunny 725-727',
-    start: '1499443200000',
-    end: '',
-    cssClass: 'family'
-  },
-  {
-    title: 'Lun 725-727',
-    start: '1499443200000',
-    end: '',
-    cssClass: 'family2'
-  },
-  {
-    title: 'Lun 725-727',
-    start: '2017-07-09',
-    end: '',
-    cssClass: 'family2'
-  }
-
-];
+import { advOrderList,orderAddress,selAddress,editadvOrder } from '@/service'
+ 
 export default {
   data() {
     return {
@@ -82,6 +62,7 @@ export default {
       name: 'Sunny!',
       fcEvents: [],
       flag:false,
+      makeOrderId:'',
       formData:{
           name:'',
           county:'',
@@ -107,9 +88,11 @@ export default {
     },
     async getList(){ 
         let lists = await advOrderList()
+        console.log('test',lists)
         this.flag = true
-        this.fcEvents = lists
-        console.log(this.fcEvents)
+        this.makeOrderId = lists[0].makeOrderId
+        this.fcEvents = lists[0].dayOrderList.filter( v => v.goodsVoList && v.goodsVoList.length>0)
+        // console.log(this.fcEvents)
     },
     closeDailog(val){
         if(val == false){
@@ -157,6 +140,15 @@ export default {
       this.moreShow = !this.moreShow
     },
     saveOrder(){
+      let para = {
+          makeOrderId:this.makeOrderId,
+          dayOrderId:'',
+          count:'',
+          goodsId:''
+      }
+      editadvOrder(para).then((res) => {
+        console.log(res)
+      })
       console.log(this.fcEvents)
     }
 

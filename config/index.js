@@ -29,14 +29,18 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/upload':'http://192.168.0.9:8090//imageBase',
+
       '/cart' : 'http://192.168.0.17:8080/fresh-order',
       '/makeOrder':'http://192.168.0.17:8080/fresh-order',
       '/dayOrder':'http://192.168.0.17:8080/fresh-order',
+      '/order':'http://192.168.0.17:8080/fresh-order',
       '/orderDaddress':'http://192.168.0.17:8080/fresh-order',
+
       '/goods':'http://192.168.0.12:8080',
       '/gc':'http://192.168.0.12:8080',
       '/brand':'http://192.168.0.12:8080',//品牌
       '/comment':'http://192.168.0.12:8080',//商品评论
+
       '/adv':'http://192.168.0.9:8080',//首页banner广告
       '/floor':'http://192.168.0.9:8080'//首页楼层
      

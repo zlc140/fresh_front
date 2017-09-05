@@ -57,9 +57,8 @@
             <!--<span class="close" @click.stop="showMore = false">x</span>-->
           </div>
           <div class="more-body">
-            <div   v-for="(event,index) in selectDay.events" :key="index"
-                  v-show="event.isShow">
-              <pro-tem :proList="event.goodsVoList" @editList="editList(event.products)"></pro-tem>
+            <div   v-for="(event,index) in selectDay.events" :key="index" v-show="event.isShow">
+              <pro-tem  :proList="event.goodsVoList" :active="selectDay.checktime"></pro-tem>
             </div>
           </div>
         </div>
@@ -135,9 +134,6 @@
       // }
     },
     methods : {
-      editList(val){
-        // console.log(val)
-      },
       emitChangeMonth (firstDayOfMonth) {
         this.showMore = false
         this.currentMonth = firstDayOfMonth;
@@ -193,7 +189,6 @@
         return calendar
       },
       slotEvents (date) {
-        // find all events start from this date
         //console.log('test',this.events)
         let cellIndexArr = [];
         let thisDayEvents = this.events.filter(day => {
@@ -205,17 +200,9 @@
               let ed = moment(day.end ? day.end : day.deliverTime);
               return date.isBetween(st, ed, null, '[]');
           }
-          // else{//传入的时间格式为毫秒
-          //     let st = parseInt(day.deliverTime)
-          //     let ed = parseInt(day.end ? day.end : day.deliverTime);
-          //     let mid = parseInt(date.valueOf())
-          //     // console.log(st,mid)
-          //     if(st == mid){  return true  }else{ return false }
-          // }
-          // return date.isBetween(st, ed, null, '[]');
+          
         });
-        //console.log(thisDayEvents)
-        // sort by duration
+      
         thisDayEvents.sort((a,b)=>{
           if(!a.cellIndex) return 1;
           if (!b.cellIndex) return -1;
@@ -242,11 +229,15 @@
         return thisDayEvents
       },
       selectThisDay (day, jsEvent) {
-        // console.log(this.events)
         this.selectDay = day;
         this.showMore = true;
-       
         this.morePos = this.computePos(jsEvent.target,this.selectDay.weekDay);
+        let checktime = true
+        let nowD = moment().valueOf()
+        if(day.date.valueOf() < nowD){
+          checktime = false
+        }
+        this.selectDay.checktime = checktime
         // this.morePos.top += 75;
         let events = day.events.filter(item =>{
           return item.isShow == true
@@ -437,9 +428,6 @@
      opacity: 0;
    }
   }
-  .more-link{
-    
-  }
   &:after{
      cursor: pointer;
       text-align: right;
@@ -461,7 +449,6 @@
     position:absolute;
     width: 343px;
     z-index: 2;
-    border:1px solid #eee;
     box-shadow: 0 2px 6px rgba(0,0,0,.15);
   .more-header{
     background-color:white;
@@ -489,8 +476,10 @@
   .more-body{
     padding-top: 10px;
     background-color: white;
-    height: 146px;
-    overflow: hidden;
+    height: 200px;
+    padding-bottom: 35px;
+    overflow-y: auto;
+    box-sizing: border-box;
     border: 1px solid $baseColor;
   .body-list{
     height: 144px;

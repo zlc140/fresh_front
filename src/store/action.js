@@ -33,11 +33,12 @@ export default {
             url:'/cart/findcart',
             params:prop
         }).then((res) => {
-            console.log(res.data)
+            console.log(res)
             if(res.data.state == 200){
                 // 首次得到并保存
+                console.log(res.data)
                 commit('GET_CAR', res.data.content.content)
-                return true
+                return  res.data.content.content
             }else{
                 return false
             }

@@ -57,9 +57,9 @@ export default {
         }
     },
     mounted(){
-        console.log('sss',this.imgs)
+        // console.log('sss',this.imgs)
         this.mid_url = this.imgs[0].path
-        console.log(this.mid_url)
+        // console.log(this.mid_url)
         this.Width = {
             'width':this.imgs.length*90+'px'
              
