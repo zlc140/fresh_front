@@ -9,13 +9,14 @@ import tool from './config/tool'
 
 import elementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
-import 'element-ui/lib/index.js'
+// import 'element-ui/lib/index.js'
+Vue.use(elementUI)
 
 import '../static/css/bgPic.css'
 // 提交
 Vue.config.productionTip = false
 
-Vue.use(elementUI)
+
 
 // import Mock from './mock'
 // Mock.bootstrap()

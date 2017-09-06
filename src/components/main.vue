@@ -50,7 +50,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/chang.scss';
+ 
+ @import '../assets/chang.scss';
+
 // 分页
  .pagination_box{
      padding: 10px 0 30px;
@@ -90,7 +92,7 @@ export default {
      }
  
 }
-.checkBox{
+.checkBox.el-input{
         width:180px;
 }
 .checkBox .el-input__inner{
@@ -358,4 +360,5 @@ div{
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
     }
 }
+
 </style>
