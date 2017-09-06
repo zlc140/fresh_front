@@ -28,7 +28,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/upload':'http://192.168.0.9:8090//imageBase',
+      '/upload':'http://192.168.0.9:8090/image-base',
       
       '/cart' : 'http://192.168.0.17:8080/fresh-order',
       '/makeOrder':'http://192.168.0.17:8080/fresh-order',
@@ -41,8 +41,8 @@ module.exports = {
       '/brand':'http://192.168.0.12:8080',//品牌
       '/comment':'http://192.168.0.12:8080',//商品评论
 
-      '/adv':'http://192.168.0.9:8080',//首页banner广告
-      '/floor':'http://192.168.0.9:8080'//首页楼层
+      '/floor':'http://192.168.0.9:8080/fresh-front',//首页楼层
+      '/upload':'http://192.168.0.9:8080/image-base',
      
     },
 
