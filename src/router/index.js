@@ -10,7 +10,17 @@ import {Address,Bill,Coupon,Information,Order} from './component'
 Vue.use(Router)
 
 const route = new Router({
-  mode:'history',
+  // mode:'history',
+  history: false,
+  hashbang: true,
+  base:__dirname,
+  scrollBehavior (to, from, savedPosition) { //这个可以简单的实现路由改变是滚动条回到顶部
+      if (savedPosition) {
+        return savedPosition
+      } else {
+        return { x: 0, y: 0 }
+      }
+  },
   routes: [
     {  path:'',component:main,children:[
     {  path:'/',redirect:'/index'},

@@ -1,7 +1,7 @@
 import axios from 'axios'
  
 // 商品模块
-const proUrl = "fresh-goods"
+const proUrl = "/fresh-goods"
 // 获取商品分类
 export const cateList = () => {
     return axios({
@@ -47,7 +47,7 @@ export const goodsDetail = (para) => {
 }
  
 // 购物车订单模块
-const orderUrl = 'fresh-order'
+const orderUrl = '/fresh-order'
 // 加入购物车
 export const addCar = (prop) => {
     return axios({
@@ -224,7 +224,7 @@ export const delAddress = (prop) => {
 // 首页
 // banner
 
-const firstPage = 'fresh-front'
+const firstPage = '/fresh-front'
 export const getBanner = () => {
     return axios({
         method:'POST',
