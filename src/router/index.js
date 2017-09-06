@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import main from '../components/main'
+// import main from '../components/main'
+const main = r =>  require.ensure([],() => r(require('../components/main')),'group-index');
 import {Login,Register,resetpassword,passSuccess,findback} from './component'
 import {Index,Detail,List,Infor,addOrder,editOrder,addWeekTel,editWeekTel,shopCar,pay} from './component'
 import {Address,Bill,Coupon,Information,Order} from './component'

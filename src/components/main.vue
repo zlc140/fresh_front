@@ -246,7 +246,7 @@ export default {
 .el-form-item__label{
   color: #959595;
 }
-.el-input__inner{
+el-form-item .el-input__inner{
   border-color:#c5c5c5;
   border-radius: 0;
 }
