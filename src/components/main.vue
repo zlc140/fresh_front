@@ -249,8 +249,8 @@ export default {
   color: #959595;
 }
 .el-input .el-input__inner{
-  border-color:#c5c5c5;
-  border-radius: 0;
+  border-color:#c5c5c5 !important;
+  border-radius: 0 !important;
 }
 .el-input  .el-dialog__body{
   padding: 20px 70px;

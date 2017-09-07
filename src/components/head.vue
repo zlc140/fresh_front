@@ -22,7 +22,7 @@
 					</div>
 					<div class="search_box fr"> 
 						<span class="arrow" @click="searchPro"></span>
-						<input type="text" id="search" name="sarch" v-model="search" />
+						<input type="text" id="search" name="sarch" v-model="search"   @keyup.enter="searchPro"/>
 						
 					</div>
 				</div>
@@ -31,12 +31,12 @@
         <div id="nav">
             <div class="nav_banner">
                 <ul >
-                    <li>
+                    <li class="cateHover">
                         <a @click="collapse">全部商品分类</a>
-                        <div class="list_banner" v-show="cateShow">
+                        <div class="list_banner"  >
                             <div class="list_left">
                                 <dl>
-                                    <dd v-for="(item,index) in classList" :key="index" v-if="index < 9">
+                                    <dd @click="close" v-for="(item,index) in classList" :key="index" v-if="index < 9">
                                         <span></span><router-link :to="{path:'/list',query:{'classId':item.classId}}">{{item.classTitle}}</router-link>
                                         <div class="moreList">
                                             <list-tem :lists = 'item.childClass?item.childClass:null'></list-tem>
@@ -72,6 +72,7 @@ export default {
             classList:[],
         }
     },
+   
      watch:{
         '$route' (to,from) {
             const toPath = to.path
@@ -80,6 +81,7 @@ export default {
                 this.search = ''
                 this.cateShow = false
             }
+            console.log(this.cateShow = false)
         }
         
     },
@@ -113,7 +115,12 @@ export default {
             this.cateShow = !this.cateShow
             this.$emit('changeCollapsed',this.cateShow)
         },
+        close() {
+            this.cateShow = false
+            this.$emit('changeCollapsed',this.cateShow)
+        },
         searchPro(){
+            console.log('key')
             this.$router.push({
                 path:'/list',
                 query:{
@@ -212,7 +219,7 @@ export default {
     }
 }
 #nav{
-    margin-top: 14px;
+    margin-top: 16px;
     width: 100%;
     height: 56px;
     background-color:  $baseColor;
@@ -242,6 +249,7 @@ export default {
     }
     .list_banner{
         position: absolute;
+        display: none;
         width:190px;
         top: 56px;
         left: 0;
@@ -287,6 +295,9 @@ export default {
                 }
             }
         }
+    }
+    .cateHover:hover .list_banner{
+        display: block;
     }
 }
 </style>

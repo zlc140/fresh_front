@@ -67,7 +67,6 @@ export default {
            if(oldval != newval && !this.carBoxShow){
                let _this = this
                _this.addActive = true
-               console.log(this.addActive)
                setTimeout(function(){
                     _this.addActive = false
                },1000)
