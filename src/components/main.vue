@@ -50,7 +50,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/chang.scss';
+ 
+ @import '../assets/chang.scss';
+
 // 分页
  .pagination_box{
      padding: 10px 0 30px;
@@ -90,7 +92,7 @@ export default {
      }
  
 }
-.checkBox{
+.checkBox.el-input{
         width:180px;
 }
 .checkBox .el-input__inner{
@@ -224,14 +226,14 @@ export default {
 .dialog-footer{
   text-align: center;
 }
-.el-button--success{
+.dialog-footer .el-button--success{
   background-color: $baseColor;
   letter-spacing: 2px;
   border-color: $baseColor;
   border-radius: 0;
   padding: 10px 30px;
 }
-.el-dialog__headerbtn{
+.el-dialog__header .el-dialog__headerbtn{
   width:25px;
   height: 25px;
   background-color: white;
@@ -240,17 +242,17 @@ export default {
   margin-right: -30px;
 
 }
-.el-dialog__title{
+.el-dialog__header .el-dialog__title{
   color: white;
 }
 .el-form-item__label{
   color: #959595;
 }
-el-form-item .el-input__inner{
+.el-input .el-input__inner{
   border-color:#c5c5c5;
   border-radius: 0;
 }
-.el-dialog__body{
+.el-input  .el-dialog__body{
   padding: 20px 70px;
 }
   /*找回密码  */
@@ -358,4 +360,5 @@ div{
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
     }
 }
+
 </style>

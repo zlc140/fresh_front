@@ -11,7 +11,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
  @import "./assets/reset.css";
 #app {
   /* font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -20,5 +20,4 @@ export default {
   width:100%;
   height: 100%;
 }
-
 </style>

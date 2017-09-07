@@ -246,13 +246,13 @@ export default {
       
     }
  }
- .price{
-   color:#f58500;
- }
-th{
-  font-size: 18px;
-  height: 50px;
-}
+//  .price{
+//    color:#f58500;
+//  }
+// th{
+//   font-size: 18px;
+//   height: 50px;
+// }
  a.title{
    white-space: nowrap;
    overflow: hidden;

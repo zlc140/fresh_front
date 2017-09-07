@@ -22,13 +22,13 @@
 				</div>
 				<div class="number">
 					购买数量：
-					<input type="text" name="" v-model="num" @keyup="changNum">
+					<input type="" name=""  v-model="num" @keyup="changNum">
 					<span class="mui-amount-btn">
 						<span class="icon-top" @click="add"></span>
 						<span class="icon-bottom" @click="reduce"></span>
 					</span>
 					<span class="mui-amount-unit">件</span>
-					<p>(当前库存9996件)</p>
+					<p>(当前库存{{content.goodsStock.stockNum}}件)</p>
 				</div>
 				<div class="cart">
 					<a class="goCar" @click="addCars(content,$event)" :class="addBtn?'diss':''">加入购物车</a>
@@ -80,6 +80,7 @@ export default {
 			this.imgs = this.content.goodsPic
 		}
 		this.breadname = this.content.goodsTitle
+		console.log(this.content)
 	},
 	methods: {
 		changNum() {

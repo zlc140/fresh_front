@@ -9,7 +9,6 @@ export default {
         //     url:'/login',
         //     data:user
         //     }).then((res) => {
-                
         //     if(res.data.msg == '请求成功'){
         //         console.log(res.data)
         //         commit('REMEMBER_NAME',res.data.user)
