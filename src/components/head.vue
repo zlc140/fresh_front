@@ -36,7 +36,7 @@
                         <div class="list_banner"  >
                             <div class="list_left">
                                 <dl>
-                                    <dd @click="close" v-for="(item,index) in classList" :key="index" v-if="index < 9">
+                                    <dd  v-for="(item,index) in classList" :key="index" v-if="index < 9">
                                         <span></span><router-link :to="{path:'/list',query:{'classId':item.classId}}">{{item.classTitle}}</router-link>
                                         <div class="moreList">
                                             <list-tem :lists = 'item.childClass?item.childClass:null'></list-tem>
@@ -87,7 +87,7 @@ export default {
     },
     computed:{
         shopNum(){
-            return this.$store.state.shopCar.length
+            return this.$store.state.shopCar.length?this.$store.state.shopCar.length:getStore('carLen')
         },
         userName(){
             return this.$store.state.username 

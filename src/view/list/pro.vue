@@ -36,7 +36,7 @@ export default {
     return {
       currentPage:1,
       pro:pro,
-      pageSize:8,
+      pageSize:4,
       total:0,
       goods: [],
       page:1,
