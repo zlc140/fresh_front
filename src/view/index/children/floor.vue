@@ -41,7 +41,7 @@
                                 <ul class="cl">
                                     <li class="" v-for="(son ,index) in child.goods" :key="index">
                                         <a href="javascript:" title="">
-                                            <img class="img2" :src="pro" alt="">
+                                            <img class="img2" :src="son.goodsPic[0].path" alt="">
                                             <p class="price">{{son.price.GOODS_MARKET_PRICE | currency}}</p>
                                         </a>
                                     </li>
@@ -104,10 +104,25 @@ export default {
                 width: 100%;
                 li {
                     width: 390px;
+                    height:200px;
+                    overflow: hidden;
                     float: left;
                     margin-left: 15px;
+                    a{
+                        display: inline-block;
+                        width:100%;
+                        height: 100%;
+                        position: relative;
+                    }
                     img {
                         width: 100%;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        bottom: 0;
+                        top: 0;
+                        margin: auto;
+
                     }
                     &:first-child {
                         margin-left: 0;
@@ -132,7 +147,7 @@ export default {
         width: 590px;
         height: 280px;
         position: relative;
-        margin-top: 20px;
+        margin-bottom: 20px;
         a {
             display: inline-block;
             width: 100%;

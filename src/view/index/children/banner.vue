@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import banner from '@/assets/images/banner.jpg'
 import {getBanner} from '@/service'
 export default {
     props:['type'],
@@ -43,6 +42,7 @@ export default {
         })
         getBanner().then((res) => {
             if(res.data.state == 200){
+                console.log(res.data)
                 vm.bannerList = res.data.content
             }
         })

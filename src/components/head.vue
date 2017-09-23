@@ -214,7 +214,7 @@ export default {
 #nav{
     margin-top: 14px;
     width: 100%;
-    height: 56px;
+    height: 60px;
     background-color:  $baseColor;
     position: relative;
     .nav_banner{

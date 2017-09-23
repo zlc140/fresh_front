@@ -128,8 +128,7 @@
     }
 </script>
 <style>
-    
-     .router-slid-enter-active, .router-slid-leave-active {
+    .router-slid-enter-active, .router-slid-leave-active {
         transition: all .4s;
     }
     .router-slid-enter, .router-slid-leave-active {
