@@ -159,7 +159,7 @@ export default {
 .carousel .btn-box {
     position: absolute;
     left: 0%;
-    bottom: 0;
+    bottom: 5px;
     width: 100%;
     margin-left: 0px;
     text-align: center;

@@ -192,6 +192,7 @@ export default {
     height: 145px;
     overflow: hidden;
     a {
+        padding-top: 5px;
         display: inline-block;
         width: 100%;
         height: 125px;
@@ -199,20 +200,10 @@ export default {
         overflow: hidden;
         position: relative;
         img {
-            max-height: 120px;
-            max-width: 100%;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            -moz-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
+            height: 120px;
+            width: 120px;
         }
         p {
-            position: absolute;
-            left: 0;
-            bottom: 0;
             text-align: center;
             width: 100%;
         }
