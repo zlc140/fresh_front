@@ -1,4 +1,6 @@
 <template>
+<div class="content">
+  <breadRumb></breadRumb>
   <div class="container">
     <h2 class="pageTitle">填写并核对订单信息</h2>
     <div class="addr_box">
@@ -48,9 +50,11 @@
         <add-address @closeDailog="closeDailog" v-if="addFormVisible"></add-address>
       </el-dialog>
   </div>
+  </div>
 </template>
 
 <script>
+import breadRumb from '@/components/breadrumb'
 import fullCalendar from '@/components/calendar'
 import addAddress from '../common/addr'
 import { advOrderList,orderAddress,selAddress,editadvOrder } from '@/service'
@@ -70,13 +74,13 @@ export default {
           phone:'',
           tel:''
         },
-      defaultAddr: '0011',
+      defaultAddr: '',
       moreShow: false,
       addrs: []
     }
   },
   components: {
-    fullCalendar,addAddress
+    fullCalendar,addAddress,breadRumb
   },
    mounted() {
     this.getAddr()
@@ -84,7 +88,16 @@ export default {
   },
   methods: {
     async getAddr(){
+      let _this = this
+       _this.defaultAddr=''
         this.addrs = await orderAddress()
+        if(this.addrs && this.addrs.length>0){
+          this.addrs.forEach(function(v) {
+            if(v.isdefault){
+              _this.defaultAddr = v
+            }
+          });
+        }
     },
     async getList(){ 
         let lists = await advOrderList()
@@ -140,16 +153,58 @@ export default {
       this.moreShow = !this.moreShow
     },
     saveOrder(){
+      if(this.defaultAddr == ''){
+        this.$message('请选择配送地址！')
+        return false;
+      }
+      let [dayIds,goodsIds,counts,names,lists] = [[],[],[],[],[]]
+      lists = this.fcEvents.slice(0)
+      // if(this.fcEvents.length>0){
+      //   this.fcEvents.forEach(v => {
+      //     let arr = []
+      //     arr.push(v)
+      //     lists.concat(arr)
+            
+      //      dayIds.concat(v.dayOrderId)
+      //      v.goodsVoList.forEach(m => {
+      //        goodsIds.concat(m.goodsId)
+      //        counts.concat(m.number)
+      //        names.concat(m.goods.goodsTitle)
+      //      })
+      //   })
+      // }
+      // dayIds = dayIds.join(',')
+      // goodsIds = goodsIds.join(',')
+      // counts = counts.join(',')
+      // console.log(counts)
+      // lists = JSON.stringify(lists)
+      console.log(lists)
       let para = {
           makeOrderId:this.makeOrderId,
-          dayOrderId:'',
-          count:'',
-          goodsId:''
+          dayOrderList:lists
+          // dayOrderId:dayIds.join(','),
+          // count:counts.join(','),
+          // goodsId:goodsIds.join(',')
       }
+      // console.log(para)
+      para.dayOrderList.forEach(v => {
+         let _times = v.deliverTime.split('-')
+         v.deliverTime =new Date(_times[0],_times[1]-1,_times[2],8,0,0).getTime()
+         console.log(new Date(_times[0],_times[1],_times[2],8,0,0).getTime())
+        if(v.goodsVoList.goods){
+             v.goodsVoList.goods.goodsPic.forEach(pic => {
+              pic = JSON.stringify(pic)
+            })
+        }
+         v.goodsVoList.forEach(l => {
+           v= JSON.stringify(l)
+         })
+      })
+       para.dayOrderList = JSON.stringify(para.dayOrderList)
       editadvOrder(para).then((res) => {
         console.log(res)
       })
-      console.log(this.fcEvents)
+       
     }
 
   }

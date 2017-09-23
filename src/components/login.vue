@@ -1,5 +1,5 @@
 <template>
-     <div class="content bgWhite">
+     <div class="content bgWhite pd100">
         <div class="login cl">
 			<div class="fl left_box">
 				<a href="javascript:" title="">
@@ -136,8 +136,7 @@
         transform: translate3d(2rem, 0, 0);
         opacity: 0;
     }
-    .bgWhite{
-        background-color: white;
+    .pd100{
         padding: 100px 0;
     }
     .login{margin: 0px auto;width:1200px;}

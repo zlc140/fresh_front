@@ -7,6 +7,7 @@
             <li v-for="(item,index) in cates" :key="index">
               <a @click="searchList(item.classId,item.classTitle)">{{item.classTitle}}</a>
             </li>
+            <li><a @click="searchList('all')">全部</a></li>
           </ul>
         </div>
       </div>

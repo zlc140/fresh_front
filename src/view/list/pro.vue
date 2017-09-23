@@ -34,14 +34,15 @@ import cateTem from './cates'
 export default {
   data() {
     return {
-      currentPage:0,
+      currentPage:1,
       pro:pro,
-      pageSize:8,
+      pageSize:4,
       total:0,
       goods: [],
       page:1,
-      isNull:false
-      
+      isNull:false,
+      classId:'',
+      name:''
     }
   },
   components:{
@@ -49,19 +50,41 @@ export default {
   },
    mounted() {
         //console.log(this.$route.query)
+        if(this.$route.query.classId){
+          this.classId =  this.$route.query.classId 
+        }else if(this.$route.query.name){
+            this.name = this.$route.query.name
+        }
         this.getList()
+  },
+  watch:{
+      '$route'(to,from){
+         if(to.query.classId){
+             this.classId =  to.query.classId 
+             this.name = ''
+             this.page = 1
+         }else if(to.query.name){
+            this.name = to.query.name
+            this.page = 1
+            this.classId = ''
+         }
+         this.getList()
+      }
   },
   methods: {
     async getList(){
         let para = {
-            page: this.page,
+            pageNum: this.page-1,
             pageSize: this.pageSize,
-            goodsShow:2
+            reqFrom:'front',
+            classId:this.classId,
+            goodsTitle:this.name
         }
+        this.goods=[]
         this.goods = await goodsList(para)
         console.log('test',this.goods)
         this.total = this.goods.totalElements
-        this.isNull = this.goods.totalElements>1?true:false
+        this.isNull = this.goods.totalElements>0?true:false
     },
     handleCurrentChange(val){
        this.page=val

@@ -43,6 +43,7 @@ const mutations = {
             }
         })
         state.shopCar.length = state.shopCar.lists.length
+        setStore('carLen',state.shopCar.length)
 
     },
     DEL_CAR (state, prop) {
@@ -53,6 +54,7 @@ const mutations = {
                 }
             })
             state.shopCar.length = state.shopCar.lists.length
+            setStore('carLen',state.shopCar.length)
         }else{
             state.shopCar.islose.forEach((item,index) => {
                 if(item.cartId == prop.cartIds) {
