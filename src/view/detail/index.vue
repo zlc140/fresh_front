@@ -22,7 +22,7 @@
 				</div>
 				<div class="number">
 					购买数量：
-					<input type="" name=""  v-model="num" @keyup="changNum">
+					<input type="" name=""  v-model="num" @change="changNum" >
 					<span class="mui-amount-btn">
 						<span class="icon-top" @click="add"></span>
 						<span class="icon-bottom" @click="reduce"></span>
@@ -88,6 +88,9 @@ export default {
 			if (!reg.test(this.num)) {
 				this.num = 1
 			}
+			if(this.num > this.content.goodsStock.stockNum){
+				this.num = this.content.goodsStock.stockNum
+			}
 		},
 		addOrder(val){
 				this.$router.push({
@@ -128,7 +131,10 @@ export default {
 			
 		},
 		add() {
-			this.num++
+			if(this.num < this.content.goodsStock.stockNum){
+				this.num++
+			}
+			
 		},
 		reduce() {
 			if (this.num > 1) {

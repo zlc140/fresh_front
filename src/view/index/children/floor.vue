@@ -130,7 +130,7 @@ export default {
                 }
                 .big {
                     width: 100%;
-                    margin: 15px 0 0;
+                    margin: 15px 0;
                 }
             }
         }

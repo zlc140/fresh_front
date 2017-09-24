@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'fresh-order'
+const baseUrl = '/fresh-order'
 export default {
     login({ commit } ,user) {
         commit('REMEMBER_NAME','admin')
