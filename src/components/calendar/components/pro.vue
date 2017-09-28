@@ -59,7 +59,6 @@ export default {
         handleChange(val,num){
             
             let num1 = val.number
-            console.log(val,num1,num)
             // val.number = num
             // if(val.number == 0){
             //     this.$confirm('您确认要删除本商品吗？').then((res) =>{

@@ -4,14 +4,15 @@
         <div class="all_left">所有分类:</div>
         <div class="all_right">
           <ul>
+             <li><a @click="searchList('all')">全部</a></li>
             <li v-for="(item,index) in cates" :key="index">
               <a @click="searchList(item.classId,item.classTitle)">{{item.classTitle}}</a>
             </li>
-            <li><a @click="searchList('all')">全部</a></li>
+           
           </ul>
         </div>
       </div>
-       <div class="productlist_all cl bdN">
+       <!-- <div class="productlist_all cl bdN">
         <div class="all_left">认证:</div>
         <div class="all_right">
           <ul>
@@ -20,7 +21,7 @@
             </li>
           </ul>
         </div>
-     </div>
+     </div> -->
     </div>
 </template>
 
@@ -94,6 +95,8 @@ export default {
 .all_right {
   width: 1110px;
   margin-left: 90px;
+  overflow: hidden;
+  zoom: 1;
 }
 
 .all_right ul li {
@@ -105,6 +108,7 @@ export default {
   border-right: 1px solid #ededed;
   width:75px;
   text-align: left;
+  float:left;
 }
 .all_right ul li:nth-child(8n),.all_right ul li:last-child{
   border-right: none;

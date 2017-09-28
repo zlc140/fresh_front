@@ -16,8 +16,6 @@ import '../static/css/bgPic.css'
 // 提交
 Vue.config.productionTip = false
 
-
-
 // import Mock from './mock'
 // Mock.bootstrap()
 
@@ -55,7 +53,20 @@ Vue.filter('phone',(value) => {
     return phone
   }
 })
-
+// 代金券状态
+Vue.filter('voucherType',function(value) {
+  if(value=='VOUCHER_STATE_ON_CHECKING'){
+    return '待审核'
+  }else if(value=='VOUCHER_STATE_CHECK_ON'){
+    return '审核通过'
+  }else if(value=='VOUCHER_STATE_CHECK_OFF'){
+    return '审核不通过'
+  }else if(value='VOUCHER_STATE_OV_ERDUE'){
+    return '代金券过期'
+  }else if(value='VOUCHER_STATE_USED'){
+    return '代金券已使用'
+  }
+}) 
 // 订单状态
 Vue.filter('filterState',(value)=>{
   value = parseInt(value)
@@ -65,6 +76,21 @@ Vue.filter('filterState',(value)=>{
       return '待收货'
   }else{
       return '已签收'
+  }
+})
+// 账单状态
+Vue.filter('filterBill',(value)=>{
+  value = parseInt(value)
+  if(value==0){
+      return '未出账'
+  }else if(value==100){
+      return '未付款'
+  }else if(value==200){
+      return '已付款'
+  }else if(value==300){
+    return '账单关闭'
+  }else if(value==400){
+    return '账单完成'
   }
 })
 /* eslint-disable no-new */

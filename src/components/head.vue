@@ -8,8 +8,8 @@
 						<li v-if="userName==''"><router-link to="/register">注册</router-link></li>
                         <li v-if="userName!=''" >欢迎<router-link to="/user" >{{userName}}</router-link>登录哈福生鲜馆</li>
                         <li v-if="userName!=''" @click="logout"><a>退出</a></li>
-						<li  v-if="userName!=''"><router-link to="/editOrder" >我的配送计划</router-link></li>
-                        <li><router-link to="/user" >个人中心</router-link></li>
+						<li v-if="userName!=''"><router-link to="/editOrder" >我的配送计划</router-link></li>
+                        <li v-if="userName!=''"><router-link to="/user"  >个人中心</router-link></li>
 						<li><router-link to="/shopCar">购物车{{shopNum}}</router-link></li>
 						<li><a href="#">客服电话：021-623453</a></li>
 					</ul>
@@ -31,13 +31,18 @@
         <div id="nav">
             <div class="nav_banner">
                 <ul >
-                    <li>
-                        <a @click="collapse">全部商品分类</a>
-                        <div class="list_banner" v-show="cateShow">
+                    <li class="hoverCate">
+                        <!-- @click="collapse  v-show="cateShow"(list_banner)" -->
+                        <router-link to="/list">全部商品分类</router-link>
+                        <div class="list_banner">
                             <div class="list_left">
                                 <dl>
                                     <dd v-for="(item,index) in classList" :key="index" v-if="index < 9">
-                                        <span></span><router-link :to="{path:'/list',query:{'classId':item.classId}}">{{item.classTitle}}</router-link>
+                                        <router-link :to="{path:'/list',query:{'classId':item.classId}}">
+                                        <span>
+                                            <img :src="item.classPic[0].path" class="one"/>
+                                            <img :src="item.classPic[1].path" class="two"/>
+                                        </span>{{item.classTitle}}</router-link>
                                         <div class="moreList">
                                             <list-tem :lists = 'item.childClass?item.childClass:null'></list-tem>
                                         </div>
@@ -45,11 +50,11 @@
                                 </dl>
                             </div>
                         </div>
-                        </li>
-                    <li><a href="">蔬菜</a></li><span class="down_one"></span>
+                    </li>
+                    <!-- <li><a href="">蔬菜</a></li><span class="down_one"></span>
                     <li><a href="">肉类</a></li>
                     <li><a href="">速冻食品</a></li>
-                    <li><a href="">更多</a></li><span class="down_two"></span>
+                    <li><a href="">更多</a></li><span class="down_two"></span> -->
                 </ul>
                 
             </div>
@@ -93,20 +98,17 @@ export default {
          
     },
     components:{listTem},
-     mounted(){
+    mounted(){
             this.getClass() 
              console.log(getStore('username'))
             if( getStore('username') != null){
                this.$store.commit('REMEMBER_NAME',getStore('username'))
               
             }
-
-          
     },
     methods:{
         async getClass(){
             this.classList = await cateList()
-
             this.$store.commit('SAVE_CLASS',this.classList)
         },
         collapse() {
@@ -237,13 +239,19 @@ export default {
             &:first-child{
                 padding-left: 0;
             }
+            &:hover{
+                .list_banner{
+                    display: block;
+                }
+            }
             }
         }
     }
     .list_banner{
+        display: none;
         position: absolute;
         width:190px;
-        top: 56px;
+        top: 58px;
         left: 0;
         height: 470px;
         background-color: $cateColor;
@@ -260,13 +268,24 @@ export default {
                     width:48px;
                     height: 48px;
                     float: left;
+                    img{
+                        margin:4px;
+                        width:40px;
+                        height:40px;
+                    }
+                    .one{
+                        display:block;
+                    }
+                    .two{
+                        display: none;
+                    }
                 }
                 a{
                     color: white;
                     font-size: 14px;
                 }
                 .moreList{
-                    width:1010px;
+                    // width:1010px;
                     overflow: hidden;
                     height:470px;
                     position: absolute;
@@ -284,9 +303,17 @@ export default {
                     >.moreList{
                         display: block;
                     }
+                    .one{
+                        display: none;
+                    }
+                    .two{
+                        display: block;
+                    }
                 }
             }
         }
+        
     }
 }
+ 
 </style>

@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import pro from '@/assets/images/pro.jpg'
 import { getStore } from '@/config/storage' 
 import { goodsList, addCar } from '@/service'
 import cateTem from './cates'
@@ -35,7 +34,7 @@ export default {
   data() {
     return {
       currentPage:1,
-      pro:pro,
+      pro:'',
       pageSize:8,
       total:0,
       goods: [],
@@ -100,7 +99,6 @@ export default {
         let prop = {
             goodsId :val.goodsId,
             count :1,
-            memberId:'M20170814170704005'
         }
         addCar(prop).then((res) => {
             if(res) {

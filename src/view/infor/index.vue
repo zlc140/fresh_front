@@ -2,7 +2,7 @@
     <div class="container cl infor_index">
         <el-col :span="24">
             <div class="avatar fl">
-                <img :src="sum.photo" alt="">
+                <img :src="photo" alt="">
             </div>
             <div class="detail">
                 <ul>
@@ -50,13 +50,14 @@ import { getSummary } from '@/service'
 export default {
     data() {
         return {
+            photo: userPhoto,
             sum: {
-                nickname: '未登录',
-                photo: userPhoto,
+                nickname: getStore('username'),
                 couponNum: 0,
                 couponAll: 0,
                 noPay: 0
-            }
+            },
+
 
         }
     },
@@ -65,9 +66,14 @@ export default {
     },
     async mounted() {
         if(getStore('username') != null){
-        this.sum = await getSummary()
-        if (this.sum.photo == null) {
-            this.sum.photo = userPhoto
+        let prop = {
+            username : getStore('username')
+        }
+        let sum = await getSummary(prop)
+        if (!sum.portrait) {
+            this.photo = userPhoto
+        }else{
+            this.photo = sum.portrait.path
         }
         // console.log(this.sum)
         if (this.sum.nickname == '') {
@@ -95,11 +101,27 @@ export default {
         width: 960px;
         float: left;
         background-color: white;
-        height: 660px;
+        min-height: 660px;
     }
     .avatar {
         width: 225px;
+        height: 185px;
         margin-right: 15px;
+        overflow: hidden;
+        background: white;
+        position: relative;
+        img{
+            width: 225px;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            max-height: 180px;
+            transform: translateY(-50%);
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+             
+        }
     }
     a {
         text-decoration: none;
@@ -162,5 +184,10 @@ export default {
             margin-left: 0;
         }
     }
+}
+.moreTxt{
+	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
 }
 </style>

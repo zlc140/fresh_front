@@ -64,7 +64,7 @@ export default {
                     vm.curIndex = -1
                     vm.curIndex++
                 }
-            }, 2000)
+            }, 5000)
         },
         Over() {
             clearInterval(this.timer)

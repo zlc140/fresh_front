@@ -122,9 +122,16 @@ export default {
       },
       getList(){
         this.listLoading = true
+        let _this = this
         // this.lists =await carList()
         if(this.$store.state.shopCar.lists.length == 0 && getStore('username') != null){
          this.$store.dispatch('getShopCar').then((res) => {
+            if(res == '403'){
+              this.$message('登录失效，请重新登录！')
+             _this.$store.dispatch('logout').then(() =>{
+                     _this.$router.push('/login')
+                })
+            }
               this.listLoading = false
               return this.$store.state.shopCar.lists
           })
@@ -160,7 +167,6 @@ export default {
               goodsId:'',
               count:'',
               deliverTime:this.selDay,
-              memberId:'M20170814170704005'
             }
             let _this = this
           this.lists.forEach( (v,index) => {

@@ -1,5 +1,49 @@
 import axios from 'axios'
  
+// 注册
+const USER_BASE = '/user-center'
+const MEMBER_BASE = '/fresh-member' 
+export const Register = (prop) => {
+    return axios({
+        method:'post',
+        url:USER_BASE+'/member/register',
+        params:prop
+    }).then((res) => {
+        console.log(res)
+        if(res.data.state == 200){
+            return true
+        }else if(res.data.state == 400){
+            return res.data.messages
+        }else{
+            return false
+        }
+    }).catch(()=>{
+        return false
+    })
+}
+export const login = (prop) => {
+    return axios({
+        method:'post',
+        url:USER_BASE+'/login',
+        params:prop
+    })
+}
+export const userUpdate = (prop) => {
+    return axios({
+        method:'post',
+        url:USER_BASE+'/member/updateMe',
+        params:prop
+    })
+}
+
+export const addMember = (prop) => {
+    return axios({
+        method:'post',
+        url:MEMBER_BASE+'/memberInfo/saveMe',
+        params:prop
+    })
+}
+
 // 商品模块
 const proUrl = "/fresh-goods"
 // 获取商品分类
@@ -38,6 +82,7 @@ export const goodsDetail = (para) => {
         url:proUrl+'/goods/findById',
         params:para,
     }).then((res) => {
+        console.log(res)
         if(res.data.state == 200){
             return res.data.content
         }else{
@@ -55,11 +100,14 @@ export const addCar = (prop) => {
         url:orderUrl+'/cart/saveCart',
         params:prop,
     }).then((res) => {
+        console.log('shopcar',res)
         if(res.data.state == 200){
             return true
         }else{
             return false
         }
+    }).catch((res) => {
+        return '403'
     })
 }
 // 删除购物车商品
@@ -92,19 +140,16 @@ export const editCar = (prop) => {
 }
 // 预订单列表
 export const advOrderList = () => {
-    let prop = {
-        memberId:'M20170814170704005'
-    }
+    
     return axios({
         method:'post',
-        url:orderUrl+'/makeOrder/findAllMakeOrders',
-       params:prop
+        url:orderUrl+'/makeOrder/getMeMakeOrder',
     }).then((res) => { 
         console.log(res)
         if(res.data.state == 200){
-            return res.data.content.content
+            return res.data.content
         }else{
-            return []
+            return false
         }
     })
 }
@@ -135,38 +180,73 @@ export const editadvOrder = (para) => {
     return axios({
         method:'post',
         url:orderUrl+'/makeOrder/update',
-        // headers : {
-        //     'Accept' : 'application/json',
-        //     'Content-Type' : 'application/x-www-form-urlencoded'
-        // },
-        // transformRequest: [function (data) {
-        //     // Do whatever you want to transform the data
-        //     let ret = ''
-        //     for (let it in data) {
-        //             ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-        //     }
-        //     ret = ret.substring(0,ret.length-1)
-        //     return ret
-        // }],
-        params:para
+        headers : {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/x-www-form-urlencoded'
+        },
+        transformRequest: [function (data) {
+            // Do whatever you want to transform the data
+            let ret = ''
+            for (let it in data) {
+                    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            ret = ret.substring(0,ret.length-1)
+            return ret
+        }],
+        data:para
     })
 }
 
 // 个人中心   这里的页面只有在登录以后才会获取数据
-export const getSummary = () => {
+export const getSummary = (prop) => {
     return axios({
         method:'post',
-        url:'/getSummary'
+        url:MEMBER_BASE+'/memberInfo/findMe',
     }).then((res) => {
-       return res.data._summary
+        if(res.data.state == 200){
+            return res.data.content
+        }
+       
     })
 }
-
+// 修改密码
+export const checkPss = (prop) => {
+    return axios({
+        method:'post',
+        url:USER_BASE+'/member/updatePassword',
+        params:prop
+    }).then((res) => {
+       if(res.data.state == 200){
+           return true
+       }else{
+           return false
+       }
+    }).catch(()=>{
+        return false
+    })
+}
+const voucher_BASE = '/fresh-voucher'
+// 代金券
+export const voucherlist = (para) => {
+    return axios({
+        method:'post',
+        url:voucher_BASE+'/voucher/findMyVoucher'
+    })
+}
+// 我的账单
+const Bill_BASE　= '/fresh-bills'
+export const billLists = (para) => {
+    return axios({
+        method:'post',
+        url:Bill_BASE+'/bills/findMe',
+        params:para
+    })
+}
 // 获取我的订单
 export const orderlist = (prop) => {
     return axios({
         method:'post',
-        url:orderUrl+'/order/findAllOrders',
+        url:orderUrl+'/order/getMeOrders',
         params:prop
     })
 }
@@ -174,12 +254,10 @@ export const orderlist = (prop) => {
 /////////////////-----地址---------///////////
 // 预订单地址
 export const orderAddress = () => {
-    let prop = {
-        memberId:'M20170814170704005'
-    }
+     
     return axios({
         method:'post',
-        url:orderUrl+'/orderDaddress/findOrderAddress'
+        url:orderUrl+'/orderDaddress/getMeOrderDaddress'
     }).then((res) => {
         if(res.data.state == 200) {
             return res.data.content.content
@@ -201,7 +279,7 @@ export const selAddress = (prop) => {
 export const addOrderAddr = (prop) => {
     return axios({
         method:'post',
-        url:orderUrl+'/orderDaddress/saveOrderDaddress',
+        url:orderUrl+'/orderDaddress/saveMeOrderDaddress',
         params:prop
     })
 }
@@ -209,7 +287,7 @@ export const addOrderAddr = (prop) => {
 export const editOrderAddr = (prop) => {
     return axios({
         method:'post',
-        url:orderUrl+'/orderDaddress/updateorderDaddress',
+        url:orderUrl+'/orderDaddress/updateMeorderDaddress',
         params:prop
     })
 }

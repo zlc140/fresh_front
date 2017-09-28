@@ -18,7 +18,7 @@ var port = process.env.PORT || config.dev.port
 var autoOpenBrowser = !!config.dev.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
-// var proxyTable = config.dev.proxyTable
+var proxyTable = config.dev.proxyTable
 
 var app = express()
 var compiler = webpack(webpackConfig)
@@ -40,25 +40,25 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
-var proxyPath = config.dev.proxypath
-var context = config.dev.context
+// var proxyPath = config.dev.proxypath
+// var context = config.dev.context
 
-var options = {
-  target: proxyPath,
-  changeOrigin: true,
-}
-if(context.length) {
-  app.use(proxyMiddleware(context,options))
-}
+// var options = {
+//   target: proxyPath,
+//   changeOrigin: true,
+// }
+// if(context.length) {
+//   app.use(proxyMiddleware(context,options))
+// }
 
 // proxy api requests
-// Object.keys(proxyTable).forEach(function (context) {
-//   var options = proxyTable[context]
-//   if (typeof options === 'string') {
-//     options = { target: options }
-//   }
-//   app.use(proxyMiddleware(context, options || options.filter))
-// })
+Object.keys(proxyTable).forEach(function (context) {
+  var options = proxyTable[context]
+  if (typeof options === 'string') {
+    options = { target: options }
+  }
+  app.use(proxyMiddleware(context, options || options.filter))
+})
 
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())

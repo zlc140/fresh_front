@@ -2,7 +2,10 @@
 .search_box .arrow{
     background: url(../image/arrow.png) no-repeat 0 0 ;
 }
-#register_upload_t a{
+.register_upload_t a{
+    background: url(../image/upload.png) no-repeat center center;
+}
+.register_upload_t2 a{
     background: url(../image/upload.png) no-repeat center center;
 }
 /*底部  */

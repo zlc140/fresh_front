@@ -13,7 +13,7 @@
             </el-select>
         </div>
       </el-form-item>
-      <el-form-item label="详细地址" class="detail_addr" prop="addrDetail">
+      <el-form-item class="detail_addr" prop="addrDetail">
         <el-input v-model="addForm.addrDetail" placeholder="请填写详细地址" auto-complete="off"></el-input>
       </el-form-item>
      <!-- <el-row :gutter="20"> -->
@@ -112,7 +112,6 @@ export default {
                     _this.addLoading = true
                     if(_this.formData == null){
                         let prop = {
-                            memberId : 'M20170814170704005',
                             address:'上海市,'+this.addForm.county+','+this.addForm.addrDetail,
                             phone:this.addForm.phone,
                             name:this.addForm.name
@@ -126,7 +125,6 @@ export default {
                         })
                     }else{
                          let prop = {
-                                memberId : 'M20170814170704005',
                                 address:'上海市,'+this.addForm.county+','+this.addForm.addrDetail,
                                 phone:this.addForm.phone,
                                 name:this.addForm.name,

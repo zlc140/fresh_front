@@ -20,7 +20,7 @@
             </li>
         </ul>
         <div class="carList">
-            <shop-car v-if="showCar && carBoxShow" @closeBox="closeBox"></shop-car>
+            <shop-car v-if="showCar &&　carBoxShow" @closeBox="closeBox"></shop-car>
              <div class="nullCar" v-if="!showCar">
                 您还没有登录，<router-link to="/login">快去登录吧！</router-link>
             </div>

@@ -7,6 +7,7 @@
       </el-button>
     </div>
     <div class="detail" v-if="addrList.length>0">
+      <el-radio class="radio" v-model="radio" label="1"></el-radio>
       <p v-for="(item,id) in addrList" :key="id">
         <span class="name">{{item.name}}</span>
         <span class="addr">{{item.address}}</span>
@@ -32,6 +33,7 @@ import { orderAddress,selAddress,delAddress } from '@/service'
 export default {
   data() {
     return {
+      radio:'',
       title: '',
       addrList: [],
       // 添加
@@ -68,6 +70,7 @@ export default {
     },
     async getList() {
       this.addrList = await orderAddress()
+      console.log(this.addrList)
     },
     handAdd() {
       this.title = "新增收货地址"

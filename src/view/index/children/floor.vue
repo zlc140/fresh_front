@@ -17,9 +17,9 @@
                 </div>
             </div>
             <div class="two_template" v-if="item.type=='FLOOR_GOODS'">
-                <div class="reduce" v-if="item.titleImage.path != ''">
-                    <img :src="item.titleImage.path" :alt="item.title">
-                    <p>{{item.title}} </p>
+                <div class="reduce" >
+                    <img :src="item.titleImage.path" :alt="item.title" v-if="item.titleImage.path != ''">
+                    <p v-else>{{item.title}} </p>
                 </div>
                 <div class="div_2">
                     <ul>
@@ -61,7 +61,6 @@
 
 <script>
 
-import pro from '@/assets/images/pro.jpg'
  
 
 import { getFloor } from '@/service'
@@ -69,7 +68,6 @@ import { getFloor } from '@/service'
 export default {
     data() {
         return {
-            pro: pro,
             floorList: []
         }
 

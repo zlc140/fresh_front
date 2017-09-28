@@ -6,20 +6,20 @@
       </div>
 	  <div class="form" v-show="select=='one'">
 	  	<el-form ref="ruleForm" :model="formData" :rules="rules" label-width="80px">
-		  <el-form-item label="姓名" prop="name">
-		    <el-input v-model="formData.name" placeholder="请输入你的姓名"></el-input>
+		  <el-form-item label="真实姓名" prop="name">
+		    <el-input v-model="formData.name" placeholder="请输入你的姓名" ></el-input>
 		  </el-form-item>
-		  <el-form-item label="邮箱" prop="email">
-		    <el-input v-model="formData.email" placeholder="请输入你的邮箱"></el-input>
+		  <el-form-item label="手机号" prop="phone">
+		    <el-input v-model="formData.phone" placeholder="请输入你的号码"></el-input>
+		  </el-form-item>
+       <el-form-item label="邮箱" prop="eMail">
+		    <el-input v-model="formData.eMail" placeholder="请输入你的邮箱"></el-input>
 		  </el-form-item>
 		  <el-form-item label="机构名" prop="agency">
 		    <el-input v-model="formData.agency" placeholder="请输入你的所在机构"></el-input>
 		  </el-form-item>
-		  <el-form-item label="手机号" prop="number">
-		    <el-input v-model="formData.number" placeholder="请输入你的号码"></el-input>
-		  </el-form-item>
 		  <el-form-item>
-		    <el-button type="primary" @click="onSubmit">确认修改</el-button>
+		    <el-button type="primary" @click="onSubmit">保存修改</el-button>
 		  </el-form-item>
 	  	</el-form>
 	  </div>
@@ -36,7 +36,7 @@
 		  </el-form-item>
 		  
 		  <el-form-item>
-		    <el-button type="primary" @click="onSubmit">确认修改</el-button>
+		    <el-button type="primary" @click="onSubmitPass">确认修改</el-button>
 		  </el-form-item>
 		</el-form>
 	  </div>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { getSummary,checkPss,userUpdate,addMember } from '@/service'
 export default {
 data() {
 	var validateNumber = (rule, value, callback) => {
@@ -121,21 +122,22 @@ data() {
       	select:'one',
         formData: {
           name: '',
-          email: '',
+          eMail: '',
           agency: '',
-          number: ''
+          phone: ''
         },
+        checkNews:null,
         rules:{
-  			  name: [
+  			  username: [
 	            { validator: validateName, trigger: 'blur' }
 	          ],
-	          email: [
+	          eMail: [
 	            { validator: validateEmail, trigger: 'blur' }
 	          ],
-	          agency: [
-	            { validator: validateAgency, trigger: 'blur' }
-	          ],
-	          number: [
+	          // agency: [
+	          //   { validator: validateAgency, trigger: 'blur' }
+	          // ],
+	          phone: [
 	            { validator: validateNumber, trigger: 'blur' }
 	          ]
 
@@ -146,27 +148,72 @@ data() {
           oldPass: ''
         },
         rules2: {
-          pass: [
-            { validator: validatePass, trigger: 'blur' }
-          ],
-          checkPass: [
-            { validator: validatePass2, trigger: 'blur' }
-          ],
-          oldPass: [
-            { validator: checkOldPass, trigger: 'blur' }
-          ]
+          // pass: [
+          //   { validator: validatePass, trigger: 'blur' }
+          // ],
+          // checkPass: [
+          //   { validator: validatePass2, trigger: 'blur' }
+          // ],
+          // oldPass: [
+          //   { validator: checkOldPass, trigger: 'blur' }
+          // ]
         }
       };
     },
+    async mounted(){
+       let detail = await getSummary()
+        this.checkNews = detail
+        console.log(detail)
+        this.formData= {
+          name: detail.member.name,
+          eMail: detail.member.email?detail.member.email:'',
+          agency: detail.workUnit,
+          phone: detail.member.phone
+        }
+       
+    },
     methods: {
     	onSubmit() {
-        console.log('submit!');
+        if( this.formData.name !=this.checkNews.member.name || this.formData.phone !=this.checkNews.member.phone || this.formData.eMail !=this.checkNews.member.email ){
+          let prop = {
+            name:this.formData.name,
+            eMail:this.formData.eMail,
+            phone:this.formData.phone
+          }
+          userUpdate(prop).then((res) => {
+           if(res.data.state == 200){
+             this.$message({message:'修改成功',type: 'success'})
+           }
+          })
+        }
+       if(this.formData.agency != this.checkNews.workUnit){
+         let prap = {
+           workUnit :this.formData.agency
+         }
+         addMember(prap).then(res => {
+           if(res.data.state == 200){
+              this.$message({message:'修改成功',type: 'success'})
+           }
+         })
+       }
+      },
+      onSubmitPass(){
+        let _this = this
+          let prop = {
+            password:this.ruleForm2.oldPass,
+            newPassword:this.ruleForm2.pass
+          }
+          checkPss(prop).then(res => {
+            if(res){
+              _this.select = 'one'
+              this.$message('密码修改成功！')
+            }else{
+              this.$message('密码修改失败！')
+            }
+          })
       },
       getList(val){
         this.select = val
-          if(this.select=='one'){
-            this.$refs.ruleForm.resetFields();
-          }
           if(this.select=='two'){
             this.$refs.ruleForm2.resetFields();
           }

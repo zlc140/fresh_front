@@ -118,8 +118,7 @@ export default {
 					_this.addFlew(_this.imgs[0].path,event)
 					prop = {
 						goodsId :val.goodsId,
-						count :this.num,	
-						memberId:'M20170814170704005'
+						count :this.num,
 					}
 			}
 			console.log(prop)

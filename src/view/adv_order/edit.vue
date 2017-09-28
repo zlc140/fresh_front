@@ -28,10 +28,10 @@
       </div>
       <div class="nullAddr"  v-if="addrs.length<1 ||　!addrs.length">您还没有添加收货地址！ </div>
     </div>
-    
+    <!-- <div v-if="fcEvents.length>0"></div> -->
     <full-calendar class="test-fc" 
           :events="fcEvents" 
-          v-if="flag"
+          v-if="flag &&　fcEvents.length>0"
           first-day='1' 
           locale="zh" 
           checkMore="false" 
@@ -43,7 +43,8 @@
                 <p><i class="fa"></i> {{ p.event.title }} test</p>
             </template> -->
     </full-calendar>
-    <div class="btn_box">
+    <div class="null" v-if="!fcEvents.length>0">您的预订单为空，<router-link to="/index">快去添加商品吧</router-link></div>
+    <div class="btn_box" v-if="fcEvents.length>0">
       <a class="btn" @click="saveOrder">保存预订单</a>
     </div>
      <el-dialog title="新增收货地址"  v-model="addFormVisible" :close-on-click-modal="false">
@@ -103,8 +104,13 @@ export default {
         let lists = await advOrderList()
         console.log('test',lists)
         this.flag = true
-        this.makeOrderId = lists[0].makeOrderId
-        this.fcEvents = lists[0].dayOrderList.filter( v => v.goodsVoList && v.goodsVoList.length>0)
+        this.makeOrderId = lists.makeOrderId
+        if(lists){
+            this.fcEvents = lists.dayOrderList.filter( v => v.goodsVoList && v.goodsVoList.length>0)
+        }else{
+            this.fcEvents = []
+        }
+       
         // console.log(this.fcEvents)
     },
     closeDailog(val){
@@ -139,7 +145,6 @@ export default {
     selAddr(val) {
       let _this = this
       let prop = {
-        memberId : 'M20170814170704005',
         orderDaddressId :val
       }
       selAddress(prop).then((res) => {
@@ -178,7 +183,7 @@ export default {
       // counts = counts.join(',')
       // console.log(counts)
       // lists = JSON.stringify(lists)
-      console.log(lists)
+      // console.log(lists)
       let para = {
           makeOrderId:this.makeOrderId,
           dayOrderList:lists
@@ -186,11 +191,11 @@ export default {
           // count:counts.join(','),
           // goodsId:goodsIds.join(',')
       }
-      // console.log(para)
+      console.log(para)
       para.dayOrderList.forEach(v => {
          let _times = v.deliverTime.split('-')
          v.deliverTime =new Date(_times[0],_times[1]-1,_times[2],8,0,0).getTime()
-         console.log(new Date(_times[0],_times[1],_times[2],8,0,0).getTime())
+        //  console.log(new Date(_times[0],_times[1],_times[2],8,0,0).getTime())
         if(v.goodsVoList.goods){
              v.goodsVoList.goods.goodsPic.forEach(pic => {
               pic = JSON.stringify(pic)

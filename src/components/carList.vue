@@ -66,11 +66,18 @@ export default {
         this.$emit('closeBox')
     },
      getList(){
+       let _this = this
         this.listLoading = true
         // this.lists =await carList()
         console.log('side',this.$store.state.shopCar)
         if(this.$store.state.shopCar.length == 0 ){
           this.$store.dispatch('getShopCar').then((res) => {
+            if(res == '403'){
+              this.$message('登录失效，请重新登录！')
+             _this.$store.dispatch('logout').then(() =>{
+                     _this.$router.push('/login')
+                })
+            }
               this.listLoading = false
               this.isNull = this.$store.state.shopCar.lists.length > 0?false:true
               return this.$store.state.shopCar.lists

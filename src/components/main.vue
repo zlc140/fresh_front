@@ -349,6 +349,7 @@ export default {
 div{
     ::-webkit-scrollbar {
         width: 4px;
+        height:8px;
     }
     ::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -360,5 +361,10 @@ div{
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
     }
 }
-
+.greens{
+    color:green;
+}
+.reds{
+    color:red;
+}
 </style>

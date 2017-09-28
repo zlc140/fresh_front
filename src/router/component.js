@@ -1,5 +1,7 @@
 export const Login = r => require.ensure([],() => r(require('../components/login')),'group-index');
-export const Register = r => require.ensure([],() => r(require('../components/register')),'group-index');
+export const Register = r => require.ensure([],() => r(require('../components/register/step1')),'group-register');
+export const StepTwo = r => require.ensure([],() => r(require('../components/register/step2')),'group-register');
+export const StepThree = r => require.ensure([],() => r(require('../components/register/step3')),'group-register');
 
 export const Index = r => require.ensure([],() => r(require('../view/index')),'group-index');
 export const List = r => require.ensure([],() => r(require('../view/list')),'group-index');

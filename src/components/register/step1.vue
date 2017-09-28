@@ -7,41 +7,43 @@
         </div>
         <!--会员注册-->
       <div id="register_member">
-          <div id="register_member_t">会员注册</div>
+          <div id="register_member_t">
+              <img :src="step" />
+          </div>
           <div id="register_member_b">
-                <el-form style="width:500px;" :model="user" :rules="rules" ref="ruleForm" label-position="center" class="demo-ruleForm login-container" >
+                <el-form style="width:500px;idisplay:block;margin:0 auto;" :model="user" :rules="rules" ref="ruleForm" label-position="center" class="demo-ruleForm login-container" >
                     <el-form-item prop="username">
-                        <el-input placeholder = "您的账户名和登陆名" auto-complete="on" v-model="user.username">
+                        <el-input placeholder = "您的用户名用于登录您的账号" auto-complete="on" v-model="user.username">
                             <template slot="prepend"> 
-                              <span>用户名</span>
+                              <span>用 户 名</span>
                             </template>    
                         </el-input>
                     </el-form-item>
-                     <el-form-item prop="nickname">
-                        <el-input placeholder = "请输入您的真实姓名" auto-complete="on" v-model="user.nickname">
+                     <el-form-item prop="name">
+                        <el-input placeholder = "请输入您的真实姓名" auto-complete="on" v-model="user.name">
                            <template slot="prepend"> 
                               <span>真实姓名</span>
                             </template>   
                         </el-input>
                     </el-form-item>
-                     <el-form-item prop="iDCardNo">
-                        <el-input placeholder = "请输入您的公司名称" auto-complete="off"  v-model="user.iDCardNo">
+                     <el-form-item prop="nickName">
+                        <el-input placeholder = "请输入您的昵称" auto-complete="on" v-model="user.nickName">
                            <template slot="prepend"> 
-                              <span>公司名/机构名</span>
-                            </template>    
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="iDCardNo">
-                        <el-input placeholder = "请输入您身份证号" auto-complete="off"  v-model="user.iDCardNo">
-                            <template slot="prepend"> 
-                              <span>身份证</span>
+                              <span>昵　　称</span>
                             </template>   
                         </el-input>
                     </el-form-item>
+                    <el-form-item prop="phone"> 
+                        <el-input placeholder="请输入11位手机号码" type="text" auto-complete="off" v-model="user.phone">
+                           <template slot="prepend"> 
+                              <span>手 机 号</span>
+                            </template> 
+                        </el-input> 
+                    </el-form-item> 
                     <el-form-item prop="password">
                         <el-input placeholder="密码长度6~12位数" type="password" auto-complete="off" v-model="user.password">
                             <template slot="prepend"> 
-                              <span>密&nbsp;&nbsp;码</span>
+                              <span>密　　码</span>
                             </template> 
                         </el-input> 
                     </el-form-item> 
@@ -53,20 +55,14 @@
                         </el-input> 
                     </el-form-item>
                      <el-form-item prop="eMail"> 
-                        <el-input placeholder="请输入有效的邮箱" type="password" auto-complete="off" v-model="user.eMail">
+                        <el-input placeholder="请输入有效的邮箱" type="text" auto-complete="off" v-model="user.eMail">
                            <template slot="prepend"> 
-                              <span>邮&nbsp;&nbsp;箱</span>
+                              <span>邮箱地址<small>（可填）</small></span>
                             </template> 
                         </el-input> 
                     </el-form-item>  
-                    <el-form-item prop="phone"> 
-                        <el-input placeholder="请输入11位手机号码" type="password" auto-complete="off" v-model="user.phone">
-                           <template slot="prepend"> 
-                              <span>手机号</span>
-                            </template> 
-                        </el-input> 
-                    </el-form-item> 
-                    <el-form-item prop="checkWord">
+                   
+                    <!-- <el-form-item prop="checkWord">
                         <el-input type="checkWord" v-model="user.checkWord" @keyup.enter.native="check" class="checkBox">
                           <template slot="prepend"> 
                               <span>手机验证码</span>
@@ -75,32 +71,16 @@
                         <div class="validation fr">
                            <el-button>发送验证码</el-button> 
                         </div>
-                      </el-form-item>
-                        <el-button type="primary" class="btn" @click="validate" id="register_button">注册</el-button>
+                      </el-form-item> -->
+                        
                         <div id="register_email">
-                              <a href="">使用邮箱注册</a>
-                              <span >已有账号
-                              <router-link to="/login">去登陆</router-link></span>
+                              <!-- <a href="">使用邮箱注册</a> -->
+                              <!-- <span >已有账号
+                              <router-link to="/login">去登陆</router-link></span> -->
                         </div> 
-                         <!--证件上传-->
-                        <div id="register_member_b_r">
-                             <div id="register_upload_t">
-                                  <el-upload class="avatar-uploader" ref="upload" 
-                                        :action="uploadImg" 
-                                        :show-file-list="false" 
-                                        :on-remove="handleRemove" 
-                                        :on-success="handleSuccess" 
-                                        :on-error="handleError" 
-                                         >
-                                       <span>机构证件上传</span> <a></a>
-                                    </el-upload>
-                                 </div> 
-                            <div id="register_upload_b">
-                                 <img :src="imageUrl" v-if="imageUrl"/>  
-                            </div>
-                        </div>
-                      
+                       
              </el-form>
+             <el-button type="primary" class="btn " @click="validate" id="register_button">下一步</el-button>
           </div>
           <!--底部-->
           <div id="register_footer">
@@ -116,6 +96,8 @@
 </template>
 
 <script>
+import step1 from '@/assets/images/step1.png'
+import {Register,login} from '@/service'
 export default {
      data(){
          var validatePass = (rule,value,callback) => {
@@ -131,39 +113,46 @@ export default {
              let pon = /^1[34578]\d{9}$/gi;
              if(value === '') {
                  callback(new Error('手机号码不能为空'))
-             }else if(pon.test(value)){
+             }else if(!pon.test(value)){
                 callback(new Error('请输入11位有效手机号码'))
+             }else{
+                  callback()
              }
          }
          var validateCardNo = (rule, value, callback) => {
              let pon = /^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/;
-             if(value === '') {
-                 callback(new Error('身份证号码不能为空'))
-             }else if(pon.test(value)){
+             if(pon.test(value)){
                 callback(new Error('请输入正确的身份证号码'))
+             }else{
+                  callback()
              }
          }
        return {
-           uploadImg:'/image-base/upload',
-           imageUrl:'',
-           dialogVisible:false,
-          user: {
-                
+            step:step1,
+            uploadImg:'/image-base/upload',
+            imageUrl:'',
+            dialogVisible:false,
+            user: {
+               
                 username: '',//账户
-                nickname:'',//真实姓名
+                name:'',//真实姓名
+                nickName:'',//昵称
                 password: '',//密码
                 confirmPassword:'',//密码确认
                 phone:'',//手机
                 eMail:'',//邮箱
-                iDCardNo:'',//身份证号码
-                iDCardPic:'',//机构图片
-                checkWord:''//验证码
+                idCardNo:'',//身份证号码
+                idCardPicStr:'',//机构图片
+                // checkWord:''//验证码
             },
             rules: {
                 username: [
                     { required: true, message: '请输入账号', trigger: 'blur' },
                 ],
-                nickname: [
+                nickName: [
+                    { required: true, message: '请输入真实姓名', trigger: 'blur' },
+                ],
+                name: [
                     { required: true, message: '请输入真实姓名', trigger: 'blur' },
                 ],
                 password: [
@@ -173,24 +162,41 @@ export default {
                     {validator : validatePass, trigger:'blur'}
                 ],
                 eMail:[
-                    { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                  
                     { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
                 ],
-                 phone:[
+                phone:[
+                    { required: true, message: '请输入正确的电话号码', trigger: 'blur' },
                     {validator : validatePhone, trigger:'blur,change'}
                 ],
                 iDCardNo:[
-                    {validator : validatePass, trigger:'blur'}
+                    {validator : validateCardNo, trigger:'blur'}
                 ]
                  
             },
        }
      },
+     mounted(){
+     },
      methods:{
        validate(){
+           let _this = this
          this.$refs.ruleForm.validate((valid) => {
                 if(valid) {
-                     this.$message('成功')
+                    let prop = Object.assign({},this.user)
+                    prop.idCardPicStr = {
+                        path:_this.imageUrl
+                    }
+                    console.log(prop)
+                    Register(prop).then((res) => {
+                        if(res == true){
+                            _this.login()
+                        }else if(res == false){
+                            _this.$message('注册失败')
+                        }else{
+                             _this.$message(res)
+                        }
+                    })
                     
                 }else {
                     console.log('error submit !')
@@ -198,21 +204,34 @@ export default {
                 }
             })
        },
-       handlePictureCardPreview(file){
-            console.log(file)
-            // this.imageUrl = val.url
-            this.dialogVisible = true
+       login(){
+            let _this = this
+            let prop = {
+                username:this.user.username,
+                password:this.user.password
+            }
+            login(prop).then(res => {
+                console.log(res)
+                if(res.data.state == 'SUCCESS'){
+                    _this.$router.push('/stepTwo')
+                }
+            })
        },
        handleRemove(){
 
        },
        handleSuccess(val){
            console.log(val)
-           this.imageUrl = val[0]
+           if(val.state == 200){
+            this.imageUrl = val.content.url
+           }else{
+               this.$message('上传失败')
+           }
+           
 
        },
        handleError(){
-
+            this.$message('上传失败')
        }
      }
 }
@@ -224,6 +243,9 @@ export default {
     width: 1200px;
     margin: 0 auto;
 }
+.mgL300{
+    margin-left: 300px;
+}
 #register_enter{
     width: 1200px;
     height: 40px;
@@ -231,7 +253,10 @@ export default {
     text-align: right;
     font-size: 16px;
 }
-
+span small{
+    font-size: 10px;
+    color:#888;
+}
 #register_enter a{
     font-size: 16px;
     color:  #6ca96e;
@@ -242,23 +267,23 @@ export default {
 /*会员注册*/
 #register_member_t{
     width: 1200px;
-    height: 94px;
-    font-size: 32px;
-    background-color: #6ca96e;
-    text-align: center;
-    line-height: 94px;
-    color: white;
-    border-radius: 20px 20px 0 0;
+    height: 75px;
+    position: relative;
+    overflow: hidden;
 }
-
+.stepPic{
+    width: 1200px;
+    height: 75px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
  #register_member_b{
     background-color: #ffffff;
-    /* height: 920px; */
-    padding-left: 50px;
+    padding:30px 50px 50px;
     overflow: hidden;
-    padding-top: 30px;
-    padding-bottom: 50px;
     position: relative;
+    text-align: center;
 }
   #register_member_b .el-input-group__append, .el-input-group__prepend{
    color: #393939;
@@ -269,8 +294,8 @@ export default {
 #register_member input{
     border:0;
     width: 275px;
-    height: 55px;
-    font-size: 18px;
+    height: 45px;
+    font-size: 16px;
     color: #333;
     float: right;
     letter-spacing:3px;
@@ -307,7 +332,7 @@ export default {
 #register_member_b .el-input-group__prepend{
   border: none;
   background-color: transparent;
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 3px;
   padding-left: 50px;
 }
@@ -336,12 +361,13 @@ export default {
 /*注册按钮*/
 #register_button{
     width: 500px;
-    height: 55px;
+    height: 45px;
     background-color: #6ca96e;
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
+    letter-spacing: 6px;
     text-align: center;
-    line-height: 55px;
+    line-height: 45px;
     margin-top: 30px;
 }
 /*使用邮箱注册*/
@@ -359,46 +385,13 @@ export default {
 /*证件上传*/
 #register_member_b_r{
     width: 478px;
-    height: 350px;
     position: absolute;
     top: 10px;
     left: 600px;
-    margin-top: 40px;
+    margin-top: 20px;
     margin-right: 40px;
 }
-#register_upload_t{
-    position: relative;
-}
-#register_upload_t span{
-    font-size: 18px;
-    color: #393939;
-}
-#register_upload_t a {
-    width: 50px;
-    height: 25px;
-    display: inline-block;
-    margin-bottom: -4px;
-}
-#register_upload_t a img{
-    width: 25px;
-    height: 25px;
-    display: block;
-    margin-left: 10px;
-}
-#register_upload_b{
-    width: 480px;
-    max-height: 400px;
-    min-height: 300px;
-    overflow: hidden;
-    margin-top: 40px;
-    background-color: #F8F8F8;
-   
-}
-#register_upload_b img{
-      width:100%;
-      height:auto;
-      border-radius:4px;
-    }
+
 /*底部*/
 #register_footer{
     text-align: center;

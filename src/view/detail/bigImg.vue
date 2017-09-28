@@ -21,10 +21,7 @@
 </template>
 
 <script>
-import pro from '@/assets/images/pro.jpg'
-import pro2 from '@/assets/images/pro2.jpg'
-import pro3 from '@/assets/images/pro3.jpg'
-
+ 
 export default {
      props:{
         imgs:{
@@ -36,7 +33,7 @@ export default {
      },
     data() {
         return {
-            mid_url:pro,
+            mid_url:'',
             fix_url:'',
             // 小图
             Width:'',

@@ -1,14 +1,14 @@
 <template>
   <div class="account_banner">
     <!-- 支付方式 -->
-    <div class="account_way">
+    <!-- <div class="account_way">
       支付方式
     </div>
     <div class="account_payment">
       <ul>
         <li v-for="(list, index) in list" :key="index" :class="{'active':ind === index}" @click="changeBgc(index)">{{list}}</li>
       </ul>
-    </div>
+    </div> -->
     <!--账目明细-->
     <div class="account_data">
       账目明细
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import testTem from './test'
+import {billLists} from '@/service'
 export default {
   data() {
     return {
@@ -99,31 +99,33 @@ export default {
         date: '2016-05-01',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      },
-      ]
+      }
+      ],
+      details:null
     }
   },
+  mounted(){
+    console.log(this.$route.query.id)
+    if(this.$route.query.id){
+      this.getBillDetail(this.$route.query.id)
+    }
+    
+  },
   methods: {
+    getBillDetail(id){
+        let prop = {
+					billsId:id
+				}
+				billLists(prop).then((res) => {
+					console.log('bills',res)
+					this.listLoading = false
+					if(res.data.state == 200){
+						this.details = res.data.content.content[0]
+					}
+				}).catch(() =>{
+					this.listLoading = false
+				})
+    },
     changeBgc (index) {
       console.log(index)
       this.ind = index

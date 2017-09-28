@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 // import main from '../components/main'
 const main = r =>  require.ensure([],() => r(require('../components/main')),'group-index');
-import {Login,Register,resetpassword,passSuccess,findback} from './component'
+import {Login,Register,StepThree,StepTwo,resetpassword,passSuccess,findback} from './component'
 import {Index,Detail,List,Infor,addOrder,editOrder,addWeekTel,editWeekTel,shopCar,pay} from './component'
 import {Address,Bill,Coupon,Information,Order} from './component'
 
@@ -37,7 +37,12 @@ const route = new Router({
     {  path:'/register', name:'注册', component:Register ,meta:{
       rightBar:false
     }},
-
+    {  path:'/stepTwo', name:'完善资料', component:StepTwo ,meta:{
+      rightBar:false
+    }},
+    {  path:'/regSuccess', name:'注册成功', component:StepThree ,meta:{
+      rightBar:false
+    }},
     {  path:'/reset', name:'重置密码', component:resetpassword ,meta:{
       rightBar:false
     }},
