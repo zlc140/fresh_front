@@ -7,10 +7,10 @@
 						<li v-if="userName==''"><router-link to="/login" >登录</router-link></li>
 						<li v-if="userName==''"><router-link to="/register">注册</router-link></li>
                         <li v-if="userName!=''" >欢迎<router-link to="/user" >{{userName}}</router-link>登录哈福生鲜馆</li>
-                        <li v-if="userName!=''" @click="logout"><a>退出</a></li>
-						<li v-if="userName!=''"><router-link to="/editOrder" >我的配送计划</router-link></li>
-                        <li v-if="userName!=''"><router-link to="/user"  >个人中心</router-link></li>
-						<li><router-link to="/shopCar">购物车{{shopNum}}</router-link></li>
+                        <li  v-if="userName!=''" @click="logout"><a>退出</a></li>
+						<li v-if="userName!='' && getName==''"><router-link to="/editOrder" >我的配送计划</router-link></li>
+                        <li v-if="userName!='' && getName==''" ><router-link to="/user"  >个人中心</router-link></li>
+						<li  v-if="getName==''"><router-link to="/shopCar">购物车<span class="shopNum" v-if="shopNum>0">({{shopNum}})</span></router-link></li>
 						<li><a href="#">客服电话：021-623453</a></li>
 					</ul>
 				</div>
@@ -66,8 +66,8 @@
 
 <script>
  import listTem from './cate_list'
- import {cateList} from '../service'
- import { getStore,removeStore } from '@/config/storage'
+ import {cateList,getSummary} from '../service'
+ import { getStore,removeStore,setStore } from '@/config/storage'
 export default {
     data() {
         return {
@@ -75,6 +75,7 @@ export default {
             cateShow:false,
             collapsed:false,
             classList:[],
+            getName:''
         }
     },
      watch:{
@@ -84,7 +85,14 @@ export default {
             if(to.path != from.path){
                 this.search = ''
                 this.cateShow = false
+                if(getStore('getName') != null){
+                    this.checkLogin()
+                }
             }
+            if(from.path == '/login'){
+                this.checkLogin()
+            }
+
         }
         
     },
@@ -99,12 +107,14 @@ export default {
     },
     components:{listTem},
     mounted(){
+            
             this.getClass() 
-             console.log(getStore('username'))
+             console.log('user',getStore('username'))
             if( getStore('username') != null){
                this.$store.commit('REMEMBER_NAME',getStore('username'))
-              
             }
+             
+            this.checkLogin()
     },
     methods:{
         async getClass(){
@@ -119,7 +129,7 @@ export default {
             this.$router.push({
                 path:'/list',
                 query:{
-                    name:this.search
+                    name:this.search.trim()
                 }
             })
         },
@@ -134,6 +144,23 @@ export default {
             })
            
              
+        },
+        checkLogin(){
+            getSummary().then((res) => {
+                console.log('ceck,',res)
+               if(res.data.state == 200 && res.data.messages=="未完善资料。"){
+                   this.$message(' 请完善资料！')
+                   setStore('getName',JSON.stringify(res.data.content))
+                   this.getName = getStore('getName')
+                    this.$store.commit('REMEMBER_NAME',res.data.content)
+                   this.$router.push('/stepTwo')
+               } else if(res.data.state == 200 && res.data.content.username){
+                   this.getName = ''
+                   this.$store.commit('REMEMBER_NAME',res.data.content.username)
+               }
+            }).catch(() => {
+
+            })
         }
 
          
@@ -144,6 +171,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/chang.scss';
+ 
 .header_box{
     width:100%;
     height:186px;
@@ -281,6 +309,9 @@ export default {
                     }
                 }
                 a{
+                    display: inline-block;
+                    width:100%;
+                    height:100%;
                     color: white;
                     font-size: 14px;
                 }

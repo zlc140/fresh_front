@@ -123,7 +123,7 @@
 <script>
 import step2 from '@/assets/images/step2.png'
 import {addMember,userUpdate} from '@/service'
-
+import {getStore,removeStore} from '@/config/storage'
 export default {
      data(){
          var validatePass = (rule,value,callback) => {
@@ -161,6 +161,7 @@ export default {
             imageUrl2:'',//营业执照
             imageUrl3:'',//身份证
             dialogVisible:false,
+            getName:'',
             member:{
                 idCardNo:'',
                 idCardPicStr:{
@@ -194,6 +195,9 @@ export default {
        }
      },
      mounted(){
+         if(getStore('getName') != null){
+             this.getName = getStore('getName')
+         }
      },
      methods:{
        validate(){
@@ -205,13 +209,10 @@ export default {
                      addMember(prop).then((res) => {
                          console.log('add' ,res)
                          if(res.data.state == 200){
-                              let user = {
-                                  username:res.data.content.username,
-                                  password:'123456'
-                              }
-                                 _this.$store.dispatch('logout').then(() =>{
+                                //  _this.$store.dispatch('logout').then(() =>{
+                                    removeStore('getName')
                                    _this.$router.push('/regSuccess')
-                                })
+                                // })
                             
                          }else{
                              _this.$message('信息完善失败，请重完善')

@@ -18,11 +18,14 @@
                     </el-input> 
                     </el-form-item>   
                     <el-form-item prop="checkWord">
-                    <el-input type="checkWord" placeholder="验证码" v-model="user.checkWord" @keyup.enter.native="check" id="checkBox" class="checkBox"></el-input> 
+                    <el-input type="checkWord" placeholder="验证码" v-model="user.checkWord" @keyup.enter.native="check" id="checkBox" class="checkBox">
+                        
+                        </el-input> 
                     <div class="validation fr">
 					    <!-- <el-button>发送验证码</el-button> -->
+                        <img :src="codePic" @click="getCode"/>
 				    </div>
-                     <a class="forget">忘记密码？</a>
+                     <!-- <a class="forget">忘记密码？</a> -->
                     </el-form-item>
                       
                     <el-col class="denglu">
@@ -40,9 +43,35 @@
 <script>
 
  import axios from 'axios'
+ import {getSummary,getCode} from '@/service'
     export default {
+        
         data() {
+             var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                callback(new Error('请输入密码'));
+                } else {
+                if(value.length<6 || value.length>12){
+                    callback(new Error('密码应该为6-12个字符'));
+                    }else if(!(/[^\d]/g).test(value)){
+                    callback(new Error('密码不能全为数字'));
+                    }else if(!(/[^a-zA-Z]/g).test(value)){
+                    callback(new Error('密码不能全为字母'));
+                    }
+                    callback();
+                }
+                return callback()
+            };
+             var validateName = (rule, value, callback) => {
+                    if(value.length>0 && value.trim() == '' ){
+                        this.$refs.ruleForm.username = ''
+                        callback(new Error('用户名不能为空'));
+                    }else{
+                        callback();
+                    }
+             }
             return {
+                codePic:'http://192.168.0.9:8080/user-center/code',
                 checked:false,
                 loginLoading:false,
                 user:{
@@ -53,9 +82,11 @@
                 rules: {
                     username: [
                         { required: true, message: '账号不能为空', trigger: 'blur,change' },
+                        { validator:validateName,trigger:'blur'}
                     ],
                     password: [
                         { required: true, message: '密码不能为空', trigger: 'blur,change' },
+                        // { validator:validatePass,trigger:'blur'}
                     ],
                     checkWord:[
                         { required: true, message: '验证码不能为空', trigger: 'blur,change' }
@@ -74,8 +105,13 @@
             }
         },
         mounted() {
+             
         },
         methods: {
+            getCode(){
+                let str = new Date().getTime()
+                this.codePic = this.codePic.split('?')[0]+'?'+str
+            },
              getValue (url) {
                     let values = {}
                     if(url.indexOf('?') != -1 &&　url.indexOf('&') == -1) {
@@ -98,6 +134,7 @@
                      _this.$store.dispatch('login',_this.user).then((res) => {
                          this.loginLoading=false
                             if(res){
+                                // _this.checkLogin()
                                 let url = decodeURIComponent(window.location.search)
                                 if(url == ''){
                                     _this.$router.push('/index')
@@ -124,7 +161,23 @@
                     }
                 })
 
-            }
+            },
+            //  checkLogin(){
+            //     getSummary().then((res) => {
+            //         console.log(res)
+            //     if(res == true){
+            //         this.$message('资料未完善，请去完善资料！')
+            //         let username = getStore('username')
+            //         setStore('getName',JSON.stringify(username))
+            //         this.getName = getStore('getName')
+            //         this.$router.push('/stepTwo')
+            //     }else if(res == false){
+
+            //     }else{
+            //         this.$store.commit('REMEMBER_NAME',res.username)
+            //     }
+            //     })
+            // }
         }
     }
 </script>
@@ -217,7 +270,7 @@
 		background-color: rgb(252,252,252);
 		padding: 0 16px;
 	}
-	.login .fr .validation input[type=text]{
+	/* .login .fr .validation input[type=text]{
 		display: inline-block;
 		width: 192px;
 		height: 39px;
@@ -225,20 +278,25 @@
 		background-color: rgb(252,252,252);
 		letter-spacing: 3px;
 		text-align: center;
-	}
+	} */
 		.login .fr .validation {
 		display: inline-block;
 		width: 176px;
 		height: 39px;
 		color: #fff;
 		border: none;
-		border:1px solid rgb(152,195,153);
+		/* border:1px solid rgb(152,195,153); */
         border-radius: 0;
 		text-align: center;
 		line-height: 42px;
         letter-spacing: 2px;
 		text-decoration: none;
 	}
+    .login .fr .validation img{
+         width:176px;
+        max-height: 39px;
+        float: left;
+    }
 	.login .fr .forget{
 		display: block;
 		text-align: right;

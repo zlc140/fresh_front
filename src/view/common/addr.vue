@@ -46,6 +46,16 @@ export default {
         }
     },
     data(){
+         var validatePhone = (rule, value, callback) => {
+             let pon = /^1[34578]\d{9}$/gi;
+             if(value === '') {
+                 callback(new Error('手机号码不能为空'))
+             }else if(!pon.test(value)){
+                callback(new Error('请输入11位有效手机号码'))
+             }else{
+                  callback()
+             }
+         }
         return{
             // 添加
             addLoading:false,
@@ -85,7 +95,8 @@ export default {
                 { required: true, message: '地址详情不能为空', trigger: 'blur' }
                 ],
             phone:[
-                { required: true, message: '电话不能为空', trigger: 'blur' }
+                { required: true, message: '电话不能为空', trigger: 'blur' },
+                { validator:validatePhone,trigger:'blur' }
                 ],
             
             },

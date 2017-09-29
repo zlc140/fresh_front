@@ -7,8 +7,9 @@
       </el-button>
     </div>
     <div class="detail" v-if="addrList.length>0">
-      <el-radio class="radio" v-model="radio" label="1"></el-radio>
+      
       <p v-for="(item,id) in addrList" :key="id">
+        <!-- <el-radio class="radio" v-model="radio" label="1"></el-radio> -->
         <span class="name">{{item.name}}</span>
         <span class="addr">{{item.address}}</span>
         <span class="tel">{{item.phone | phone}}</span>

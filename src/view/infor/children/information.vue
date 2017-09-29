@@ -98,8 +98,8 @@ data() {
         if (value === '') {
           callback(new Error('请输入密码'));
         } else {
-          if(value.length<6 || value.length>16){
-        	callback(new Error('密码应该为6-16个字符'));
+          if(value.length<6 || value.length>12){
+        	callback(new Error('密码应该为6-12个字符'));
         	}else if(!(/[^\d]/g).test(value)){
         	callback(new Error('密码不能全为数字'));
         	}else if(!(/[^a-zA-Z]/g).test(value)){

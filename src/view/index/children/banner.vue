@@ -14,7 +14,7 @@
         <div class="carousel" v-if="type=='fade' && bannerList.length > 1 ">
             <ul>
                 <li v-for="(item,idx) in bannerList" :key="idx" :class="idx === curIndex?'on':''" @mouseover="Over" @mouseout="autoPlay">
-                    <img :src="item.advImage.path" :aly="item.advTitle"/>
+                    <a :href="item.advImage.url"><img :src="item.advImage.path" :aly="item.advTitle"/></a>
                 </li>
             </ul>
             <div class="btn-box">
@@ -142,6 +142,7 @@ export default {
     top: 0;
     opacity: 0;
     transition: 1s all;
+    z-index: 1;
 }
 
 .carousel>ul li img {
@@ -154,6 +155,7 @@ export default {
 
 .carousel>ul li.on {
     opacity: 1;
+    z-index: 9;
 }
 
 .carousel .btn-box {
@@ -163,6 +165,7 @@ export default {
     width: 100%;
     margin-left: 0px;
     text-align: center;
+    z-index: 99;
 }
 
 .carousel .btn-box span {

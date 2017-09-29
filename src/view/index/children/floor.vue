@@ -34,7 +34,7 @@
                             </div> 
     				    </li> -->
                         <li v-for="(child,id) in item.body" :key="id" class="list">
-                            <a href="javascript:;">
+                            <a :href="child.image.url">
                                 <img :src="child.image.path" :class="child.goods.length>0?'img1':''">
                             </a>
                             <div class="detail" v-if="child.goods.length>0">
@@ -47,7 +47,7 @@
                                     </li>
                                 </ul>
                                 <div class="more_box">
-                                    <a class="more">查看更多</a>
+                                    <a class="more" :href="child.image.url">查看更多</a>
                                 </div>
                             </div>
                         </li>
@@ -76,6 +76,7 @@ export default {
         let _this = this
         getFloor().then(res => {
             if (res.data.state == 200) {
+                console.log('floor',res.data)
                 _this.floorList = res.data.content
                 console.log(_this.floorList)
             }

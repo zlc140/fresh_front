@@ -8,15 +8,14 @@
  		<div class="table1" v-if="lists.length>0">
 			<el-table border  :data="lists" style="width: 100%"  v-loading="listLoading">
 				<!-- 父级 -->
-				<el-table-column label="账单号" prop="id" width="180">  </el-table-column>
-				<el-table-column label="期号" prop="issue" >  </el-table-column>
-				<el-table-column label="描述" prop="description" min-width="150">
-				<template scope="scope">
-					 <span  v-if="scope.row.description == null">-</span>
-					<span class="moreTxt" v-else :title="scope.row.description"> 	{{scope.row.description?scope.row.description:''}}</span>
+				<el-table-column label="描述" type="expand" prop="description" min-width="150">
+					<template scope="scope">
+						<span  v-if="scope.row.description == null">-</span>
+						<div class="moreTxt" v-else v-html="scope.row.description"></div>
 					</template>
 				</el-table-column>
-				 
+				<el-table-column label="账单号" prop="id" width="180">  </el-table-column>
+				<el-table-column label="期号" prop="issue" >  </el-table-column>
 				<el-table-column label="出账时间"  prop="generatedBillsTime" width="110px">
 				<template scope="scope">   
 						<span>{{ scope.row.generatedBillsTime | formatDate }}</span>

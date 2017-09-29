@@ -4,7 +4,8 @@ export default {
     login({ commit } ,user) {
         let prop = {
             username:user.username,
-            password:user.password
+            password:user.password,
+            imageCode:user.checkWord
         }
         return axios({
             method:'post',

@@ -198,16 +198,11 @@ export const editadvOrder = (para) => {
 }
 
 // 个人中心   这里的页面只有在登录以后才会获取数据
-export const getSummary = (prop) => {
+export const getSummary = () => {
     return axios({
         method:'post',
         url:MEMBER_BASE+'/memberInfo/findMe',
-    }).then((res) => {
-        if(res.data.state == 200){
-            return res.data.content
-        }
-       
-    })
+    }) 
 }
 // 修改密码
 export const checkPss = (prop) => {

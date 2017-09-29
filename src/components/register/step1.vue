@@ -98,13 +98,31 @@
 <script>
 import step1 from '@/assets/images/step1.png'
 import {Register,login} from '@/service'
+import {setStore} from '@/config/storage'
 export default {
      data(){
-         var validatePass = (rule,value,callback) => {
+          var noSpace = (rule, value, callback) => {
+                    if(value.length>0 && value.trim() == '' ){
+                        callback(new Error('不能全部输入空格'));
+                    }else{
+                        callback();
+                    }
+             }
+         var validateCompare = (rule,value,callback) => {
              if(value === ''){
                  callback(new Error('请再次输入密码'))
              }else if(value !== this.user.password) {
                  callback(new Error('两次输入的密码不一致'))
+             }else{
+                 callback()
+             }
+         }
+          var validatePass = (rule,value,callback) => {
+              let par = /^(\w){6,20}$/; //6~20位数字字母下划线
+             if(value === ''){
+                 callback(new Error('请输入密码'))
+             }else if(!par.test(value) ) {
+                 callback(new Error('密码为6~20为数字字符下划线'))
              }else{
                  callback()
              }
@@ -148,18 +166,22 @@ export default {
             rules: {
                 username: [
                     { required: true, message: '请输入账号', trigger: 'blur' },
+                    {validator:noSpace, trigger:'blur'}
                 ],
                 nickName: [
-                    { required: true, message: '请输入真实姓名', trigger: 'blur' },
+                    { required: true, message: '请输入昵称', trigger: 'blur' },
+                     {validator:noSpace, trigger:'blur'}
                 ],
                 name: [
                     { required: true, message: '请输入真实姓名', trigger: 'blur' },
+                    {validator:noSpace, trigger:'blur'}
                 ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
+                    { validator : validatePass, trigger:'blur' }
                 ],
                 confirmPassword:[
-                    {validator : validatePass, trigger:'blur'}
+                    {validator : validateCompare, trigger:'blur'}
                 ],
                 eMail:[
                   
@@ -210,12 +232,17 @@ export default {
                 username:this.user.username,
                 password:this.user.password
             }
-            login(prop).then(res => {
-                console.log(res)
-                if(res.data.state == 'SUCCESS'){
-                    _this.$router.push('/stepTwo')
-                }
-            })
+             _this.$store.dispatch('login',prop).then(() => {
+                  setStore('getName',JSON.stringify(prop.username))
+                  _this.$router.push('/stepTwo')
+             })
+            // login(prop).then(res => {
+            //     console.log(res)
+            //     if(res.data.state == 'SUCCESS'){
+            //         _this.setStore('getName',prop.username)
+            //         _this.$router.push('/stepTwo')
+            //     }
+            // })
        },
        handleRemove(){
 

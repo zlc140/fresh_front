@@ -27,6 +27,7 @@ const mutations = {
         state.shopCar.length = 0
         state.shopCar.lists = []
         removeStore('username')
+        removeStore('getName')
     },
     SAVE_CLASS (state, lists) {
         state.classList = lists
