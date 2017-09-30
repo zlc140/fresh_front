@@ -160,19 +160,24 @@ data() {
         }
       };
     },
-    async mounted(){
-       let detail = await getSummary()
-        this.checkNews = detail
-        console.log(detail)
-        this.formData= {
-          name: detail.member.name,
-          eMail: detail.member.email?detail.member.email:'',
-          agency: detail.workUnit,
-          phone: detail.member.phone
-        }
-       
+    mounted(){
+          this.getnews()
     },
     methods: {
+      getnews(){
+        let _this = this
+          getSummary().then((res) => {
+               console.log(res)
+              let detail = res.data.content
+              _this.formData= {
+                name: detail.member.name,
+                eMail: detail.member.email?detail.member.email:'',
+                agency: detail.workUnit,
+                phone: detail.member.phone
+              }
+            })
+             
+      },
     	onSubmit() {
         if( this.formData.name !=this.checkNews.member.name || this.formData.phone !=this.checkNews.member.phone || this.formData.eMail !=this.checkNews.member.email ){
           let prop = {

@@ -5,7 +5,8 @@ export default {
         let prop = {
             username:user.username,
             password:user.password,
-            imageCode:user.checkWord
+            imageCode:user.checkWord,
+            key:user.key
         }
         return axios({
             method:'post',

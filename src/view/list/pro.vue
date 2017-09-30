@@ -48,11 +48,17 @@ export default {
     cateTem
   },
    mounted() {
+       this.name = ''
+       this.classId = ''
         //console.log(this.$route.query)
         if(this.$route.query.classId){
           this.classId =  this.$route.query.classId 
+          this.name = ''
+
         }else if(this.$route.query.name){
             this.name = this.$route.query.name
+            this.classId = ''
+
         }
         this.getList()
   },
@@ -60,10 +66,18 @@ export default {
       '$route'(to,from){
          if(to.query.classId){
              this.classId =  to.query.classId 
+             if(to.query.classId == 'all'){
+                 this.classId = ''
+             }
              this.name = ''
              this.page = 1
          }else if(to.query.name){
+             console.log('text',to.query.name)
             this.name = to.query.name
+            this.page = 1
+            this.classId = ''
+         }else{
+            this.name = ''
             this.page = 1
             this.classId = ''
          }
@@ -163,6 +177,7 @@ export default {
     height: 55px;
     font-size: 18px;
     color: #666;
+    overflow: hidden;
 }
 .list_one_word p{
     font-size: 16px;

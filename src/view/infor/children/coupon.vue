@@ -56,7 +56,7 @@ export default {
 		}
 	},
 	mounted(){
-		
+		this.volist()
 	},
 	methods:{
 		volist(){

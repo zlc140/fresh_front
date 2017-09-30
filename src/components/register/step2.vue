@@ -105,7 +105,7 @@
                         </div>
              
              <el-button type="primary" class="btn" @click="validate" id="register_button">完善资料</el-button>
-            
+            <el-dialog v-model="imgPic"></el-dialog>
           </div>
           <!--底部-->
           <div id="register_footer">
@@ -155,6 +155,8 @@ export default {
              }
          }
        return {
+            imgPic:false,
+            showPic:'',
             step:step2,
             uploadImg:'/image-base/upload',
             imageUrl:'',//机构代码证

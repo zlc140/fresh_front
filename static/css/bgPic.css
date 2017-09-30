@@ -126,7 +126,7 @@
     height: 40px;
     background: url(../image/selAddr.png) no-repeat;
 }
- .account_voucher .transition-box_one span {
+ /* .account_voucher .transition-box_one span {
     width: 70px;
     height: 22px;
     display: block;
@@ -136,7 +136,7 @@
     line-height: 25px;
     text-align: center;
     background: url(../image/button.png) no-repeat; 
-}
+} */
 /* 支付页面提交按钮 */
 .account_voucher_list li.btn{
    

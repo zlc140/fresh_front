@@ -14,9 +14,9 @@
                  <div class="findback_detail">
                     <i class="el-icon-check"></i>
                     <span class="findback_a">
-                        <router-link to="/login">恭喜您，您已成为哈福生鲜会员，快去登录吧！</router-link>
+                        <router-link to="/index">恭喜您，您已成为哈福生鲜会员 ！</router-link>
                         （<span class="num">{{time}}</span>）秒后为你跳转到
-                        <router-link to="/login"> 登录页 ...</router-link></span>
+                        <router-link to="/index"> 首页 ...</router-link></span>
                 </div>
           </div>
           <!--底部-->

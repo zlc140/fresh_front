@@ -19,8 +19,7 @@
                     </el-form-item>   
                     <el-form-item prop="checkWord">
                     <el-input type="checkWord" placeholder="验证码" v-model="user.checkWord" @keyup.enter.native="check" id="checkBox" class="checkBox">
-                        
-                        </el-input> 
+                    </el-input> 
                     <div class="validation fr">
 					    <!-- <el-button>发送验证码</el-button> -->
                         <img :src="codePic" @click="getCode"/>
@@ -77,7 +76,8 @@
                 user:{
                     username:'',
                     password: '',
-                    checkWord:''                
+                    checkWord:'',
+                    key:''                
                 },
                 rules: {
                     username: [
@@ -105,12 +105,13 @@
             }
         },
         mounted() {
-             
+            this.getCode()
         },
         methods: {
             getCode(){
-                let str = new Date().getTime()
-                this.codePic = this.codePic.split('?')[0]+'?'+str
+                let str = new Date().getTime()+''
+                this.user.key = Math.random()+str
+                this.codePic = this.codePic+'?key='+this.user.key
             },
              getValue (url) {
                     let values = {}

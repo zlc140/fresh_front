@@ -10,15 +10,61 @@
       </ul>
     </div> -->
     <!--账目明细-->
+    <div class="detail_bills_box">
+        <ul>
+          <li><label> 期　号：</label>{{details.issue}}</li>
+          <li><label> 账单号：</label>{{details.id}}</li>
+          <li><label> 出账时间：</label>{{details.generatedBillsTime | formatDate}}</li>
+          <li><label> 已支付金额：</label>{{details.paymentMoney | currency}}</li>
+        </ul>
+    </div>
     <div class="account_data">
       账目明细
     </div>
     <template>
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column prop="date" label="日期" width="400px"></el-table-column>
-        <el-table-column prop="name" label="消费金额" width="400px"> </el-table-column>
-        <el-table-column prop="address" label="折扣金额"> </el-table-column>
-      </el-table>
+        <el-table-column type="expand" width="50">
+            <template scope="scope">
+                <div v-if="scope.row.order">
+                <el-table  border  :data="scope.row.order.goodsList"  style="width: 90%">  
+                        <el-table-column   prop="goods.goodsTitle"  label="商品名称" min-width="200px"> </el-table-column>
+                        <el-table-column prop="goodsId"  label="商品编号" width="200px"> </el-table-column>
+                        <el-table-column  prop="goods.price.GOODS_MARKET_PRICE" label="商品单价" width="100px">
+                        <template scope="scope">   
+                            <span class="price">{{ scope.row.goods.price.GOODS_MARKET_PRICE | currency }}</span>
+                        </template>
+                        </el-table-column>
+                        <el-table-column  prop="number" label="商品数量" width="100px"> 
+                            <template scope="scope">
+                                <span>× {{scope.row.number}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column  prop="price" label="小计" width="100px"> 
+                        <template scope="scope">   
+                            <span class="price">{{ scope.row.price | currency }}</span>
+                        </template>
+                        </el-table-column>
+                </el-table>
+                <ul class="getAddr">
+                    <li><span>订单号:</span> {{scope.row.order.ordersId}}<span>应付金额:</span><span class="price"> {{scope.row.order.price | currency}}</span></li>
+                </ul>
+                </div>
+                <div v-else>没有详情</div>
+            </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="日期" width="400px">
+          <template scope="scope">
+              {{scope.row.createTime | formatDate}}
+          </template>
+        </el-table-column>
+        <!-- <el-table-column prop="money" label="金额" width="400px"> </el-table-column> -->
+         <el-table-column align="center" prop="description" label="描述" > </el-table-column>
+          <el-table-column align="left" prop="money" label="金额" width="120">
+              <template scope="scope">
+                  <span :class="scope.row.type == 300?'greens':'reds'">{{ scope.row.type==300?'+':'-' }} {{ scope.row.money | currency}}</span>
+              </template>
+          </el-table-column>
+  </el-table>
     </template>
     <!--是否使用抵用券-->
     <div class="account_voucher">
@@ -28,18 +74,15 @@
             <i class="el-icon-arrow-down"></i>
           </div>
           <div>
+            
             <el-collapse-transition>
               <div v-show="show3">
                 <div class="transition-box">
-                  <div class="transition-box_one">哈佛优惠券 满200 减￥20
-                    <span>立即使用</span>
-                  </div>
-                  <div class="transition-box_one">哈佛优惠券 满200 减￥20
-                    <span>立即使用</span>
-                  </div>
-                  <div class="transition-box_one">哈佛优惠券 满200 减￥20
-                    <span>立即使用</span>
-                  </div>
+                  <div class="transition-box_one"  v-for="(item,index) in vouchers" :key="index" :title="item.description">
+                    <span class="price">抵扣现金{{item.money | currency}}</span>
+                    <el-checkbox  @change="handLeChange(item)">立即使用</el-checkbox>
+                    </div>
+                  
                 </div>
               </div>
             </el-collapse-transition>
@@ -49,28 +92,20 @@
       <div class="account_voucher_list">
         <ul>
           <li>
-            <span>账单起始时间：</span>
-            <p>2017-12-29</p>
-          </li>
-          <li>
             <span>账单出账时间：</span>
-            <p>2017-12-29</p>
-          </li>
-          <li>
-            <span>账单还款时间：</span>
-            <p>2017-12-29</p>
+            <p>{{generatedBills | formatDate}}</p>
           </li>
           <li>
             <span>商品总额：</span>
-            <p>￥789.00</p>
+            <p>{{goodPrice|currency }}</p>
           </li>
           <li>
             <span>优惠券：</span>
-            <p>￥789.00</p>
+            <p >{{total|currency}}</p>
           </li>
           <li>
             <span>应付总额：</span>
-            <p>￥72389.00</p>
+            <p>{{totalPrice|currency}}</p>
           </li>
           <li class="btn">提交订单</li>
         </ul>
@@ -80,36 +115,43 @@
 </template>
 
 <script>
-import {billLists} from '@/service'
+import {billLists,voucherlist} from '@/service'
 export default {
   data() {
     return {
       show3: true,
       list: ['在线支付', '公司转账', '邮局汇款'],
       ind: 0,
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }
-      ],
-      details:null
+      checked: false,
+      details:null,
+      tableData:[],
+      vouchers:[],
+      generatedBills: '',
+      goodPrice: 0.00,
+      total: 0.00,
+      totalPrice: 0.00,
     }
   },
   mounted(){
     console.log(this.$route.query.id)
+    let _this = this
     if(this.$route.query.id){
       this.getBillDetail(this.$route.query.id)
     }
-    
+    this.vouchers =[]
+    voucherlist().then((res) =>{
+      if(res.data.state == 200){
+        _this.vouchers = res.data.content
+        if(_this.vouchers.length>0){
+          _this.vouchers.forEach(function(ele) {
+              ele.checks = false
+          });
+        }
+      }
+      console.log('voucher',_this.vouchers)
+    }).catch((res) =>{
+      console.log('失败了')
+    })
   },
   methods: {
     getBillDetail(id){
@@ -117,10 +159,15 @@ export default {
 					billsId:id
 				}
 				billLists(prop).then((res) => {
-					console.log('bills',res)
+					console.log('你好',res)
 					this.listLoading = false
 					if(res.data.state == 200){
-						this.details = res.data.content.content[0]
+            this.details = res.data.content.content[0]
+            this.tableData = this.details.billsInfos 
+            this.generatedBills = this.details.generatedBillsTime
+            this.goodPrice = this.details.money
+            this.totalPrice = this.goodPrice
+            console.log('订单详情',this.details)
 					}
 				}).catch(() =>{
 					this.listLoading = false
@@ -129,14 +176,32 @@ export default {
     changeBgc (index) {
       console.log(index)
       this.ind = index
-    }
+    },
+    handLeChange(item){
+        //console.log('按键',item.checks)
+        item.checks = !item.checks
+        if(item.checks){
+          this.total+=item.money
+        }else{
+          this.total-=item.money
+        }
+        //console.log('优惠券总额',this.total)
+        this.totalPrice=this.goodPrice-this.total
+    } 
   }
 }
 </script>
 
 <style lang= "scss">
 /*支付方式*/
-
+.detail_bills_box{
+  padding:30px 0 10px;
+  font-size: 18px;
+  label{
+    display: inline-block;
+    width:120px;
+  }
+}
 .account_banner {
   width: 1200px;
   height: 2000px;
@@ -168,7 +233,7 @@ export default {
   }
   /*账目明细*/
   .account_data {
-    font-size: 20px;
+    font-size: 18px;
   }
   .el-table tr th {
     background-color: #6ca96e;
@@ -203,12 +268,12 @@ export default {
     position: relative;
     margin-top: 10px;
   }
-  .account_voucher span {
+  /* .account_voucher span {
     width: 70px;
     height: 25px;
     display: block;
     line-height: 28px;
-  }
+  } */
   .account_voucher span img {
     width: 25px;
     height: 15px;
@@ -231,19 +296,21 @@ export default {
     position: relative;
   }
   .account_voucher_list li {
+    overflow: hidden;
+    zoom: 1;
     width: 350px;
   }
   .account_voucher_list li.btn{
    height: 44px;
    width:150px;
    text-align: center;
-    position: absolute;
-    bottom: 200px;
+    float: right;
+    margin: 30px 0;
     font-size: 20px;
     color: #ffffff;
     line-height: 44px;
     cursor: pointer;
-    right: 0;
+    
 } 
   .account_voucher_list li span {
     width: 177px;
@@ -279,7 +346,8 @@ export default {
     font-size: 16px;
   }
   .transition-box {
-    width: 340px;
+    width: 450px;
+    cursor: pointer;
     border-radius: 4px;
     color: #979797;
     padding-top: 20px;
