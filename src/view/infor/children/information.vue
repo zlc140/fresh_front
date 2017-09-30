@@ -148,15 +148,15 @@ data() {
           oldPass: ''
         },
         rules2: {
-          // pass: [
-          //   { validator: validatePass, trigger: 'blur' }
-          // ],
-          // checkPass: [
-          //   { validator: validatePass2, trigger: 'blur' }
-          // ],
-          // oldPass: [
-          //   { validator: checkOldPass, trigger: 'blur' }
-          // ]
+          pass: [
+            { validator: validatePass, trigger: 'blur' }
+          ],
+          checkPass: [
+            { validator: validatePass2, trigger: 'blur' }
+          ],
+          oldPass: [
+            { validator: checkOldPass, trigger: 'blur' }
+          ]
         }
       };
     },
@@ -170,11 +170,12 @@ data() {
                console.log(res)
                if(res.data.state == 200){
                   let detail = res.data.content
+                  this.checkNews = res.data.content
                     _this.formData= {
-                      name: detail.member.name,
+                      name: detail.member.name?detail.member.name:'',
                       eMail: detail.member.email?detail.member.email:'',
-                      agency: detail.workUnit,
-                      phone: detail.member.phone
+                      agency: detail.workUnit? detail.workUnit:'',
+                      phone: detail.member.phone?detail.member.phone:''
                     }
                }else{
                  _this.$store.dispatch('logout').then(() =>{
@@ -202,24 +203,35 @@ data() {
            workUnit :this.formData.agency
          }
          addMember(prap).then(res => {
+           console.log(res)
            if(res.data.state == 200){
               this.$message({message:'修改成功',type: 'success'})
+           }else{
+             this.$message(res.data.messages)
            }
          })
        }
       },
       onSubmitPass(){
+         if(this.ruleForm2.oldPass == this.ruleForm2.pass){
+           this.$message('新旧密码不能一样！')
+           return false
+         }
+         if(this.ruleForm2.checkPass == this.ruleForm2.pass){
+           this.$message('请重新确认密码！')
+           return false
+         }
         let _this = this
           let prop = {
             password:this.ruleForm2.oldPass,
             newPassword:this.ruleForm2.pass
           }
           checkPss(prop).then(res => {
-            if(res){
+            if(res.data.state == 200){
               _this.select = 'one'
               this.$message('密码修改成功！')
             }else{
-              this.$message('密码修改失败！')
+              this.$message(res.data.messages)
             }
           })
       },

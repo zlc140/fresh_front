@@ -204,8 +204,14 @@ export default {
 
 <style scoped>
 .Prodetail{
+	background-color: white;
+	padding: 40px;
+	font-size: 16px;
 	overflow: hidden;
 	padding-bottom: 50px;
+}
+.Prodetail>*{
+	width:100%;
 }
 .Prodetail img{
 	max-width: 1200px;

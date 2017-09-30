@@ -125,6 +125,7 @@ export default {
                      _this.$router.push('/login')
                 })
             }
+            console.log('e',res)
               this.listLoading = false
               this.isNull = res.length > 0?false:true
               return this.$store.state.shopCar.lists
@@ -132,6 +133,7 @@ export default {
         }else{
           this.listLoading = false
           // this.isNull = this.$store.state.shopCar.lists.length > 0?false:true
+          this.isNull = this.$store.state.shopCar.lists.length > 0?false:true
           return this.$store.state.shopCar.lists
         }
         

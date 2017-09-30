@@ -160,13 +160,13 @@ export default {
                 phone:'',//手机
                 eMail:'',//邮箱
                 idCardNo:'',//身份证号码
-                idCardPicStr:'',//机构图片
+                idCardPicStr:{},//机构图片
                 // checkWord:''//验证码
             },
             rules: {
                 username: [
                     { required: true, message: '请输入账号', trigger: 'blur' },
-                    {validator:noSpace, trigger:'blur'}
+                    { validator:noSpace, trigger:'blur'}
                 ],
                 nickName: [
                     { required: true, message: '请输入昵称', trigger: 'blur' },
@@ -206,9 +206,7 @@ export default {
          this.$refs.ruleForm.validate((valid) => {
                 if(valid) {
                     let prop = Object.assign({},this.user)
-                    prop.idCardPicStr = {
-                        path:_this.imageUrl
-                    }
+                  
                     console.log(prop)
                     Register(prop).then((res) => {
                         if(res == true){

@@ -211,10 +211,9 @@ export default {
                      addMember(prop).then((res) => {
                          console.log('add' ,res)
                          if(res.data.state == 200){
-                                //  _this.$store.dispatch('logout').then(() =>{
-                                    removeStore('getName')
+                                 _this.$store.dispatch('logout').then(() =>{
                                    _this.$router.push('/regSuccess')
-                                // })
+                                })
                             
                          }else{
                              _this.$message('信息完善失败，请重完善')

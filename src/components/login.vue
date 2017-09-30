@@ -43,6 +43,7 @@
 
  import axios from 'axios'
  import {getSummary,getCode} from '@/service'
+ import {getStore,setStore } from '@/config/storage'
     export default {
         
         data() {
@@ -109,9 +110,19 @@
         },
         methods: {
             getCode(){
-                let str = new Date().getTime()+''
-                this.user.key = Math.random()+str
-                this.codePic = this.codePic+'?key='+this.user.key
+                 if(getStore('keyCode') == null){
+                    let str = new Date().getTime()+''+Math.random()
+                     setStore('keyCode',str)
+                    this.user.key = getStore('keyCode') 
+                }else{
+                    this.user.key = getStore('keyCode') 
+                }
+                if(this.codePic.indexOf('?')>0){
+                     this.codePic =  this.codePic.split('?')[0]
+                }
+                let news = new Date().getTime()
+                this.codePic = this.codePic+'?key='+this.user.key+'&time='+news
+                console.log(this.user.key)
             },
              getValue (url) {
                     let values = {}
@@ -128,13 +139,13 @@
                     return values
             }, 
             check () {
-                let _this = this
+              let _this = this
               this.$refs.ruleForm.validate((valid) => {
                 if(valid) {
                     this.loginLoading=true
                      _this.$store.dispatch('login',_this.user).then((res) => {
                          this.loginLoading=false
-                            if(res){
+                            if(res == true){
                                 // _this.checkLogin()
                                 let url = decodeURIComponent(window.location.search)
                                 if(url == ''){
@@ -155,8 +166,12 @@
                                     }
                                     
                                 }
+                            }else if(res== false){
+                                this.getCode()
+                                this.$message('登录失败！')
                             }else{
-                                this.$message('用户名或密码错误')
+                                this.getCode()
+                                this.$message(res)
                             }
                      })
                     }

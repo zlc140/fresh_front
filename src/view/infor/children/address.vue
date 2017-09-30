@@ -70,7 +70,7 @@ export default {
       }
     },
     async getList() {
-      this.addrList = await orderAddress()
+      this.addrList = await orderAddress() 
       console.log(this.addrList)
     },
     handAdd() {

@@ -210,14 +210,6 @@ export const checkPss = (prop) => {
         method:'post',
         url:USER_BASE+'/member/updatePassword',
         params:prop
-    }).then((res) => {
-       if(res.data.state == 200){
-           return true
-       }else{
-           return false
-       }
-    }).catch(()=>{
-        return false
     })
 }
 const voucher_BASE = '/fresh-voucher'
@@ -259,6 +251,7 @@ export const orderAddress = () => {
         }
         return []
     }).catch(() => {
+        return []
         console.log('error')
     })
 }

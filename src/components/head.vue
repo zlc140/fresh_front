@@ -6,7 +6,7 @@
 					<ul class="fr">
 						<li v-if="userName==''"><router-link to="/login" >登录</router-link></li>
 						<li v-if="userName==''"><router-link to="/register">注册</router-link></li>
-                        <li v-if="userName!=''" >欢迎<router-link to="/user" >{{userName}}</router-link>登录哈福生鲜馆</li>
+                        <li v-if="userName!=''" >欢迎<router-link to="/user" style="font-size:14px;color:#6CA96E;">{{userName}}</router-link>登录哈福生鲜馆</li>
                         <li  v-if="userName!=''" @click="logout"><a>退出</a></li>
 						<li v-if="userName!='' && getName==''"><router-link to="/editOrder" >我的配送计划</router-link></li>
                         <li v-if="userName!='' && getName==''" ><router-link to="/user"  >个人中心</router-link></li>
@@ -88,6 +88,12 @@ export default {
                 if(getStore('getName') != null){
                     this.checkLogin()
                 }
+               
+            }
+             if(to.query.name){
+                this.search = to.query.name
+            }else{
+                this.search = ''
             }
             if(from.path == '/login'){
                 this.checkLogin()

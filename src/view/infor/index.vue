@@ -2,6 +2,14 @@
     <div class="container cl infor_index">
         <el-col :span="24">
             <div class="avatar fl">
+                 <el-upload class="photo-uploader" 
+                        ref="upload" 
+                        :action="uploadImg" 
+                        :show-file-list="false" 
+                        :on-success="handleSuccess" 
+                        :on-error="handleError" 
+                                         >
+                </el-upload>
                 <img :src="photo" alt="">
             </div>
             <div class="detail">
@@ -46,10 +54,11 @@ import userPhoto from '@/assets/face.jpg'
 import sideBar from '@/components/aside'
 import { getStore } from '@/config/storage'
 
-import { getSummary } from '@/service'
+import { getSummary,addMember } from '@/service'
 export default {
     data() {
         return {
+            uploadImg:'/image-base/upload',
             photo: userPhoto,
             sum: {
                 nickname: getStore('username'),
@@ -64,25 +73,53 @@ export default {
     components: {
         sideBar
     },
-    async mounted() {
+     mounted() {
         if(getStore('username') != null){
-        let prop = {
-            username : getStore('username')
+        
+            getSummary().then(res=>{
+                if(res.data.state == 200){
+                    let sum = res.data.content
+                    if (!sum.portrait) {
+                        this.photo = userPhoto
+                    }else{
+                        this.photo = sum.portrait.path
+                    }
+                    // console.log(this.sum)
+                    if (sum.nickname == '') {
+                        sum.nickname = '用户'
+                    }
+                
+                }else{
+                        this.$message('/login')
+                    }
+            })
         }
-        let sum = await getSummary(prop)
-        if (!sum.portrait) {
-            this.photo = userPhoto
-        }else{
-            this.photo = sum.portrait.path
-        }
-        // console.log(this.sum)
-        if (this.sum.nickname == '') {
-            this.sum.nickname = '用户'
-        }
-        }
-
     },
     methods: {
+        handleSuccess(val){
+            console.log('loadimg',val)
+            if(val.state == 200){
+               this.savePhoto(val.content.url)
+            }
+        },
+        handleError(val){
+            
+        },
+        savePhoto(val){
+                let prop = {
+                    portrait:{
+                        path:val
+                    }
+                }
+                addMember(prop).then(res => {
+                    if(res.data.state == 200){
+                        this.photo = val
+                    }else{
+                        this.$message(res.data.messages)
+                    }
+                     
+                })
+        }
 
     }
 }
@@ -110,7 +147,7 @@ export default {
         overflow: hidden;
         background: white;
         position: relative;
-        img{
+        &>img{
             width: 225px;
             position: absolute;
             left: 0;
@@ -121,6 +158,19 @@ export default {
             -moz-transform: translateY(-50%);
             -ms-transform: translateY(-50%);
              
+        }
+        .photo-uploader{
+            width:100%;
+            height:100%;
+            z-index: 1;
+            background-color: rgba(0,0,0,0.2);
+            position: absolute;
+            top: 0;
+            left: 0;
+            .el-upload{
+                width:100%;
+                height:100%;
+            }
         }
     }
     a {

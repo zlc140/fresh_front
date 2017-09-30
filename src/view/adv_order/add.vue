@@ -153,7 +153,7 @@ export default {
         },
         dayClick (day, jsEvent) {
           this.selDay = day
-          // console.log('dayClick', day)
+          console.log('dayClick', day,new Date(day[0]))
         },
         moreClick (day, events, jsEvent) {
           // console.log('moreCLick', day, events, jsEvent)

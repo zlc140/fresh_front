@@ -8,6 +8,7 @@ export default {
             imageCode:user.checkWord,
             key:user.key
         }
+        console.log(prop)
         return axios({
             method:'post',
             url:'/user-center/login',
@@ -18,7 +19,7 @@ export default {
                 commit('REMEMBER_NAME',user.username)
                  return true
             }else{
-                return false
+                return res.data.messages
             }
         }).catch((res) => {
                 return false

@@ -40,10 +40,10 @@
                             <div class="detail" v-if="child.goods.length>0">
                                 <ul class="cl">
                                     <li class="" v-for="(son ,index) in child.goods" :key="index">
-                                        <a href="javascript:" title="">
+                                        <router-link :to="{path:'detail',query:{id:`${son.goodsId}`}}">
                                             <img class="img2" :src="son.goodsPic[0].path" alt="">
                                             <p class="price">{{son.price.GOODS_MARKET_PRICE | currency}}</p>
-                                        </a>
+                                        </router-link>
                                     </li>
                                 </ul>
                                 <div class="more_box">
@@ -93,8 +93,13 @@ export default {
         line-height: 70px;
         font-size: 20px;
         overflow: hidden;
+        margin-bottom: 8px;
         img {
-            width: 100%;
+            display: block;
+            width: auto;
+            max-width: 1200px;
+            max-height: 70px;
+            margin: 0 auto;
         }
     }
     .one_template {
