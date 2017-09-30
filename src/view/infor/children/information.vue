@@ -168,14 +168,20 @@ data() {
         let _this = this
           getSummary().then((res) => {
                console.log(res)
-              let detail = res.data.content
-              _this.formData= {
-                name: detail.member.name,
-                eMail: detail.member.email?detail.member.email:'',
-                agency: detail.workUnit,
-                phone: detail.member.phone
-              }
-            })
+               if(res.data.state == 200){
+                  let detail = res.data.content
+                    _this.formData= {
+                      name: detail.member.name,
+                      eMail: detail.member.email?detail.member.email:'',
+                      agency: detail.workUnit,
+                      phone: detail.member.phone
+                    }
+               }else{
+                 _this.$store.dispatch('logout').then(() =>{
+                     _this.$router.push('/login')
+                 })
+               }
+             })
              
       },
     	onSubmit() {

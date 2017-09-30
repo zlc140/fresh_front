@@ -157,6 +157,10 @@ export default {
                } else if(res.data.state == 200 && res.data.content.username){
                    this.getName = ''
                    this.$store.commit('REMEMBER_NAME',res.data.content.username)
+               }else if(res.data.state == 400 && getStore('username') != null){
+                    this.$store.dispatch('logout').then(() =>{
+                     this.$router.push('/login')
+                    })
                }
             }).catch(() => {
 
