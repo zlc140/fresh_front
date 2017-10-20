@@ -2,13 +2,13 @@
   <el-col :span="24" class="content">
         
         <head-bar></head-bar>
-        <el-col :span="24" class="main">
+        <el-col :span="24" class="main" @click="closeNav">
             <router-view></router-view>
         </el-col> 
         <el-col :span="24">
             <foot-bar></foot-bar>
         </el-col>
-        <right-nav v-if="rightShow" ></right-nav>
+        <right-nav v-if="rightShow" :closeN = 'closeN'></right-nav>
   </el-col>
 </template>
 
@@ -21,7 +21,8 @@ export default {
     data(){
         return{
           rightShow:true,
-          closeBox:false
+          closeBox:false,
+          closeN:false
         }
     },
     components:{
@@ -44,6 +45,9 @@ export default {
            this.rightShow = true
          }
       },
+      closeNav(){
+        this.closeN = true
+      }
       
     }
 }
@@ -213,9 +217,9 @@ export default {
    .el-button--small{
      font-size: 16px;
    }
-   .el-table .cell{
-     text-align: center;
-   }
+  //  .el-table .cell{
+  //    text-align: center;
+  //  }
  
  }
 // dislog弹出框
@@ -362,9 +366,9 @@ div{
     }
 }
 .greens{
-    color:green;
+    color:green !important;
 }
 .reds{
-    color:red;
+    color:red !important;
 }
 </style>

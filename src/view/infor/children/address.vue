@@ -1,5 +1,5 @@
 <template>
-  <div class="addr_list">
+  <div class="addr_list" v-loading="fullscreenLoading">
     <div class="top_select cl">
       <a class=" on">收货地址</a>
       <el-button type="text" class="fr pos" @click="handAdd"> <i class="arrow el-icon-plus"></i>新增地址
@@ -34,6 +34,7 @@ import { orderAddress,selAddress,delAddress } from '@/service'
 export default {
   data() {
     return {
+      fullscreenLoading:false,
       radio:'',
       title: '',
       addrList: [],
@@ -70,7 +71,9 @@ export default {
       }
     },
     async getList() {
+      this.fullscreenLoading = true
       this.addrList = await orderAddress() 
+      this.fullscreenLoading = false
       console.log(this.addrList)
     },
     handAdd() {

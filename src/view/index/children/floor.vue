@@ -107,11 +107,11 @@ export default {
             ul {
                 width: 100%;
                 li {
-                    width: 390px;
+                    width: 392px;
                     height:200px;
                     overflow: hidden;
                     float: left;
-                    margin-left: 15px;
+                    margin-left: 12px;
                     a{
                         display: inline-block;
                         width:100%;
@@ -134,7 +134,7 @@ export default {
                 }
                 .big {
                     width: 100%;
-                    margin: 15px 0;
+                    margin: 12px 0;
                 }
             }
         }
@@ -148,10 +148,10 @@ export default {
     .list {
         overflow: hidden;
         float: left;
-        width: 590px;
+        width: 594px;
         height: 280px;
         position: relative;
-        margin-bottom: 20px;
+        margin-bottom: 12px;
         a {
             display: inline-block;
             width: 100%;
@@ -186,7 +186,7 @@ export default {
 }
 
 .div_2 li:nth-child(2n) {
-    margin-left: 20px;
+    margin-left: 12px;
 }
 
 .div_2 .detail li {
@@ -233,12 +233,13 @@ a {
 
 .div_2 .detail .more {
     border: 1px solid #333;
-    padding: 5px 30px;
+    padding: 5px 0px;
     display: inline-block;
+    text-align: center;
     position: absolute;
     bottom: 10px;
     right: 15px;
-    width: 50px;
+    width: 110px;
     cursor: pointer;
 }
 

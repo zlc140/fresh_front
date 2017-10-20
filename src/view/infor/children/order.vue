@@ -1,13 +1,13 @@
 
 <template>
-  <div class="order">
+  <div class="order"  v-loading="listLoading">
   	<div class="top_select cl">
       <a class="on">全部订单</a>
       <!-- <a class="">未支付订单</a>
       <a>已结算订单</a> -->
       </div>
   	<div class="table1" v-if="lists.length>0">
-			<el-table border  :data="lists"  v-loading="listLoading" style="width: 98%" @expand="handleExpand"> 
+			<el-table border  :data="lists"  style="width: 98%" @expand="handleExpand"> 
 				<!-- 子级 -->
 				<el-table-column type="expand" prop="goodsList" >
 				<template scope="scope">
@@ -41,7 +41,7 @@
 				<el-table-column label="订单号" prop="ordersId" >  </el-table-column>
 				<el-table-column label="买家" prop="username">
 				<template scope="scope">
-						{{scope.row.member.username}}
+						{{scope.row.username}}
 					</template>
 				</el-table-column>
 				<el-table-column label="收货地址"  prop="orderDaddress" min-width="100px">
@@ -99,12 +99,11 @@ export default {
 				console.log(row,expands)
 			},
 			getorderlist(){
-				this.listLoading = false
+				this.listLoading = true
 				let _this = this
 				let para = {
 					page: this.page-1,
-					pageSize:this.pageSize,
-					memberId:''
+					pageSize:this.pageSize
 				}
 				orderlist(para).then((res) => {
 					console.log(res.data)

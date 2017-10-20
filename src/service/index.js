@@ -90,7 +90,30 @@ export const goodsDetail = (para) => {
         }
     })
 }
- 
+
+ // 创建店铺
+export const saveStore = (para) => {
+    return axios({
+        method:'post',
+        params:para,
+        url:proUrl+'/store/save'
+    })
+}
+// 编辑店铺
+export const updateStore = (para) => {
+    return axios({
+        method:'post',
+        params:para,
+        url:proUrl+'/store/update'
+    })
+}
+ // 我的店铺
+ export const checkStore = () => {
+    return axios({
+        method:'post',
+        url:proUrl+'/store/findMyStore'
+    })
+}
 // 购物车订单模块
 const orderUrl = '/fresh-order'
 // 加入购物车
@@ -99,15 +122,6 @@ export const addCar = (prop) => {
         method:'post',
         url:orderUrl+'/cart/saveCart',
         params:prop,
-    }).then((res) => {
-        console.log('shopcar',res)
-        if(res.data.state == 200){
-            return true
-        }else{
-            return false
-        }
-    }).catch((res) => {
-        return '403'
     })
 }
 // 删除购物车商品
@@ -144,13 +158,6 @@ export const advOrderList = () => {
     return axios({
         method:'post',
         url:orderUrl+'/makeOrder/getMeMakeOrder',
-    }).then((res) => { 
-        console.log(res)
-        if(res.data.state == 200){
-            return res.data.content
-        }else{
-            return false
-        }
     })
 }
 // 保存天订单
@@ -204,6 +211,7 @@ export const getSummary = () => {
         url:MEMBER_BASE+'/memberInfo/findMe',
     }) 
 }
+
 // 修改密码
 export const checkPss = (prop) => {
     return axios({
@@ -227,6 +235,14 @@ export const billLists = (para) => {
         method:'post',
         url:Bill_BASE+'/bills/findMe',
         params:para
+    })
+}
+ // 付款
+ export const paySub = (para) => {
+    return axios({
+        method:'post',
+        params:para,
+        url:Bill_BASE　+'/bills/submit'
     })
 }
 // 获取我的订单

@@ -3,21 +3,21 @@
           <div id="bottom_banner">
               <div id="bottom_t">
                   <div id="bottom_t_one">
-                      <p>全球采购</p>
-                      <span>全球原产地采购保证品质</span>
+                      <p>预约配送</p>
+                      <span>提前制定商品采购计划</span>
                   </div>
                   <div id="bottom_t_two">
-                      <p>中央厨房</p>
-                      <span>12000平米自动化中央厨房</span>
+                      <p>线上挂账</p>
+                      <span>购买商品无须现结</span>
                   </div>
                   <div id="bottom_t_three">
-                      <p>冷链保鲜</p>
-                      <span>自建物流全程专业冷链</span>
+                      <p>品质保证 </p>
+                      <span>优选最专业的生鲜供应商</span>
                   </div>
-                  <div id="bottom_t_four">
+                  <!-- <div id="bottom_t_four">
                       <p>品质保障</p>
                       <span>12项工序确保食材新鲜</span>
-                  </div>
+                  </div> -->
               </div>
               <div id="bottom_b">
                   <dl class="footer_dl" v-for="(item,index) in footBar" :key="index">
@@ -89,7 +89,8 @@ export default {
 </script>
 
 <style>
-  .footer{
+
+.footer{
     width: 100%;
     height:380px;
     background-color:#EEF5EE; 
@@ -105,20 +106,20 @@ export default {
     padding-top: 50px;
 }
 #bottom_banner #bottom_t{
-    width: 1188px;
+    width: 1180px;
+    padding-left:20px;
     height: 70px;
-    padding-left: 25px;
 }
+ 
 #bottom_banner #bottom_t div{
-    width: 227px;
+    width: 180px;
     padding-left: 70px;
     height: 70px;
     float: left;
+    margin-left:206px;
 }
-#bottom_banner #bottom_t img{
-    width: 70px;
-    height: 70px;
-    float: left;
+#bottom_banner #bottom_t div:first-child{
+    margin:0
 }
 #bottom_banner #bottom_t p{
     font-size: 20px;
@@ -134,6 +135,7 @@ export default {
 }
 #bottom_b .footer_dl{
     float: left;
+    text-align:center;
 }
 #bottom_b .footer_dl dt{
  font-size: 16px;
@@ -146,10 +148,10 @@ export default {
    line-height: 25px;
 }
 #bottom_b .footer_dl{
-  margin-left: 180px;
+  margin-left: 207px;
    }
 #bottom_b .footer_dl:first-child{
-  margin-left: 30px;
+  margin-left: 27px;
 }
 #bottom_b .footer_dl dd a{
     font-size: 12px;

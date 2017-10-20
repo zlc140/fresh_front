@@ -31,7 +31,7 @@
                         <el-button type="primary" class="btn" @click="check">登录</el-button>
                     </el-col>
                     <div class="register">
-					<el-checkbox v-model="checked">下次自动登录</el-checkbox>
+					<!-- <el-checkbox v-model="checked">下次自动登录</el-checkbox> -->
 					<router-link to="/register"  class="new">新用户注册</router-link>
 				</div>
                 </el-form>
@@ -71,7 +71,7 @@
                     }
              }
             return {
-                codePic:'http://192.168.0.9:8080/user-center/code',
+                codePic:'',
                 checked:false,
                 loginLoading:false,
                 user:{
@@ -106,6 +106,8 @@
             }
         },
         mounted() {
+             let src =  window.location.protocol+ '//'+window.location.host
+            this.codePic =src+'/user-center/code'
             this.getCode()
         },
         methods: {
@@ -339,7 +341,7 @@
 		font-size: 18px;
 	}
 	.login .fr .register{
-		font-size: 10px;
+		font-size: 12px;
 	}
 	.login .fr .register .auto{
 		text-decoration: none;
@@ -347,7 +349,7 @@
 	}
 	.login .fr .register .new{
 		float: right;
-		font-size: 10px;
+		font-size: 14px;
 		color: rgb(108,169,110);
 	}
 </style>

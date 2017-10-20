@@ -26,7 +26,7 @@
           <div class="week-row" v-for="(week,index) in currentDates" :key="index" >
             <div class="day-cell" v-for="(day,id) in week" :key="id"
                  :class="{'today' : day.isToday, 
-              'not-cur-month' : !day.isCurMonth}" 
+              'not-cur-month' : !day.isCurMonth || !day.losing}" 
                @click.stop="dayClick(day, id,index)"
                >
               <p class="day-number" :class="day.select?'select':''" >{{ day.monthDay }}</p>
@@ -39,7 +39,7 @@
           <div class="events-week" v-for="(week,index) in currentDates" :key="index">
             <div class="events-day" v-for="day in week" :key="day.index"
                  :class="{'today' : day.isToday,
-              'not-cur-month' : !day.isCurMonth}" @click.stop="dayClick(day.date, $event)">
+              'not-cur-month' : day.isCurMonth}" @click.stop="dayClick(day.date, $event)">
               <p class="day-number">{{day.monthDay}}</p>
               <div class="event-box" v-if="day.events.length > 0" @click.stop="selectThisDay(day, $event)" >
                 <p class="more-link">
@@ -58,7 +58,7 @@
           </div>
           <div class="more-body">
             <div   v-for="(event,index) in selectDay.events" :key="index" v-show="event.isShow">
-              <pro-tem  :proList="event.goodsVoList" :active="selectDay.checktime"></pro-tem>
+              <pro-tem  :proList="event.goodsVoList" :active="event.dayOrderState==2?false:true"></pro-tem>
             </div>
           </div>
         </div>
@@ -124,6 +124,7 @@
     },
     mounted () {
       this.currentDates = this.getCalendar()
+      console.log(this.currentDates)
       this.emitChangeMonth(this.currentMonth);
     },
     
@@ -167,9 +168,14 @@
                     weekDay : perDay,
                     date : moment(monthViewStartDate),
                     events : this.slotEvents(monthViewStartDate),
-                    select : true
+                    select : true,
+                    losing:false
                   });
                }else{
+                 let losing = true;
+                 if(moment(monthViewStartDate).valueOf() < moment().valueOf()){
+                   losing = false
+                 }
                  week.push({
                     monthDay : monthViewStartDate.date(),
                     isToday : monthViewStartDate.isSame(moment(), 'day'),
@@ -177,7 +183,8 @@
                     weekDay : perDay,
                     date : moment(monthViewStartDate),
                     events : this.slotEvents(monthViewStartDate),
-                    select : false
+                    select : false,
+                    losing:losing
                   });
                }
             
@@ -229,6 +236,7 @@
         return thisDayEvents
       },
       selectThisDay (day, jsEvent) {
+        console.log('day',day,jsEvent)
         this.selectDay = day;
         this.showMore = true;
         this.morePos = this.computePos(jsEvent.target,this.selectDay.weekDay);

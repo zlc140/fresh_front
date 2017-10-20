@@ -1,9 +1,9 @@
 <template>
-    <div class="right_nav" :class="carBoxShow?'showCar':''">
+    <div class="right_nav" :class="carBoxShow?'showCar':''" v-on:mouseleave.stop="closeCarbox">
         <ul class="tab">
             <li class="tel">
                 <i></i>
-                <span>021-9653265</span>
+                <span>400-8851659</span>
             </li>
             <li class="car">
                 <i @click="carShow"></i>
@@ -20,8 +20,8 @@
             </li>
         </ul>
         <div class="carList">
-            <shop-car v-if="showCar &&　carBoxShow" @closeBox="closeBox"></shop-car>
-             <div class="nullCar" v-if="!showCar">
+            <shop-car v-if=" carBoxShow" @closeBox="closeBox"></shop-car>
+             <div class="nullCar" v-if="userName==null || userName==''">
                 您还没有登录，<router-link to="/login">快去登录吧！</router-link>
             </div>
         </div>
@@ -39,20 +39,28 @@ export default {
             addActive:false
         }
     },
+    props:{
+        closeN:{
+            type:Boolean,
+            default:false
+
+        }
+    },
     computed:{
         lists(){
             return this.$store.state.shopCar.lists
+        },
+        userName(){
+            return this.$store.state.username 
         }
+         
     },
     components: {
         shopCar
     },
     mounted() {
-        if(getStore('username') != null){
-            this.showCar = true
-        }else{
-            this.showCar = false
-        }
+        
+       
     },
     watch: {
         '$route'(to, from) {
@@ -61,7 +69,6 @@ export default {
             if (to.path != from.path) {
                 this.carBoxShow = false
             }
-
         },
         'lists'(oldval,newval) {
            if(oldval != newval && !this.carBoxShow){
@@ -88,6 +95,9 @@ export default {
         },
         carShow() {
             this.carBoxShow = !this.carBoxShow
+        },
+        closeCarbox(){
+             this.carBoxShow = false
         }
     }
 }

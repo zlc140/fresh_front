@@ -1,12 +1,12 @@
 <template>
- 	<div class="bill">
+ 	<div class="bill" v-loading="listLoading">
  		<div class="top_select cl">
 			 <a @click="getList('one')" :class="select=='one'?'on':''">全部账单</a>
 			 <a @click="getList('two')" :class="select=='two'?'on':''">未付款账单</a>
-			 <a @click="getList('three')" :class="select=='three'?'on':''">已支付账单</a>
+			 <a @click="getList('three')" :class="select=='three'?'on':''">已完成账单</a>
 		</div>
  		<div class="table1" v-if="lists.length>0">
-			<el-table border  :data="lists" style="width: 100%"  v-loading="listLoading">
+			<el-table border  :data="lists" style="width: 100%" >
 				<!-- 父级 -->
 				<el-table-column label="描述" type="expand" prop="description" min-width="150">
 					<template scope="scope">
@@ -110,7 +110,7 @@ export default {
 				}else if(val == 'two'){
 					this.state = 100  //未付款
 				}else if(val == 'three'){
-					this.state = 200  // 已付款
+					this.state = 400  // 已付款
 				}
 				this.getBills()
 			},

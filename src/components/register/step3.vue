@@ -14,18 +14,19 @@
                  <div class="findback_detail">
                     <i class="el-icon-check"></i>
                     <span class="findback_a">
-                        <router-link to="/index">恭喜您，您已成为哈福生鲜会员 ！</router-link>
+                        <router-link to="/login">恭喜您，您已成为哈福生鲜会员 ！快去登录吧！</router-link>
                         （<span class="num">{{time}}</span>）秒后为你跳转到
-                        <router-link to="/index"> 首页 ...</router-link></span>
+                        <router-link to="/login">登录页 ...</router-link></span>
                 </div>
           </div>
           <!--底部-->
           <div id="register_footer">
-              <span>北京创新乐知信息技术有限公司 版权所有</span>
+              <span>上海嘉善科技有限公司  &copy版权所有</span>
+              <!-- <span>北京创新乐知信息技术有限公司 版权所有</span>
               <span class="interval">|</span>
               <span>江苏知之为计算机有限公司</span>
               <span class="interval">|</span>
-              <span>江苏乐知网络技术有限公司</span>
+              <span>江苏乐知网络技术有限公司</span> -->
           </div>
       </div>
     </div>

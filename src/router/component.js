@@ -20,6 +20,8 @@ export const Coupon = r => require.ensure([],() => r(require('../view/infor/chil
 export const Information = r => require.ensure([],() => r(require('../view/infor/children/information')),'group-infor');
 export const Order = r => require.ensure([],() => r(require('../view/infor/children/order')),'group-infor');
 
+// 创建店铺
+export const addStore = r => require.ensure([],() => r(require('../view/store/add')),'group-infor');
 //密码
  
 export const findback = r => require.ensure([],() => r(require('../view/findPass/find')),'group-index');

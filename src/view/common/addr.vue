@@ -5,7 +5,7 @@
       <el-form-item label="收货人" prop="name">
         <el-input v-model="addForm.name" auto-complete="off" placeholder="请填写收货人真实姓名，方便收货"></el-input>
       </el-form-item>
-      <el-form-item label="所在地区" class="sel_addr">
+      <el-form-item label="所在地区" required class="sel_addr" style="margin-bottom:10px;">
         <div class="el-input">
             <span class="city">上海市</span> 
             <el-select v-model="addForm.county" placeholder="请选择区">
@@ -120,6 +120,10 @@ export default {
             let _this = this
             this.$refs.addForm.validate((valid) => {
                 if(valid) {
+                    if(this.addForm.county == ''){
+                        this.$message('请选择您所在的区')
+                        return false
+                    }
                     _this.addLoading = true
                     if(_this.formData == null){
                         let prop = {

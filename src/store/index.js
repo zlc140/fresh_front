@@ -19,6 +19,9 @@ const state = {
 const mutations = {
 
     REMEMBER_NAME (state,user) {
+        // if(user == '' || user == null){
+        //     user = ''
+        // }
         state.username = user
         setStore('username',JSON.stringify(user))
     },
@@ -28,6 +31,8 @@ const mutations = {
         state.shopCar.lists = []
         removeStore('username')
         removeStore('getName')
+        removeStore('carLen')
+        removeStore('keyCode')
     },
     SAVE_CLASS (state, lists) {
         state.classList = lists

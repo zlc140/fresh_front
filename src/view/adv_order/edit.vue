@@ -1,5 +1,5 @@
 <template>
-<div class="content">
+<div class="content" v-loading="fullscreenLoading">
   <breadRumb></breadRumb>
   <div class="container">
     <h2 class="pageTitle">填写并核对订单信息</h2>
@@ -24,7 +24,7 @@
         </ul>
       </div>
       <div class="more_box " v-if="addrs.length>1">
-        <el-button type="text" @click="showMore">{{moreShow?'收起 ︽':'查看更多︾'}}</el-button>
+        <el-button type="text" @click="showMore">{{moreShow?'收起 ':'查看更多'}}<i :class="moreShow?'el-icon-arrow-up':'el-icon-arrow-down'"></i></el-button>
       </div>
       <div class="nullAddr"  v-if="addrs.length<1 ||　!addrs.length">您还没有添加收货地址！ </div>
     </div>
@@ -43,7 +43,10 @@
                 <p><i class="fa"></i> {{ p.event.title }} test</p>
             </template> -->
     </full-calendar>
-    <div class="null" v-if="!fcEvents.length>0">您的预订单为空，<router-link to="/index">快去添加商品吧</router-link></div>
+    <div class="null" v-if="!fcEvents.length>0">
+      <span >您的预订单为空，<router-link to="/index">快去添加商品吧</router-link></span>
+      <!-- <span v-if="flag">您的账号需要等待审核通过才能才看您的预订单</span> -->
+      </div>
     <div class="btn_box" v-if="fcEvents.length>0">
       <a class="btn" @click="saveOrder">保存预订单</a>
     </div>
@@ -63,6 +66,7 @@ import { advOrderList,orderAddress,selAddress,editadvOrder } from '@/service'
 export default {
   data() {
     return {
+      fullscreenLoading:false,
       addFormVisible:false,
       name: 'Sunny!',
       fcEvents: [],
@@ -100,16 +104,26 @@ export default {
           });
         }
     },
-    async getList(){ 
-        let lists = await advOrderList()
+     getList(){ 
+        this.fullscreenLoading = true
+        let lists
+         advOrderList().then(res =>{
+           console.log('order',res)
+           this.flag = true
+           this.fullscreenLoading = false
+           this.fcEvents = []
+            if(res.data.state == 200){
+              lists = res.data.content
+              this.makeOrderId = lists.makeOrderId
+              if(!lists.dayOrderList){return false}
+              this.fcEvents = lists.dayOrderList.filter( v => v.goodsVoList && v.goodsVoList.length>0)
+               console.log('list',this.fcEvents)
+            }else{
+                this.$message(res.data.messages)
+            }
+    
+        })
         console.log('test',lists)
-        this.flag = true
-        this.makeOrderId = lists.makeOrderId
-        if(lists){
-            this.fcEvents = lists.dayOrderList.filter( v => v.goodsVoList && v.goodsVoList.length>0)
-        }else{
-            this.fcEvents = []
-        }
        
         // console.log(this.fcEvents)
     },
@@ -193,8 +207,11 @@ export default {
       }
       console.log(para)
       para.dayOrderList.forEach(v => {
-         let _times = v.deliverTime.split('-')
-         v.deliverTime =new Date(_times[0],_times[1]-1,_times[2],8,0,0).getTime()
+        // console.log('v',v)
+        if((v.deliverTime+'').indexOf('-')>0){
+            let _times = v.deliverTime.split('-')
+            v.deliverTime =new Date(_times[0],_times[1]-1,_times[2],8,0,0).getTime()
+        }
         //  console.log(new Date(_times[0],_times[1],_times[2],8,0,0).getTime())
         if(v.goodsVoList.goods){
              v.goodsVoList.goods.goodsPic.forEach(pic => {
@@ -206,8 +223,16 @@ export default {
          })
       })
        para.dayOrderList = JSON.stringify(para.dayOrderList)
+        this.fullscreenLoading = true
       editadvOrder(para).then((res) => {
-        console.log(res)
+        if(res.data.state == 200){
+        this.$message(res.data.messages)
+        this.fullscreenLoading = false
+        this.getList()
+        }else{
+          this.$message(res.data.messages)
+        }
+        console.log('edit',res)
       })
        
     }

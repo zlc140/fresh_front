@@ -12,7 +12,7 @@ import 'element-ui/lib/theme-default/index.css'
 // import 'element-ui/lib/index.js'
 Vue.use(elementUI)
 
-import '../static/css/bgPic.css'
+// import '../static/css/bgPic.css'
 // 提交
 Vue.config.productionTip = false
 
@@ -58,9 +58,9 @@ Vue.filter('voucherType',function(value) {
   if(value=='VOUCHER_STATE_ON_CHECKING'){
     return '待审核'
   }else if(value=='VOUCHER_STATE_CHECK_ON'){
-    return '审核通过'
+    return '待使用'
   }else if(value=='VOUCHER_STATE_CHECK_OFF'){
-    return '审核不通过'
+    return '代金券失效'
   }else if(value='VOUCHER_STATE_OV_ERDUE'){
     return '代金券过期'
   }else if(value='VOUCHER_STATE_USED'){

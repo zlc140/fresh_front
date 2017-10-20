@@ -15,27 +15,29 @@
             <div class="detail">
                 <ul>
                     <li>
-                        <a href="javascript:" title="">
-                            <span class="icon coup"></span> 我的代金券
-                            <span class="number">{{sum.couponNum}}</span>
-                        </a>
+                        <router-link to="/" title="">
+                            <span class="icon order"></span>商城首页
+                            <!-- <span class="">{{sum.couponAll}}</span> -->
+                        </router-link>
                     </li>
                     <li>
-                        <a href="javascript:" title="">代金券总额
-                            <span class="">{{sum.couponAll}}</span>
-                        </a>
+                        <router-link to="/user/coupon" title="">
+                            <span class="icon coup"></span>我的代金券 
+                            <!-- <span class="number">{{sum.couponNum}}</span> -->
+                        </router-link>
+                    </li>
+                  
+                    <li>
+                        <router-link to="/user/bill" title="">
+                            <span class="icon noPay"></span>我的账单
+                            <!-- <span class="number">{{sum.noPay}}</span> -->
+                        </router-link>
                     </li>
                     <li>
-                        <a href="javascript:" title="">
-                            <span class="icon noPay"></span>未支付订单
-                            <span class="number">{{sum.noPay}}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:" title="">
+                        <router-link to="/editOrder" title="">
                             <span class="icon order"></span>我的预订单
-                            <span class="number"></span>
-                        </a>
+                            <!-- <span class="number"></span> -->
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -98,8 +100,10 @@ export default {
     methods: {
         handleSuccess(val){
             console.log('loadimg',val)
-            if(val.state == 200){
+            if(val.state == 200 &&　val.content!=null){
                this.savePhoto(val.content.url)
+            }else{
+                this.$message('上传失败，只能上传jpg、jpeg、png、gif等格式的图片')
             }
         },
         handleError(val){
@@ -107,11 +111,12 @@ export default {
         },
         savePhoto(val){
                 let prop = {
-                    portrait:{
+                    portraitStr:{
                         path:val
                     }
                 }
                 addMember(prop).then(res => {
+                    console.log('photo',res)
                     if(res.data.state == 200){
                         this.photo = val
                     }else{
@@ -163,7 +168,6 @@ export default {
             width:100%;
             height:100%;
             z-index: 1;
-            background-color: rgba(0,0,0,0.2);
             position: absolute;
             top: 0;
             left: 0;

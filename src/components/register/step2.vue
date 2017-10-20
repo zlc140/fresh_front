@@ -12,32 +12,32 @@
           </div>
           <div id="register_member_b">
                <p class="tip">提示：只有资料完善的用户才可以使用哈福生鲜的功能</p>
-                <el-form style="width:500px;min-height:475px;" :model="user" :rules="rules" ref="ruleForm" label-position="center" class="demo-ruleForm login-container" >
+                <el-form style="width:500px;min-height:475px;" :model="user" :rules="rules" ref="ruleForm" v-loading="loginLoading" label-position="center" class="demo-ruleForm login-container" >
                     <el-form-item prop="workUnit">
                         <el-input placeholder = "请输入您所在的公司/机构名称" auto-complete="on" v-model="user.workUnit ">
                             <template slot="prepend"> 
-                              <span>公司/机构名称</span>
+                               <span class="reds">*</span> <span>公司/机构名称</span>
                             </template>    
                         </el-input>
                     </el-form-item>
-                     <el-form-item prop="officeTel ">
-                        <el-input placeholder = "请输入公司或机构的座机或手机号码" auto-complete="on" v-model="user.officeTel">
-                           <template slot="prepend"> 
-                              <span>公司/机构电话</span>
-                            </template>   
+                     <el-form-item prop="officeTel">
+                        <el-input placeholder = "请输入公司或机构的座机或手机号码" auto-complete="on" v-model="user.officeTel ">
+                            <template slot="prepend"> 
+                               <span class="reds">*</span> <span>公司/机构电话</span>
+                            </template>    
                         </el-input>
                     </el-form-item>
                      <el-form-item prop="officeAddress">
-                        <el-input placeholder = "请输入有效的公司/机构地址" auto-complete="on" v-model="user.officeAddress">
+                        <el-input placeholder = "请输入有效的公司/机构地址" type="text" auto-complete="on" v-model="user.officeAddress">
                            <template slot="prepend"> 
-                              <span>公司/机构地址</span>
+                                <span>公司/机构地址</span>
                             </template>   
                         </el-input>
                     </el-form-item>
                     <el-form-item prop="businessLicenseSN"> 
                         <el-input placeholder="请输入有效的营业执照编号" type="text" auto-complete="off" v-model="user.businessLicenseSN">
                            <template slot="prepend"> 
-                              <span>营业执照编号</span>
+                               <span class="reds">*</span> <span>营业执照编号</span>
                             </template> 
                         </el-input> 
                     </el-form-item> 
@@ -51,11 +51,11 @@
                      <el-form-item >
                         <el-input placeholder = "请输入您身份证号" auto-complete="off"  v-model="member.idCardNo">
                             <template slot="prepend"> 
-                              <span>身份证<small>（可填）</small></span>
+                              <span>身份证<small>（可空）</small></span>
                             </template>   
                         </el-input>
                     </el-form-item>
-                    <div class="pdL30">
+                    <!-- <div class="pdL30">
                         <div class="register_upload_t">
                             <el-upload class="avatar-uploader" ref="upload" 
                                 :action="uploadImg" 
@@ -63,13 +63,13 @@
                                 :on-success="handleSuccess3" 
                                 :on-error="handleError" 
                                     >
-                                <span>身份证图片<small>（可填）</small></span> <a></a>
+                                <span>身份证图片<small>（可空）</small></span> <a></a>
                             </el-upload>
                             </div> 
                             <div class="register_upload_b">
                                     <img :src="member.idCardPicStr.path"/>  
                             </div>
-                        </div>
+                    </div> -->
                     </el-form>
                          <!--证件上传-->
                         <div id="register_member_b_r">
@@ -82,7 +82,7 @@
                                         :on-success="handleSuccess" 
                                         :on-error="handleError" 
                                          >
-                                       <span>组织机构大码证图片</span> <a></a>
+                                        <span>组织机构大码证图片</span> <a></a>
                                     </el-upload>
                                 </div> 
                             <div class="register_upload_b2">
@@ -96,7 +96,7 @@
                                         :on-success="handleSuccess2" 
                                         :on-error="handleError2" 
                                          >
-                                       <span>营业执照图片</span> <a></a>
+                                         <span>营业执照图片</span> <a></a>
                                     </el-upload>
                                  </div> 
                             <div class="register_upload_b2">
@@ -109,11 +109,12 @@
           </div>
           <!--底部-->
           <div id="register_footer">
-              <span>北京创新乐知信息技术有限公司 版权所有</span>
+               <span>上海嘉善科技有限公司  &copy版权所有</span>
+              <!-- <span>北京创新乐知信息技术有限公司 版权所有</span>
               <span class="interval">|</span>
               <span>江苏知之为计算机有限公司</span>
               <span class="interval">|</span>
-              <span>江苏乐知网络技术有限公司</span>
+              <span>江苏乐知网络技术有限公司</span> -->
           </div>
       </div>
     </div>
@@ -136,13 +137,13 @@ export default {
              }
          }
          var validatePhone = (rule, value, callback) => {
-              var par=/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{8}$/;
-             var phone = /^1[34578]\d{9}$/ ;
-            if (!phone.test(value) && !par.test(value) && value.trim() != '' ) {
-                callback(new Error('请输入电话号码的正确格式'));//09557777777
-            } else if (value.trim() == '') {
+            var par=/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{8}$/;
+            var phone = /^1[34578]\d{9}$/ ;
+            if (value.trim() == '') {
                 callback(new Error('电话号码不能为空'))
-            } else {
+            }else if (!phone.test(value) && !par.test(value) && value.trim() != '' ) {
+                callback(new Error('请输入电话号码的正确格式'));//09557777777
+            }  else {
                 callback()
             }
          }
@@ -155,6 +156,7 @@ export default {
              }
          }
        return {
+           loginLoading:false,
             imgPic:false,
             showPic:'',
             step:step2,
@@ -206,10 +208,12 @@ export default {
            let _this = this
          this.$refs.ruleForm.validate((valid) => {
                 if(valid) {
+                    this.loginLoading = true
                     let prop = Object.assign({},this.user)
                     console.log(prop)
                      addMember(prop).then((res) => {
                          console.log('add' ,res)
+                         this.loginLoading = false
                          if(res.data.state == 200){
                                  _this.$store.dispatch('logout').then(() =>{
                                    _this.$router.push('/regSuccess')
@@ -469,7 +473,8 @@ span small{
 }
 .register_upload_b{
     width: 360px;
-    height: 200px;
+    max-height: 360px;
+    min-height:200px;
     overflow: hidden;
     margin-top: 10px;
     background-color: #F8F8F8;
@@ -487,7 +492,9 @@ span small{
 .register_upload_t2 span{
     font-size: 16px;
     color: #393939;
+    
 }
+ 
 .register_upload_t2 a {
     width: 50px;
     height: 25px;
@@ -502,7 +509,8 @@ span small{
 }
 .register_upload_b2{
     width: 360px;
-    height: 200px;
+    max-height: 360px;
+    min-height:200px;
     overflow: hidden;
     background-color: #F8F8F8;
    

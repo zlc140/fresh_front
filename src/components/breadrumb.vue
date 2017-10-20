@@ -1,9 +1,9 @@
 <template>
 <div class="breadcrumb">
     <el-breadcrumb separator="/">
-        <el-breadcrumb-item>首页</el-breadcrumb-item>
-        <el-breadcrumb-item >{{pageName }}</el-breadcrumb-item>
-        <el-breadcrumb-item  v-if="breadname">{{ breadname }}</el-breadcrumb-item>
+        <el-breadcrumb-item ><router-link to="/">首页</router-link></el-breadcrumb-item>
+        <el-breadcrumb-item @click.native="goTo">{{pageName }}</el-breadcrumb-item>
+        <el-breadcrumb-item  v-if="name">{{ name }}</el-breadcrumb-item>
     </el-breadcrumb>
 </div>
 </template>
@@ -13,22 +13,42 @@ export default {
     props:['breadname'],
     data(){
         return {
-            pageName:this.$route.name
+            pageName:this.$route.name,
+            breadnameCopy:'',
+            path:this.$route.path
         }
     },
-    mounted(){
+    computed:{
+        name(){
+            this.breadnameCopy = this.breadname
+            return this.breadnameCopy
+        }
+        
+    },
+    methods:{
+        goTo(){
+            this.$emit('clearName','')
+            this.$router.push(this.path)
+        }
     }
 }
 </script>
 
 <style>
 .breadcrumb{
-  padding: 10px 0;
+  padding: 10px;
   /* border-bottom: 1px solid #f0f0f0; */
   background-color: #f5f5f5;
+
+}
+.el-breadcrumb__item:last-child .el-breadcrumb__item__inner, .el-breadcrumb__item:last-child .el-breadcrumb__item__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__item__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__item__inner:hover{
+    color:#6CA96E;
+}
+.el-breadcrumb__item__inner, .el-breadcrumb__item__inner a{
+    color:#aaa;
 }
 .el-breadcrumb{
-    width:1200px;
+    width:1180px;
     margin: 0 auto;
 }
 </style>

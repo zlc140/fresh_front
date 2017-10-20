@@ -2,19 +2,21 @@
      <div class="content">
          <!--图片只有一张时  -->
           <div class="img_box" v-if="bannerList.length == 1">
+              <a :href="bannerList[0].advImage.url" target="_blank">
               <img :src='bannerList[0].advImage.path' :alt="bannerList[0].advTitle" />
+              </a>
           </div>
           <!--滑动  -->
           <el-carousel v-if="type=='slide' && bannerList.length > 1 " :autoplay='false' trigger="click" indicator-position="outside" :interval="9000"   arrow="never" height="470px">
                 <el-carousel-item  v-for="(item,idx) in bannerList" :key="idx">
-                <img :src="item.advImage.path" :aly="item.advTitle"/>
+                <a :href="item.advImage.url "  target="_blank"><img :src="item.advImage.path" :aly="item.advTitle"/></a>
                 </el-carousel-item>
           </el-carousel>
      <!--淡入淡出  -->
         <div class="carousel" v-if="type=='fade' && bannerList.length > 1 ">
             <ul>
                 <li v-for="(item,idx) in bannerList" :key="idx" :class="idx === curIndex?'on':''" @mouseover="Over" @mouseout="autoPlay">
-                    <a :href="item.advImage.url"><img :src="item.advImage.path" :aly="item.advTitle"/></a>
+                    <a :href="item.advImage.url"  target="_blank"><img :src="item.advImage.path" :aly="item.advTitle"/></a>
                 </li>
             </ul>
             <div class="btn-box">
@@ -146,9 +148,11 @@ export default {
 }
 
 .carousel>ul li img {
-    min-width: 100%;
+    width: 100%;
+    min-width:1200px;
     position: absolute;
     left: 50%;
+    height:470px;
     transform: translate(-50%);
     margin: 0 auto;
 }

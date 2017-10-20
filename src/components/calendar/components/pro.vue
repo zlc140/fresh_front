@@ -1,17 +1,17 @@
 <template>
  <div class="cart_box proList"> 
    <el-table :data="lists" ref="proList" :show-header="false" max-height="300" style="width: 100%;">
-            <el-table-column  prop="goods" label="商品" min-width="160" >
+            <el-table-column  prop="goods" label="商品" min-width="160" align="left">
                 <template scope="scope">
                      <span class="title" >{{scope.row.goods.goodsTitle}}</span>
                 </template>
             </el-table-column>
-             <el-table-column prop="number" label="数量" width="80" v-if="active">
+             <el-table-column prop="number" label="数量" width="90" v-if="active" align="right">
                <template scope="scope">
                  <el-input-number size="small" v-model="scope.row.number" @change="handleChange(scope.row,scope.row.number)" :min="0" ></el-input-number>
                 </template>
             </el-table-column>
-            <el-table-column  prop="goods" label="价格" width="80" >
+            <el-table-column  prop="goods" label="价格" width="90" align="right">
                 <template scope="scope">
                     <span class="price">{{scope.row.goods.price.GOODS_MARKET_PRICE | currency}} </span> <span style="color:#aaa;" v-if="!active">×{{scope.row.number}}</span>
                 </template>
@@ -40,12 +40,13 @@ export default {
         }
     },
     mounted(){
-        this.lists = this.proList
+        this.lists = this.proList.filter( v => v.number>0 )
         this.totalPrice()
     },
     watch: {
         'proList' (to,from){
-            this.lists = this.proList
+            this.lists = this.proList.filter( v => v.number>0 )
+            console.log('eg',this.lists)
             this.totalPrice()
             
         }
@@ -100,9 +101,10 @@ export default {
     padding-left: 10px;
 }
  .proList.cart_box .el-table .cell{
-    text-align: left;
+    // text-align: left;
     padding-left: 3px;
     padding-right: 3px;
+    font-size:14px;
  } 
  .proList.cart_box .el-input-number--small .el-input__inner{
      width:70px;
@@ -135,7 +137,7 @@ export default {
     position: absolute;
     left: 1px;
     bottom: 1px;
-    font-size: 14px;
+    font-size: 16px;
     width: 340px;
     height: 30px;
     line-height: 20px;

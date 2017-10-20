@@ -1,5 +1,5 @@
 <template>
-  <div class="account_banner">
+  <div class="account_banner"  v-loading="fullscreenLoading">
     <!-- 支付方式 -->
     <!-- <div class="account_way">
       支付方式
@@ -10,12 +10,11 @@
       </ul>
     </div> -->
     <!--账目明细-->
-    <div class="detail_bills_box">
+    <div class="detail_bills_box" v-if="details != null">
         <ul>
           <li><label> 期　号：</label>{{details.issue}}</li>
           <li><label> 账单号：</label>{{details.id}}</li>
           <li><label> 出账时间：</label>{{details.generatedBillsTime | formatDate}}</li>
-          <li><label> 已支付金额：</label>{{details.paymentMoney | currency}}</li>
         </ul>
     </div>
     <div class="account_data">
@@ -78,9 +77,9 @@
             <el-collapse-transition>
               <div v-show="show3">
                 <div class="transition-box">
-                  <div class="transition-box_one"  v-for="(item,index) in vouchers" :key="index" :title="item.description">
+                  <div class="transition-box_one"  @click="handLeChange(item)" v-for="(item,index) in vouchers" :key="index" :title="item.description">
                     <span class="price">抵扣现金{{item.money | currency}}</span>
-                    <el-checkbox  @change="handLeChange(item)">立即使用</el-checkbox>
+                    <el-checkbox  v-model="item.checks">立即使用</el-checkbox>
                     </div>
                   
                 </div>
@@ -100,14 +99,19 @@
             <p>{{goodPrice|currency }}</p>
           </li>
           <li>
-            <span>优惠券：</span>
+            <span>已付金额：</span>
+            <p>{{aleadyPrice | currency}}</p>
+          </li>
+          <li>
+            <span>优惠金额：</span>
             <p >{{total|currency}}</p>
           </li>
+         
           <li>
             <span>应付总额：</span>
             <p>{{totalPrice|currency}}</p>
           </li>
-          <li class="btn">提交订单</li>
+          <li class="btn" @click="paySubmit()">提交订单</li>
         </ul>
       </div>
     </div>
@@ -115,10 +119,11 @@
 </template>
 
 <script>
-import {billLists,voucherlist} from '@/service'
+import {billLists,voucherlist,paySub} from '@/service'
 export default {
   data() {
     return {
+      fullscreenLoading:false,
       show3: true,
       list: ['在线支付', '公司转账', '邮局汇款'],
       ind: 0,
@@ -130,6 +135,7 @@ export default {
       goodPrice: 0.00,
       total: 0.00,
       totalPrice: 0.00,
+      aleadyPrice:0
     }
   },
   mounted(){
@@ -138,19 +144,23 @@ export default {
     if(this.$route.query.id){
       this.getBillDetail(this.$route.query.id)
     }
+    this.fullscreenLoading = true
     this.vouchers =[]
     voucherlist().then((res) =>{
-      if(res.data.state == 200){
+      this.fullscreenLoading = false
+      console.log('voucher',res)
+      if(res.data.state == 200 && res.data.messages != '暂无数据！'){
         _this.vouchers = res.data.content
         if(_this.vouchers.length>0){
           _this.vouchers.forEach(function(ele) {
               ele.checks = false
           });
         }
+      }else{
+        // this.$message(res.data.messages)
       }
-      console.log('voucher',_this.vouchers)
     }).catch((res) =>{
-      console.log('失败了')
+       
     })
   },
   methods: {
@@ -166,7 +176,8 @@ export default {
             this.tableData = this.details.billsInfos 
             this.generatedBills = this.details.generatedBillsTime
             this.goodPrice = this.details.money
-            this.totalPrice = this.goodPrice
+            this.aleadyPrice = this.details.paymentMoney
+            this.totalPrice = this.goodPrice - this.total - this.aleadyPrice
             console.log('订单详情',this.details)
 					}
 				}).catch(() =>{
@@ -177,17 +188,83 @@ export default {
       console.log(index)
       this.ind = index
     },
+    checking(){
+       if(this.totalPrice = 0){
+          item.checks = false
+          return false
+        }
+    },
     handLeChange(item){
         //console.log('按键',item.checks)
-        item.checks = !item.checks
-        if(item.checks){
-          this.total+=item.money
+        
+        // if(this.totalPrice == 0){
+        //   console.log(this.totalPrice)
+        //    item.checks = false
+        //   return false
+        // }else{
+          // this.$nextTick(function(){
+           if(item.checks == false && this.totalPrice == 0){
+             this.$messge('已经减至最低')
+                return false
+            }
+              item.checks = !item.checks
+            
+          // })
+          
+        // }
+        if(item.checks == true){
+          this.total+=parseFloat(item.money)
         }else{
           this.total-=item.money
         }
         //console.log('优惠券总额',this.total)
-        this.totalPrice=this.goodPrice-this.total
-    } 
+        this.totalPrice=this.goodPrice-parseFloat(this.total) - this.aleadyPrice
+        if(this.totalPrice<0){
+          this.totalPrice = 0
+        }
+        
+    },
+    paySubmit(){
+        
+        let prop = {
+          billsId:this.details.id,
+          voucherIds:[]
+        }
+        if(prop.billsId == ''){
+          return false
+        }
+        if(this.vouchers.length>0){
+            this.vouchers.forEach(v => {
+              if(v.checks == true){
+               prop.voucherIds.push(v.voucherId)
+              }
+            })
+        }
+         prop.voucherIds = prop.voucherIds.join(',')
+        console.log(prop)
+       
+        paySub(prop).then(res => {
+          console.log('pat',res)
+          if(res.data.state == 200){
+           window.open(res.data.content )
+            // window.location.href=res.data.content
+            this.layer()
+          }
+        }).catch((res) => {
+          console.log('error',res)
+        })
+    } ,
+    layer(){
+      this.$confirm('请您在新打开的网上银行页面进行支付，支付完成确认支付结果','在线支付', {
+          confirmButtonText: '支付成功',
+          cancelButtonText: '支付失败',
+          type: 'info'
+        }).then(() => {
+          this.$router.push('/user/bill')
+        }).catch(() => {
+          this.$message('重新支付')     
+        });
+    }
   }
 }
 </script>
