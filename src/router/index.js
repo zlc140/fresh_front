@@ -6,7 +6,7 @@ const main = r =>  require.ensure([],() => r(require('../components/main')),'gro
 import {Login,Register,StepThree,StepTwo,resetpassword,passSuccess,findback} from './component'
 import {Index,Detail,List,Infor,addOrder,editOrder,addWeekTel,editWeekTel,shopCar,pay} from './component'
 import {Address,Bill,Coupon,Information,Order} from './component'
-
+import {addStore} from './component'
 
 Vue.use(Router)
 
@@ -41,6 +41,9 @@ const route = new Router({
       rightBar:false
     }},
     {  path:'/regSuccess', name:'注册成功', component:StepThree ,meta:{
+      rightBar:false
+    }},
+    {  path:'/addStore', name:'创建店铺', component:addStore ,meta:{
       rightBar:false
     }},
     {  path:'/reset', name:'重置密码', component:resetpassword ,meta:{

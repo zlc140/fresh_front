@@ -3,7 +3,7 @@
     <breadRumb></breadRumb>
     <div class="container">
     <div class="cart_box order2" :class="moreShow?'more':''" >
-     <el-table :data="shopList" ref="carList"   v-loading="listLoading"  style="width: 100%;" >
+     <el-table :data="shopList" ref="carList"   v-loading="listLoading"  style="width: 1196px;" >
              <el-table-column  prop="goodsVoList" label="" width="90"  label="商品" >
                <template scope="scope">
                    <a class="imgBox"><img  :src="scope.row.goodsVoList[0].goods.goodsPic[0].path"/></a>
@@ -35,7 +35,7 @@
     </div>
      <div class="null" v-if="shopList.length<1" style="height:100px;line-height:100px;">您还没有选择商品<router-link to="list">快去挑选吧~</router-link></div> 
     <div class="more_box" :class="moreShow?'addB':''" v-if="lists.length>1">
-      <el-button type="text" @click="showMore">{{moreShow?'收起 ︽':'查看更多︾'}}</el-button>
+      <el-button type="text" @click="showMore">{{moreShow?'收起 ':'查看更多'}}<i :class="moreShow?'el-icon-arrow-up':'el-icon-arrow-down'"></i></el-button>
       </div>
      <full-calendar class="test-fc" :events="fcEvents" 
       first-day='1' locale="zh"  checkMore="true"
@@ -70,7 +70,8 @@ export default {
         listLoading:false,
         checked:false,
         selDay:[],
-        shopList:[]
+        shopList:[],
+        carts:false
       }
     },
     components:{
@@ -95,7 +96,9 @@ export default {
       }
     },
     mounted(){
-        
+        if(this.$route.query.ids){
+          this.carts = true
+        }
     },
     methods:{
       async getOne(){
@@ -169,22 +172,23 @@ export default {
               deliverTime:this.selDay,
             }
             let _this = this
-          this.lists.forEach( (v,index) => {
-             if(index == _this.lists.length-1){
-                para.goodsId = para.goodsId+(v.goodsVoList[0].goods.goodsId || v.goodsId)
-                para.count =para.count + (v.goodsVoList[0].number || v.number)
-             }else{
-                para.goodsId = para.goodsId+v.goodsVoList[0].goods.goodsId+','
-                para.count =para.count + v.goodsVoList[0].number+','
-             }
+          
+            this.shopList.forEach( (v,index) => {
+              if(index == _this.shopList.length-1){
+                  para.goodsId = para.goodsId+(v.goodsVoList[0].goods.goodsId || v.goodsId)
+                  para.count =para.count + (v.goodsVoList[0].number || v.number)
+              }else{
+                  para.goodsId = para.goodsId+v.goodsVoList[0].goods.goodsId+','
+                  para.count =para.count + v.goodsVoList[0].number+','
+              }
           })
-          // para.goodsId = para.goodsId.Substring(0,para.goodsId.length-1)
-          // para.count =para.count.Substring(0,para.count.length-1)
           para.deliverTime = para.deliverTime.join(',')
-          console.log(para)
           saveDayOrder(para).then((res) => {
+             console.log('addOrder',res)
             if(res.data.state == 200) {
                 this.$router.push('/editOrder')
+            }else{
+              this.$message(res.data.messages)
             }
             console.log(res.data)
           })
@@ -202,9 +206,12 @@ export default {
   }
   width: 100%;
    .el-table__body-wrapper{
-     height: 87px;
+     height: 86px;
      border: 1px solid $baseColor;
      overflow: hidden;
+     width:1198px;
+     z-index:9;
+    //  border-bottom:0px;
    }
    .el-table td, .el-table th.is-leaf{
      border-color: $baseColor;
@@ -253,7 +260,7 @@ export default {
  }
 
  .addB{
-   border-top: 1px solid $baseColor;
+  //  border-top: 1px solid $baseColor;
  }
 .btn_box{
   text-align: right;

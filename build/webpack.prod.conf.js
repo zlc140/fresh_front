@@ -31,13 +31,19 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
+        warnings: false,
+        drop_debugger: true,
+        drop_console: true
       },
       sourceMap: true
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css')
+      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      publicPath:'../../'
+      // output: {
+      //   publicPath:'/'
+      // }
     }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.

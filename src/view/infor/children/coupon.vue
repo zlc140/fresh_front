@@ -1,10 +1,10 @@
 <template>
-  <div class="coupon">
-  	<div class="top_select cl">
+  <div class="coupon" v-loading="listLoading">
+  	<div class="top_select cl" >
       <a class="on">代金券</a>
       </div>
   		 <div class="table1" v-if="lists.length>0" >
-			<el-table border  :data="lists" style="width: 98%"  v-loading="listLoading">
+			<el-table border  :data="lists" style="width: 98%"  >
 				<!-- 父级 -->
 				<el-table-column label="编号" prop="voucherId" >  </el-table-column>
 				<el-table-column label="描述" prop="description">
@@ -51,7 +51,7 @@ import {voucherlist} from '@/service'
 export default {
 	data(){
 		return{
-			lists:'',
+			lists:[],
 			listLoading:false
 		}
 	},
@@ -64,7 +64,7 @@ export default {
 			voucherlist().then(res => {
 				console.log(res)
 				this.listLoading =false
-				if(res.data.state == 200){
+				if(res.data.state == 200 && res.data.content != null){
 						this.lists = res.data.content
 				}
 			}).catch(() => {

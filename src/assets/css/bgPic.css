@@ -87,7 +87,8 @@
     /* border-color:  green !important; */
     height: 42px;
     width:160px;
-    background: url(../image/selAddr.png) no-repeat;
+    background-image: url(../image/selAddr.png);
+    background-repeat: no-repeat;
     background-size: 160px 42px;
     border-color: transparent;
 }

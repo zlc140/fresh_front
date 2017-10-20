@@ -94,7 +94,11 @@ export default {
       isNull: false
     }
   },
-    mounted(){
+  mounted(){
+    if(getStore('username') == null){
+      this.$message('请先登录')
+      this.$router.push('/login')
+    }
       this.caculate()
   },
   computed:{

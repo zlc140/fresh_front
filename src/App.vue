@@ -13,6 +13,7 @@ export default {
 
 <style lang="scss">
  @import "./assets/reset.css";
+ @import "./assets/css/bgPic.css";
 #app {
   /* font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

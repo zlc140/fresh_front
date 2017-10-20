@@ -8,7 +8,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
-    productionSourceMap: true,
+    productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -45,7 +45,8 @@ module.exports = {
       // '/fresh-voucher':'http://192.168.0.111:9090',//优惠券
       // '/fresh-bills':'http://192.168.0.111:9090',//账单
       // '/user-center':'http://192.168.0.111:9090',//用户中心
-      
+      // '/fresh-order':'http://192.168.0.111:9090',
+      // '/fresh-member':'http://192.168.0.111:9090'
   },
     // context:[
     //   '/image-base',//图片

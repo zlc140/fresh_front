@@ -3,61 +3,61 @@
          <div id="register_banner">
         <!--已有账号马上登陆-->
         <div id="register_enter">
-           已有账号 ， <router-link to="/login">马上登陆</router-link>
+           已有账号 ， <router-link to="/login">马上登录</router-link>
         </div>
         <!--会员注册-->
       <div id="register_member">
           <div id="register_member_t">
               <img :src="step" />
           </div>
-          <div id="register_member_b">
+          <div id="register_member_b" v-loading="loginLoading">
                 <el-form style="width:500px;idisplay:block;margin:0 auto;" :model="user" :rules="rules" ref="ruleForm" label-position="center" class="demo-ruleForm login-container" >
-                    <el-form-item prop="username">
+                    <el-form-item prop="username" >
                         <el-input placeholder = "您的用户名用于登录您的账号" auto-complete="on" v-model="user.username">
                             <template slot="prepend"> 
-                              <span>用 户 名</span>
+                             <span class="reds">*</span><span>用 户 名</span>
                             </template>    
                         </el-input>
                     </el-form-item>
                      <el-form-item prop="name">
                         <el-input placeholder = "请输入您的真实姓名" auto-complete="on" v-model="user.name">
                            <template slot="prepend"> 
-                              <span>真实姓名</span>
+                              <span class="reds">*</span><span>真实姓名</span>
                             </template>   
                         </el-input>
                     </el-form-item>
-                     <el-form-item prop="nickName">
+                     <!-- <el-form-item prop="nickName">
                         <el-input placeholder = "请输入您的昵称" auto-complete="on" v-model="user.nickName">
                            <template slot="prepend"> 
                               <span>昵　　称</span>
                             </template>   
                         </el-input>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item prop="phone"> 
                         <el-input placeholder="请输入11位手机号码" type="text" auto-complete="off" v-model="user.phone">
                            <template slot="prepend"> 
-                              <span>手 机 号</span>
+                              <span class="reds">*</span><span>手 机 号</span>
                             </template> 
                         </el-input> 
                     </el-form-item> 
                     <el-form-item prop="password">
-                        <el-input placeholder="密码长度6~12位数" type="password" auto-complete="off" v-model="user.password">
+                        <el-input placeholder="密码长度6~20位数" type="password" auto-complete="off" v-model="user.password">
                             <template slot="prepend"> 
-                              <span>密　　码</span>
+                              <span class="reds">*</span><span>密　　码</span>
                             </template> 
                         </el-input> 
                     </el-form-item> 
                     <el-form-item prop="confirmPassword"> 
                         <el-input placeholder="请确认您的密码" type="password" auto-complete="off" v-model="user.confirmPassword">
                            <template slot="prepend"> 
-                              <span>确认密码</span>
+                              <span class="reds">*</span><span>确认密码</span>
                             </template>
                         </el-input> 
                     </el-form-item>
                      <el-form-item prop="eMail"> 
                         <el-input placeholder="请输入有效的邮箱" type="text" auto-complete="off" v-model="user.eMail">
                            <template slot="prepend"> 
-                              <span>邮箱地址<small>（可填）</small></span>
+                              <span class="reds"> </span><span>邮箱地址<small>（可空）</small></span>
                             </template> 
                         </el-input> 
                     </el-form-item>  
@@ -84,11 +84,11 @@
           </div>
           <!--底部-->
           <div id="register_footer">
-              <span>北京创新乐知信息技术有限公司 版权所有</span>
+              <span>上海嘉善科技有限公司  &copy版权所有</span>
+              <!-- <span class="interval">|</span>
+              <span>海嘉善科技有限公司</span>
               <span class="interval">|</span>
-              <span>江苏知之为计算机有限公司</span>
-              <span class="interval">|</span>
-              <span>江苏乐知网络技术有限公司</span>
+              <span>海嘉善科技有限公司</span> -->
           </div>
       </div>
     </div>
@@ -118,11 +118,22 @@ export default {
              }
          }
           var validatePass = (rule,value,callback) => {
-              let par = /^(\w){6,20}$/; //6~20位数字字母下划线
-             if(value === ''){
-                 callback(new Error('请输入密码'))
-             }else if(!par.test(value) ) {
-                 callback(new Error('密码为6~20为数字字符下划线'))
+              let pon = /^[A-Za-z0-9_]{6,20}$/;
+             if(value === '') {
+                 callback(new Error('密码不能为空'))
+             }else if(!pon.test(value)){
+                callback(new Error('密码为数字字母下划线组成，长度6-20位'))
+             }else{
+                  callback()
+             }
+             
+         }
+         var validateUser = (rule, value, callback) => {
+              let par = /^[0-9a-zA-Z_]{2,18}$/;
+            if(value.length>0 && value.trim() == '' ){
+                        callback(new Error('不能全部输入空格'));
+            }else if(!par.test(value) ) {
+                 callback(new Error('用户名为2~18位数字与英文字母下划线组成'))
              }else{
                  callback()
              }
@@ -131,7 +142,7 @@ export default {
              let pon = /^1[34578]\d{9}$/gi;
              if(value === '') {
                  callback(new Error('手机号码不能为空'))
-             }else if(!pon.test(value)){
+             }else if(!pon.test(value.trim())){
                 callback(new Error('请输入11位有效手机号码'))
              }else{
                   callback()
@@ -139,13 +150,14 @@ export default {
          }
          var validateCardNo = (rule, value, callback) => {
              let pon = /^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/;
-             if(pon.test(value)){
+             if(pon.test(value.trim())){
                 callback(new Error('请输入正确的身份证号码'))
              }else{
                   callback()
              }
          }
        return {
+            loginLoading:false,
             step:step1,
             uploadImg:'/image-base/upload',
             imageUrl:'',
@@ -165,8 +177,8 @@ export default {
             },
             rules: {
                 username: [
-                    { required: true, message: '请输入账号', trigger: 'blur' },
-                    { validator:noSpace, trigger:'blur'}
+                    { required: true, message: '请输入您的用户名', trigger: 'blur' },
+                    { validator:validateUser, trigger:'blur'}
                 ],
                 nickName: [
                     { required: true, message: '请输入昵称', trigger: 'blur' },
@@ -198,17 +210,18 @@ export default {
             },
        }
      },
-     mounted(){
-     },
      methods:{
        validate(){
            let _this = this
+           
          this.$refs.ruleForm.validate((valid) => {
                 if(valid) {
+                    this.loginLoading = true
                     let prop = Object.assign({},this.user)
-                  
+                    prop.phone = prop.phone.trim()
                     console.log(prop)
                     Register(prop).then((res) => {
+                        _this.loginLoading = false
                         if(res == true){
                             _this.login()
                         }else if(res == false){

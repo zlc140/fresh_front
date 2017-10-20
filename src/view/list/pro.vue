@@ -1,15 +1,15 @@
 <template>
-   <div class="content">
+   <div class="content minH400"  v-loading="fullscreenLoading">
        <div class="productlist_list cl" v-if="isNull">
          <div class="list_one" v-for="(item,id) in goods.content" :key="id">
                 <div class="list_one_img">
                    <router-link :to="{path:'detail',query:{id:`${item.goodsId}`}}"> 
-                       <img :src="item.goodsPic[0].path" alt=""/>
+                       <img :src="item.goodsPic[0].path" alt="" :title="item.goodsTitle"/>
                        </router-link>
                     </div>
                 <div class="list_one_word">
-                    <router-link :to="{path:'detail',query:{id:`${item.goodsId}`}}" >{{item.goodsTitle}}</router-link>
-                    <p>￥{{item.price.GOODS_MARKET_PRICE}}<span>（约2.5元/500g）</span></p>
+                    <div><router-link :to="{path:'detail',query:{id:`${item.goodsId}`}}"  :title="item.goodsTitle">{{item.goodsTitle}}</router-link></div>
+                    <p>￥{{item.price.GOODS_MARKET_PRICE}}<span>（约{{item.price.GOODS_MARKET_PRICE}}元/{{item.goodsStock.sku}}）</span></p>
                 </div>
                 <!--加入购物车-->
                 <div class="list_add">
@@ -33,15 +33,18 @@ import cateTem from './cates'
 export default {
   data() {
     return {
+      fullscreenLoading:false,
       currentPage:1,
       pro:'',
-      pageSize:8,
+      pageSize:16,
       total:0,
       goods: [],
       page:1,
-      isNull:false,
+      isNull:true,
       classId:'',
-      name:''
+      name:'',
+      check:false
+
     }
   },
   components:{
@@ -86,6 +89,7 @@ export default {
   },
   methods: {
     async getList(){
+        this.fullscreenLoading = true
         let para = {
             pageNum: this.page-1,
             pageSize: this.pageSize,
@@ -96,6 +100,7 @@ export default {
         this.goods=[]
         this.goods = await goodsList(para)
         console.log('test',this.goods)
+        this.fullscreenLoading = false
         this.total = this.goods.totalElements
         this.isNull = this.goods.totalElements>0?true:false
     },
@@ -108,6 +113,15 @@ export default {
             this.$router.push('/login')
             return false
         }
+         if(getStore('username') != null && getStore('getName') != null){
+            this.$message('请先完善您的资料！')
+            this.$router.push('/stepTwo')
+            return false
+        }
+        if(this.check == true){
+            return false
+        }
+        this.check = true
         let _this = this
         _this.$emit('addFlew',val.goodsPic[0].path,event)
         let prop = {
@@ -115,14 +129,31 @@ export default {
             count :1,
         }
         addCar(prop).then((res) => {
-            if(res) {
-                _this.$store.dispatch('getShopCar')
-            }
-        })
-        
+                console.log('shopcar',res)
+                if(res.data.state == 200){
+                    _this.$store.dispatch('getShopCar')
+                    setTimeout(function(){
+                        _this.check = false
+                    },1000)
+                }else{
+                    this.$message(res.data.messages)
+                    }
+                }).catch((res) => {
+                    this.$message(res.data.messages)
+                })
          
     },
     addOrder(val){
+        if(getStore('username') == null){
+            this.$message('请先登录')
+            this.$router.push('/login')
+            return false
+        }
+        if(getStore('username') != null && getStore('getName') != null){
+            this.$message('请先完善您的资料！')
+            this.$router.push('/stepTwo')
+            return false
+        }
         this.$router.push({
             path:'/addOrder',
             query:{
@@ -137,7 +168,9 @@ export default {
 
 <style>
  /*商品列表*/
-
+.minH400{
+    min-height:400px;
+}
 .productlist_list{
     width: 100%;
     margin-top:30px;
@@ -164,23 +197,27 @@ export default {
 .list_one_img img{
     position: absolute;
     top: 50%;
-    left: 2%;
+    left:1%;
     transform: translateY(-50%);
-    width: 96%;
+    width: 98%;
     height: auto;
 }
 .list_one_word{
     padding: 0 10px;
 }
-.list_one_word a{
-    display: inline-block;
+.list_one_word div{
+    /* display: inline-block; */
     height: 55px;
-    font-size: 18px;
+    font-size: 16px;
     color: #666;
     overflow: hidden;
 }
+.list_one_word div a{
+    color:#666;
+}
 .list_one_word p{
     font-size: 16px;
+    height:25px;
     color: #cc0707;
     font-weight: bold;
     margin-top: 20px;
@@ -198,9 +235,10 @@ export default {
     height: 400px;
     border: none;
     transition: .3s all;
-    -webkit-box-shadow: -2px 0 5px #e7e7e7,0 -2px 5px #e7e7e7,2px 0 5px #e7e7e7;
-    -moz-box-shadow: -2px 0 5px #e7e7e7,0 -2px 5px #e7e7e7,2px 0 5px #e7e7e7;
-    box-shadow: -2px 0 5px #e7e7e7,0 -2px 5px #e7e7e7,2px 0 5px #e7e7e7;
+    -moz-box-shadow:0px 0px 12px #ccc; 
+    -webkit-box-shadow:0px 0px 12px #ccc;
+     box-shadow:0px 0px 12px #ccc;
+    
 }
 
 .productlist_list .list_one:hover .list_add{
@@ -213,9 +251,9 @@ export default {
 /*<!--加入购物车-->*/
 .list_add{
     width: 282px;
-    height: 30px;
+    height: 31px;
     line-height: 30px;
-     display: none;  
+    display: none;  
     font-size: 16px;
     text-align: center;
     border: 1px solid #6ca96e;
@@ -232,6 +270,7 @@ export default {
     }
     .list_add div:first-child{
          border-right:  1px solid #6ca96e; 
+         width:141px;
     }
 .list_add div:hover{
     color: white;

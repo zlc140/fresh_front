@@ -1,5 +1,5 @@
 <template>
-	<div class="content">
+	<div class="content" v-loading="fullscreenLoading">
 		<bread-rumb :breadname ='breadname'></bread-rumb>
 		<div class="container detail cl" v-if='content != null'>
 			<div class="left_box" ref="box">
@@ -13,11 +13,11 @@
 				<div class="price">
 					价格：
 					<strong>￥{{content.price.GOODS_MARKET_PRICE}}</strong>
-					(约2.5/500g)
+					（约{{content.price.GOODS_MARKET_PRICE}}元/{{content.goodsStock.sku}}）
 				</div>
 				<div class="place">
-					<span>生产地：上海</span>
-					<span>保质期：3天</span>
+					<!-- <span>生产地：上海</span> -->
+					<span>所属店铺：{{content.store.storeName}}</span>
 					<span>存储条件：冷藏</span>
 				</div>
 				<div class="number">
@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<div class="container Prodetail" v-if='content != null' v-html="content.goodsBody">
-	
+				<!-- {{{content.goodsBody}}} -->
 		</div>
 		<div v-if='content == null' class="nothing">
 			该商品详情不存在
@@ -54,24 +54,27 @@ import bigImg from './bigImg'
 export default {
 	data() {
 		return {
+			fullscreenLoading:false,
 			addBtn: false,
 			flewMove:false,
 			flewPic:'',
 			num: 1,
 			content: null,
 			imgs: [],
-			breadname:''
+			breadname:'',
+			check:false
 		}
 	},
 	components: {
 		bigImg,breadRumb
 	},
 	async mounted() {
-
+		this.fullscreenLoading = true
 		let para = {
 			goodsId: this.$route.query.id
 		}
 		this.content = await goodsDetail(para)
+		this.fullscreenLoading = false
 		if (!this.content) {
 			this.content = null
 			this.imgs = []
@@ -93,6 +96,16 @@ export default {
 			}
 		},
 		addOrder(val){
+			if(getStore('username') == null){
+				 this.$message('请先登录')
+				this.$router.push('/login')
+					return false
+			}
+			if(getStore('username') != null && getStore('getName') != null){
+				this.$message('请先完善您的资料！')
+				this.$router.push('/stepTwo')
+				return false
+			}
 				this.$router.push({
 					path:'/addOrder',
 					query:{
@@ -111,6 +124,15 @@ export default {
 				  })
 				  return false
 			}
+			 if(getStore('username') != null && getStore('getName') != null){
+				this.$message('请先完善您的资料！')
+				this.$router.push('/stepTwo')
+				return false
+			}
+			if(this.check == true){
+				return false
+			}
+			this.check = true
 			let prop
 			let _this = this
 			if (!this.addBtn ) {
@@ -122,11 +144,24 @@ export default {
 					}
 			}
 			console.log(prop)
-			addCar(prop).then((res) => {
-				if(res) {
-					_this.$store.dispatch('getShopCar')
-				}
-			})
+			// addCar(prop).then((res) => {
+			// 	if(res) {
+			// 		_this.check = false
+			// 		_this.$store.dispatch('getShopCar')
+			// 	}
+			// })
+			 addCar(prop).then((res) => {
+                console.log('shopcar',res)
+                if(res.data.state == 200){
+                    setTimeout(function(){
+                        _this.check = false
+                    },1000)
+                }else{
+                    this.$message(res.data.messages)
+                    }
+                }).catch((res) => {
+                    this.$message(res.data.messages)
+                })
 			
 		},
 		add() {
@@ -202,19 +237,22 @@ export default {
 }
 </script>
 
-<style scoped>
+<style >
 .Prodetail{
+	box-sizing:border-box;
 	background-color: white;
 	padding: 40px;
 	font-size: 16px;
 	overflow: hidden;
 	padding-bottom: 50px;
+	text-align:center;
+	margin-top: 20px;
 }
-.Prodetail>*{
+/* .Prodetail>*{
 	width:100%;
-}
-.Prodetail img{
-	max-width: 1200px;
+} */
+.Prodetail>p>img{
+	width: 1120px !important;
 }
 .nothing {
 	text-align: center;
@@ -225,6 +263,7 @@ export default {
 
 .detail {
 	padding: 30px 0;
+	background-color: white;
 }
 
 .detail .left_box {
@@ -310,7 +349,7 @@ export default {
 	border: 1px solid #a7a6ab;
 	display: block;
 	font-size: 10px;
-	color: #888;
+	color: #f0f0f0;
 	border: 1px solid #ccc;
 	cursor: pointer;
 	position: relative;
@@ -380,7 +419,7 @@ export default {
 }
 
 .detail .cart .diss {
-	border-color: #ccc;
+	border-color: #eee ;
 	color: #888;
 	background-color: #f0f0f0;
 }

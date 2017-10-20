@@ -52,7 +52,7 @@ html,body{ width:100%; height: 100%;color:#333;background-color: #F9F9F9;}
  .price{  color: #FF8E2B;  }
 .el-input__inner::-ms-input-placeholder{
     text-align: left;
-    color: #bababa !important;
+    color: #eeebeb !important;
     opacity:1;
 }
 .el-input__inner::-webkit-input-placeholder{

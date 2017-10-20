@@ -1,13 +1,13 @@
 <template>
-  <div class="info_change">
+  <div class="info_change"  >
      <div class="top_select cl">
          <a @click="getList('one')" :class="select=='one'?'on':''">个人信息</a>
          <a @click="getList('two')" :class="select=='two'?'on':''">修改密码</a>
       </div>
-	  <div class="form" v-show="select=='one'">
+	  <div class="form" v-show="select=='one'" >
 	  	<el-form ref="ruleForm" :model="formData" :rules="rules" label-width="80px">
 		  <el-form-item label="真实姓名" prop="name">
-		    <el-input v-model="formData.name" placeholder="请输入你的姓名" ></el-input>
+		    <el-input v-model="formData.name" placeholder="请输入你的姓名" readonly></el-input>
 		  </el-form-item>
 		  <el-form-item label="手机号" prop="phone">
 		    <el-input v-model="formData.phone" placeholder="请输入你的号码"></el-input>
@@ -58,9 +58,6 @@ data() {
         return callback()
       };
 	var validateEmail = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('邮箱不能为空'));
-        }
         let re = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/ig
         if(!re.test(value)){
           return callback(new Error('邮箱不符合规则,请输入合法的邮箱'));
@@ -94,20 +91,14 @@ data() {
         return callback()
       };
       var validatePass = (rule, value, callback) => {
-
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-          if(value.length<6 || value.length>12){
-        	callback(new Error('密码应该为6-12个字符'));
-        	}else if(!(/[^\d]/g).test(value)){
-        	callback(new Error('密码不能全为数字'));
-        	}else if(!(/[^a-zA-Z]/g).test(value)){
-        	callback(new Error('密码不能全为字母'));
-        	}
-          	callback();
-        }
-        return callback()
+        let par = /^(\w){6,20}$/; //6~20位数字字母下划线
+          if(value === ''){
+              callback(new Error('请输入密码'))
+          }else if(!par.test(value) ) {
+              callback(new Error('密码为6~20为数字字符下划线'))
+          }else{
+              callback()
+          }
       };
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
@@ -119,6 +110,7 @@ data() {
         }
       };
       return {
+        listLoading:false,
       	select:'one',
         formData: {
           name: '',
@@ -165,8 +157,10 @@ data() {
     },
     methods: {
       getnews(){
+        this.listLoading = true
         let _this = this
           getSummary().then((res) => {
+            this.listLoading = false
                console.log(res)
                if(res.data.state == 200){
                   let detail = res.data.content
@@ -192,11 +186,18 @@ data() {
             eMail:this.formData.eMail,
             phone:this.formData.phone
           }
+    this.$refs.ruleForm.validate((valid) => {
+        if(valid) {
           userUpdate(prop).then((res) => {
+            console.log('updatamember',res)
            if(res.data.state == 200){
              this.$message({message:'修改成功',type: 'success'})
+           }else{
+             this.$message(res.data.messages)
            }
           })
+        }
+    })
         }
        if(this.formData.agency != this.checkNews.workUnit){
          let prap = {
@@ -217,7 +218,7 @@ data() {
            this.$message('新旧密码不能一样！')
            return false
          }
-         if(this.ruleForm2.checkPass == this.ruleForm2.pass){
+         if(this.ruleForm2.checkPass != this.ruleForm2.pass){
            this.$message('请重新确认密码！')
            return false
          }
@@ -229,7 +230,9 @@ data() {
           checkPss(prop).then(res => {
             if(res.data.state == 200){
               _this.select = 'one'
-              this.$message('密码修改成功！')
+                _this.$store.dispatch('logout').then(() =>{
+                    _this.$router.push('/login')
+                })
             }else{
               this.$message(res.data.messages)
             }

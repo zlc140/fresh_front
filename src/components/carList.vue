@@ -36,7 +36,7 @@
 
 <script>
 import axios from 'axios'
-import {carList} from '@/service'
+import {carList,editCar} from '@/service'
 import { getStore } from '@/config/storage'
 export default {
   data(){
@@ -136,17 +136,12 @@ export default {
             count:item.goodsVoList[0].number,
           }
           let _this = this
-              axios({
-                methods:'post',
-                url:'/cart/updateCart',
-                params:prop
-              }).then((res) => {
-                  _this.$nextTick(function(){
-                    _this.caculate()
-                })
-              }).catch((res) => {
-                console.log('error')
-              })
+          editCar(prop).then((res) => {
+              if(res){
+                _this.caculate()
+              }
+          })
+              
     },
     addOrder(){
       

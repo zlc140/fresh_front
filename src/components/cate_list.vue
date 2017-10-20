@@ -39,7 +39,7 @@ export default {
         }
         this.classList = arrTemp
         this.Width  ={
-            'width': arrTemp.length*101+'px'
+            'width': arrTemp.length*170+'px'
         }      
             
     }
@@ -54,7 +54,7 @@ export default {
    dl{
         background-color: #F8F8F8;
         height:470px;
-        padding:0 15px 0;
+        padding:0 60px 0;
         line-height: 46px;
         float: left;
         width:71px;
