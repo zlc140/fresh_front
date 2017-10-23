@@ -1,18 +1,19 @@
 <template>
-  <div class="content cl" v-if="classList.length>0">
+  <div class="cl maxW" :style="Width" v-if="classList.length>0">
          <dl  v-for="(child,index) in classList" :key="index">
             <dd v-for="(cate,id) in child" :key="id" >
                 <router-link :to="{path:'/list',query:{'classId':cate.classId}}" :title="cate.classTitle">{{cate.classTitle}}</router-link>
             </dd>
         </dl> 
-  </div>
+</div>
 </template>
 
 <script>
 export default {
     data(){
         return{
-            classList:[]
+            classList:[],
+            Width:{'width':'0px'}
         }
     },
     props:{
@@ -37,18 +38,23 @@ export default {
         
         }
         this.classList = arrTemp
-                    
+        this.Width  ={
+            'width': arrTemp.length*170+'px'
+        }      
             
     }
 }
 </script>
 
 <style lang="scss"  scoped>
- 
+ .maxW{
+     max-width: 1010px;
+     overflow: hidden;
+ }
    dl{
         background-color: #F8F8F8;
         height:470px;
-        padding:0 15px 0;
+        padding:0 60px 0;
         line-height: 46px;
         float: left;
         width:71px;

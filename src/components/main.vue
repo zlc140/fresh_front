@@ -2,13 +2,13 @@
   <el-col :span="24" class="content">
         
         <head-bar></head-bar>
-        <el-col :span="24" class="main">
+        <el-col :span="24" class="main" @click="closeNav">
             <router-view></router-view>
         </el-col> 
         <el-col :span="24">
             <foot-bar></foot-bar>
         </el-col>
-        <right-nav v-if="rightShow" ></right-nav>
+        <right-nav v-if="rightShow" :closeN = 'closeN'></right-nav>
   </el-col>
 </template>
 
@@ -21,7 +21,8 @@ export default {
     data(){
         return{
           rightShow:true,
-          closeBox:false
+          closeBox:false,
+          closeN:false
         }
     },
     components:{
@@ -44,13 +45,18 @@ export default {
            this.rightShow = true
          }
       },
+      closeNav(){
+        this.closeN = true
+      }
       
     }
 }
 </script>
 
 <style lang="scss">
-@import '../assets/chang.scss';
+ 
+ @import '../assets/chang.scss';
+
 // 分页
  .pagination_box{
      padding: 10px 0 30px;
@@ -90,7 +96,7 @@ export default {
      }
  
 }
-.checkBox{
+.checkBox.el-input{
         width:180px;
 }
 .checkBox .el-input__inner{
@@ -211,9 +217,9 @@ export default {
    .el-button--small{
      font-size: 16px;
    }
-   .el-table .cell{
-     text-align: center;
-   }
+  //  .el-table .cell{
+  //    text-align: center;
+  //  }
  
  }
 // dislog弹出框
@@ -224,14 +230,14 @@ export default {
 .dialog-footer{
   text-align: center;
 }
-.el-button--success{
+.dialog-footer .el-button--success{
   background-color: $baseColor;
   letter-spacing: 2px;
   border-color: $baseColor;
   border-radius: 0;
   padding: 10px 30px;
 }
-.el-dialog__headerbtn{
+.el-dialog__header .el-dialog__headerbtn{
   width:25px;
   height: 25px;
   background-color: white;
@@ -240,17 +246,17 @@ export default {
   margin-right: -30px;
 
 }
-.el-dialog__title{
+.el-dialog__header .el-dialog__title{
   color: white;
 }
 .el-form-item__label{
   color: #959595;
 }
-.el-input__inner{
-  border-color:#c5c5c5;
-  border-radius: 0;
+.el-input .el-input__inner{
+  border-color:#c5c5c5 !important;
+  border-radius: 0 !important;
 }
-.el-dialog__body{
+.el-input  .el-dialog__body{
   padding: 20px 70px;
 }
   /*找回密码  */
@@ -347,6 +353,7 @@ export default {
 div{
     ::-webkit-scrollbar {
         width: 4px;
+        height:8px;
     }
     ::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -357,5 +364,11 @@ div{
         background: rgb(139, 186, 142);
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
     }
+}
+.greens{
+    color:green !important;
+}
+.reds{
+    color:red !important;
 }
 </style>

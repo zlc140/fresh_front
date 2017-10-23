@@ -2,10 +2,10 @@
   <div>
       <ul>
             <li class="" v-for="(son ,index) in child.aboutPro" :key="index" >
-                <a href="javascript:" title="">
+                <router-link :to="{path:'detail',query:{id:`${item.goodsId}`}}">
                     <img  class="img2" :src="son.img[0].path" alt="">
-                    <p class="price">￥39.8</p>
-                </a>
+                    <p class="price">{{item.price.GOODS_MARKET_PRICE | currency}}</p>
+                </router-link>
             </li>
         </ul>
   </div>

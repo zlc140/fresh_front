@@ -19,6 +19,9 @@ const state = {
 const mutations = {
 
     REMEMBER_NAME (state,user) {
+        // if(user == '' || user == null){
+        //     user = ''
+        // }
         state.username = user
         setStore('username',JSON.stringify(user))
     },
@@ -27,6 +30,9 @@ const mutations = {
         state.shopCar.length = 0
         state.shopCar.lists = []
         removeStore('username')
+        removeStore('getName')
+        removeStore('carLen')
+        removeStore('keyCode')
     },
     SAVE_CLASS (state, lists) {
         state.classList = lists
@@ -43,6 +49,7 @@ const mutations = {
             }
         })
         state.shopCar.length = state.shopCar.lists.length
+        setStore('carLen',state.shopCar.length)
 
     },
     DEL_CAR (state, prop) {
@@ -53,6 +60,7 @@ const mutations = {
                 }
             })
             state.shopCar.length = state.shopCar.lists.length
+            setStore('carLen',state.shopCar.length)
         }else{
             state.shopCar.islose.forEach((item,index) => {
                 if(item.cartId == prop.cartIds) {

@@ -1,5 +1,7 @@
 export const Login = r => require.ensure([],() => r(require('../components/login')),'group-index');
-export const Register = r => require.ensure([],() => r(require('../components/register')),'group-index');
+export const Register = r => require.ensure([],() => r(require('../components/register/step1')),'group-register');
+export const StepTwo = r => require.ensure([],() => r(require('../components/register/step2')),'group-register');
+export const StepThree = r => require.ensure([],() => r(require('../components/register/step3')),'group-register');
 
 export const Index = r => require.ensure([],() => r(require('../view/index')),'group-index');
 export const List = r => require.ensure([],() => r(require('../view/list')),'group-index');
@@ -18,6 +20,8 @@ export const Coupon = r => require.ensure([],() => r(require('../view/infor/chil
 export const Information = r => require.ensure([],() => r(require('../view/infor/children/information')),'group-infor');
 export const Order = r => require.ensure([],() => r(require('../view/infor/children/order')),'group-infor');
 
+// 创建店铺
+export const addStore = r => require.ensure([],() => r(require('../view/store/add')),'group-infor');
 //密码
  
 export const findback = r => require.ensure([],() => r(require('../view/findPass/find')),'group-index');

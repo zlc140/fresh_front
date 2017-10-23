@@ -1,5 +1,5 @@
+# 本项目是vue2.3.3项目，在2.5以后所有的scope都不能用了，需要改成slot-scope
 # my-project
-<!-- 齐倩慧添加 -->
 > A Vue.js project
 
 ## Build Setup
@@ -8,7 +8,7 @@
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# serve with hot reload at localhost:8078
 npm run dev
 
 # build for production with minification

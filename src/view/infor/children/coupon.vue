@@ -1,52 +1,77 @@
 <template>
-  <div class="coupon">
-  	<div class="top_select cl">
+  <div class="coupon" v-loading="listLoading">
+  	<div class="top_select cl" >
       <a class="on">代金券</a>
       </div>
-  	<div class="table1">
-  		<table border=".5" cellspacing="0" cellpadding="0">
-  			<thead>
-  				<tr class="head">
-  				<th height=40>代金券编码</th>
-  				<th>金额</th>
-  				<th>日期</th>
-  				<th>操作</th>
-  		</tr>
-  			</thead>
-  			<tbody>
-  				<tr height=40>
-  				<td>111897222009776</td>
-  				<td>￥120.00</td>
-  				<td>2016-03-24  15:32</td>
-  				<td><a href="" title="">查看详情</a></td>
-  				</tr>
-  				<tr height=40>
-  				<td>111897222009776</td>
-  				<td>￥120.00</td>
-  				<td>2016-03-24  15:32</td>
-  				<td><a href="" title="">查看详情</a></td>
-  				</tr>
-  				<tr height=40>
-  				<td>111897222009776</td>
-  				<td>￥120.00</td>
-  				<td>2016-03-24  15:32</td>
-  				<td><a href="" title="">查看详情</a></td>
-  				</tr>
-  				<tr height=40>
-  				<td>111897222009776</td>
-  				<td>￥120.00</td>
-  				<td>2016-03-24  15:32</td>
-  				<td><a href="" title="">查看详情</a></td>
-  				</tr>
-  			</tbody>
-  		</table>
+  		 <div class="table1" v-if="lists.length>0" >
+			<el-table border  :data="lists" style="width: 98%"  >
+				<!-- 父级 -->
+				<el-table-column label="编号" prop="voucherId" >  </el-table-column>
+				<el-table-column label="描述" prop="description">
+				<template scope="scope">
+						{{scope.row.description?scope.row.description:''}}
+					</template>
+				</el-table-column>
+				 
+				<el-table-column label="生效时间"  prop="effectiveTime" width="110px">
+				<template scope="scope">   
+						<span>{{ scope.row.effectiveTime | formatDate }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="到期时间"  prop="indate" width="110px">
+				<template scope="scope">   
+						<span>{{ scope.row.indate | formatDate }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="额度" prop="money" width="90px">
+				<template scope="scope">   
+						<span class="price">{{ scope.row.money | currency }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="代金券状态" prop="state" >
+					<template scope="scope">   
+						<span>{{ scope.row.state | voucherType }}</span>
+					</template>
+				</el-table-column>
+			</el-table>
+			<!-- 分页 -->
+			<!-- <el-col :span="24" class="pagination_box">
+				<el-pagination small layout="total,prev,pager,next" :current-page.sync="currentPage1" :page-size='pageSize' :total="total" @current-change="handleCurrentChange">
+				</el-pagination>        
+             </el-col> -->
   	</div>
+	<div class="null" v-if="lists.length<1">
+      您没有代金券！
+    </div>
   </div>
 </template>
 
 <script>
+import {voucherlist} from '@/service'
 export default {
-
+	data(){
+		return{
+			lists:[],
+			listLoading:false
+		}
+	},
+	mounted(){
+		this.volist()
+	},
+	methods:{
+		volist(){
+			this.listLoading = true
+			voucherlist().then(res => {
+				console.log(res)
+				this.listLoading =false
+				if(res.data.state == 200 && res.data.content != null){
+						this.lists = res.data.content
+				}
+			}).catch(() => {
+				this.listLoading =false
+			})
+		}
+	}
 }
 </script>
 
@@ -55,11 +80,10 @@ export default {
     .top{margin-bottom: 10px;}
      
     .coupon{background-color:#fff;height: 100%;}
-    .coupon table{width: 573px;text-align: center;border:none;}
-    .coupon table thead th{font-weight:bold;}
-    .coupon table tr td:first-child{font-weight:bold;}
-    .coupon table tr td:last-child a{color: rgb(75,118,77);}
-    .coupon .table1{border-right: 1px solid rgb(154,154,154);display: inline-block;border-bottom: 1px solid rgb(154,154,154);}
-    .coupon .head{background-color: rgb(242,242,242);}
+    // .coupon table{width: 573px;text-align: center;border:none;}
+    // .coupon table thead th{font-weight:bold;}
+    // .coupon table tr td:first-child{font-weight:bold;}
+    // .coupon table tr td:last-child a{color: rgb(75,118,77);}
+    // .coupon .head{background-color: rgb(242,242,242);}
     
 </style>

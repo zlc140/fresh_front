@@ -2,19 +2,21 @@
      <div class="content">
          <!--图片只有一张时  -->
           <div class="img_box" v-if="bannerList.length == 1">
+              <a :href="bannerList[0].advImage.url" target="_blank">
               <img :src='bannerList[0].advImage.path' :alt="bannerList[0].advTitle" />
+              </a>
           </div>
           <!--滑动  -->
           <el-carousel v-if="type=='slide' && bannerList.length > 1 " :autoplay='false' trigger="click" indicator-position="outside" :interval="9000"   arrow="never" height="470px">
                 <el-carousel-item  v-for="(item,idx) in bannerList" :key="idx">
-                <img :src="item.advImage.path" :aly="item.advTitle"/>
+                <a :href="item.advImage.url "  target="_blank"><img :src="item.advImage.path" :aly="item.advTitle"/></a>
                 </el-carousel-item>
           </el-carousel>
      <!--淡入淡出  -->
         <div class="carousel" v-if="type=='fade' && bannerList.length > 1 ">
             <ul>
                 <li v-for="(item,idx) in bannerList" :key="idx" :class="idx === curIndex?'on':''" @mouseover="Over" @mouseout="autoPlay">
-                    <img :src="item.advImage.path" :aly="item.advTitle"/>
+                    <a :href="item.advImage.url"  target="_blank"><img :src="item.advImage.path" :aly="item.advTitle"/></a>
                 </li>
             </ul>
             <div class="btn-box">
@@ -25,7 +27,6 @@
 </template>
 
 <script>
-import banner from '@/assets/images/banner.jpg'
 import {getBanner} from '@/service'
 export default {
     props:['type'],
@@ -43,6 +44,7 @@ export default {
         })
         getBanner().then((res) => {
             if(res.data.state == 200){
+                console.log(res.data)
                 vm.bannerList = res.data.content
             }
         })
@@ -64,7 +66,7 @@ export default {
                     vm.curIndex = -1
                     vm.curIndex++
                 }
-            }, 2000)
+            }, 5000)
         },
         Over() {
             clearInterval(this.timer)
@@ -142,27 +144,32 @@ export default {
     top: 0;
     opacity: 0;
     transition: 1s all;
+    z-index: 1;
 }
 
 .carousel>ul li img {
-    min-width: 100%;
+    width: 100%;
+    min-width:1200px;
     position: absolute;
     left: 50%;
+    height:470px;
     transform: translate(-50%);
     margin: 0 auto;
 }
 
 .carousel>ul li.on {
     opacity: 1;
+    z-index: 9;
 }
 
 .carousel .btn-box {
     position: absolute;
     left: 0%;
-    bottom: 0;
+    bottom: 5px;
     width: 100%;
     margin-left: 0px;
     text-align: center;
+    z-index: 99;
 }
 
 .carousel .btn-box span {

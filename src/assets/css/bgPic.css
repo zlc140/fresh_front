@@ -2,7 +2,10 @@
 .search_box .arrow{
     background: url(../image/arrow.png) no-repeat 0 0 ;
 }
-#register_upload_t a{
+.register_upload_t a{
+    background: url(../image/upload.png) no-repeat center center;
+}
+.register_upload_t2 a{
     background: url(../image/upload.png) no-repeat center center;
 }
 /*底部  */
@@ -84,7 +87,8 @@
     /* border-color:  green !important; */
     height: 42px;
     width:160px;
-    background: url(../image/selAddr.png) no-repeat;
+    background-image: url(../image/selAddr.png);
+    background-repeat: no-repeat;
     background-size: 160px 42px;
     border-color: transparent;
 }
@@ -123,7 +127,7 @@
     height: 40px;
     background: url(../image/selAddr.png) no-repeat;
 }
- .account_voucher .transition-box_one span {
+ /* .account_voucher .transition-box_one span {
     width: 70px;
     height: 22px;
     display: block;
@@ -133,7 +137,7 @@
     line-height: 25px;
     text-align: center;
     background: url(../image/button.png) no-repeat; 
-}
+} */
 /* 支付页面提交按钮 */
 .account_voucher_list li.btn{
    

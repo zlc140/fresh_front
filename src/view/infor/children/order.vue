@@ -1,15 +1,15 @@
 
 <template>
-  <div class="order">
+  <div class="order"  v-loading="listLoading">
   	<div class="top_select cl">
       <a class="on">全部订单</a>
       <!-- <a class="">未支付订单</a>
       <a>已结算订单</a> -->
       </div>
   	<div class="table1" v-if="lists.length>0">
-			<el-table border  :data="lists" style="width: 98%">
+			<el-table border  :data="lists"  style="width: 98%" @expand="handleExpand"> 
 				<!-- 子级 -->
-				<el-table-column type="expand" prop="goodsList">
+				<el-table-column type="expand" prop="goodsList" >
 				<template scope="scope">
 						<el-table  border  :data="scope.row.goodsList"  style="width: 90%">  
 							<el-table-column   prop="goods.goodsTitle"  label="商品名称" min-width="200px"> </el-table-column>
@@ -41,12 +41,12 @@
 				<el-table-column label="订单号" prop="ordersId" >  </el-table-column>
 				<el-table-column label="买家" prop="username">
 				<template scope="scope">
-						{{scope.row.member.username}}
+						{{scope.row.username}}
 					</template>
 				</el-table-column>
 				<el-table-column label="收货地址"  prop="orderDaddress" min-width="100px">
 				<template scope="scope">   
-						<span>{{ scope.row.orderDaddress.address}}</span>
+						<span class="moreTxt" :title="scope.row.orderDaddress.address">{{ scope.row.orderDaddress.address}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="下单时间"  prop="createTime" width="110px">
@@ -54,7 +54,7 @@
 						<span>{{ scope.row.createTime | formatDate }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="订单总额" prop="price" width="90px">
+				<el-table-column label="订单总额" prop="price" width="90">
 				<template scope="scope">   
 						<span class="price">{{ scope.row.price | currency }}</span>
 					</template>
@@ -83,7 +83,7 @@ import {orderlist} from '@/service'
 export default {
 		data(){
 			return{
-				 
+				listLoading:false,
 				currentPage1:1,
 				lists:[],
 				page:1,
@@ -95,18 +95,26 @@ export default {
 			this.getorderlist()
 		},
 		methods:{
-			
+			handleExpand(row,expands){
+				console.log(row,expands)
+			},
 			getorderlist(){
+				this.listLoading = true
 				let _this = this
 				let para = {
 					page: this.page-1,
-					pageSize:this.pageSize,
-					memberId:''
+					pageSize:this.pageSize
 				}
 				orderlist(para).then((res) => {
 					console.log(res.data)
-					_this.lists=res.data.content.content; 
-					_this.total = res.data.content.totalElements
+					this.listLoading = false
+					if(res.data.state == 200){
+						_this.lists=res.data.content.content; 
+						_this.total = res.data.content.totalElements
+					}
+					
+				}).catch(() => {
+					this.listLoading = false
 				})
 			},
 			 //  点击分页

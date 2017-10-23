@@ -17,9 +17,9 @@
                 </div>
             </div>
             <div class="two_template" v-if="item.type=='FLOOR_GOODS'">
-                <div class="reduce" v-if="item.titleImage.path != ''">
-                    <img :src="item.titleImage.path" :alt="item.title">
-                    <p>{{item.title}} </p>
+                <div class="reduce" >
+                    <img :src="item.titleImage.path" :alt="item.title" v-if="item.titleImage.path != ''">
+                    <p v-else>{{item.title}} </p>
                 </div>
                 <div class="div_2">
                     <ul>
@@ -34,20 +34,20 @@
                             </div> 
     				    </li> -->
                         <li v-for="(child,id) in item.body" :key="id" class="list">
-                            <a href="javascript:;">
+                            <a :href="child.image.url">
                                 <img :src="child.image.path" :class="child.goods.length>0?'img1':''">
                             </a>
                             <div class="detail" v-if="child.goods.length>0">
                                 <ul class="cl">
                                     <li class="" v-for="(son ,index) in child.goods" :key="index">
-                                        <a href="javascript:" title="">
-                                            <img class="img2" :src="pro" alt="">
+                                        <router-link :to="{path:'detail',query:{id:`${son.goodsId}`}}">
+                                            <img class="img2" :src="son.goodsPic[0].path" alt="">
                                             <p class="price">{{son.price.GOODS_MARKET_PRICE | currency}}</p>
-                                        </a>
+                                        </router-link>
                                     </li>
                                 </ul>
                                 <div class="more_box">
-                                    <a class="more">查看更多</a>
+                                    <a class="more" :href="child.image.url">查看更多</a>
                                 </div>
                             </div>
                         </li>
@@ -61,7 +61,6 @@
 
 <script>
 
-import pro from '@/assets/images/pro.jpg'
  
 
 import { getFloor } from '@/service'
@@ -69,7 +68,6 @@ import { getFloor } from '@/service'
 export default {
     data() {
         return {
-            pro: pro,
             floorList: []
         }
 
@@ -78,6 +76,7 @@ export default {
         let _this = this
         getFloor().then(res => {
             if (res.data.state == 200) {
+                console.log('floor',res.data)
                 _this.floorList = res.data.content
                 console.log(_this.floorList)
             }
@@ -94,8 +93,13 @@ export default {
         line-height: 70px;
         font-size: 20px;
         overflow: hidden;
+        margin-bottom: 8px;
         img {
-            width: 100%;
+            display: block;
+            width: auto;
+            max-width: 1200px;
+            max-height: 70px;
+            margin: 0 auto;
         }
     }
     .one_template {
@@ -103,11 +107,26 @@ export default {
             ul {
                 width: 100%;
                 li {
-                    width: 390px;
+                    width: 392px;
+                    height:200px;
+                    overflow: hidden;
                     float: left;
-                    margin-left: 15px;
+                    margin-left: 12px;
+                    a{
+                        display: inline-block;
+                        width:100%;
+                        height: 100%;
+                        position: relative;
+                    }
                     img {
                         width: 100%;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        bottom: 0;
+                        top: 0;
+                        margin: auto;
+
                     }
                     &:first-child {
                         margin-left: 0;
@@ -115,7 +134,7 @@ export default {
                 }
                 .big {
                     width: 100%;
-                    margin: 15px 0 0;
+                    margin: 12px 0;
                 }
             }
         }
@@ -129,10 +148,10 @@ export default {
     .list {
         overflow: hidden;
         float: left;
-        width: 590px;
+        width: 594px;
         height: 280px;
         position: relative;
-        margin-top: 20px;
+        margin-bottom: 12px;
         a {
             display: inline-block;
             width: 100%;
@@ -167,7 +186,7 @@ export default {
 }
 
 .div_2 li:nth-child(2n) {
-    margin-left: 20px;
+    margin-left: 12px;
 }
 
 .div_2 .detail li {
@@ -177,6 +196,7 @@ export default {
     height: 145px;
     overflow: hidden;
     a {
+        padding-top: 5px;
         display: inline-block;
         width: 100%;
         height: 125px;
@@ -184,20 +204,10 @@ export default {
         overflow: hidden;
         position: relative;
         img {
-            max-height: 120px;
-            max-width: 100%;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            -moz-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
+            height: 120px;
+            width: 120px;
         }
         p {
-            position: absolute;
-            left: 0;
-            bottom: 0;
             text-align: center;
             width: 100%;
         }
@@ -223,12 +233,13 @@ a {
 
 .div_2 .detail .more {
     border: 1px solid #333;
-    padding: 5px 30px;
+    padding: 5px 0px;
     display: inline-block;
+    text-align: center;
     position: absolute;
     bottom: 10px;
     right: 15px;
-    width: 50px;
+    width: 110px;
     cursor: pointer;
 }
 

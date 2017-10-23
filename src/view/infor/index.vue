@@ -2,32 +2,42 @@
     <div class="container cl infor_index">
         <el-col :span="24">
             <div class="avatar fl">
-                <img :src="sum.photo" alt="">
+                 <el-upload class="photo-uploader" 
+                        ref="upload" 
+                        :action="uploadImg" 
+                        :show-file-list="false" 
+                        :on-success="handleSuccess" 
+                        :on-error="handleError" 
+                                         >
+                </el-upload>
+                <img :src="photo" alt="">
             </div>
             <div class="detail">
                 <ul>
                     <li>
-                        <a href="javascript:" title="">
-                            <span class="icon coup"></span> 我的代金券
-                            <span class="number">{{sum.couponNum}}</span>
-                        </a>
+                        <router-link to="/" title="">
+                            <span class="icon order"></span>商城首页
+                            <!-- <span class="">{{sum.couponAll}}</span> -->
+                        </router-link>
                     </li>
                     <li>
-                        <a href="javascript:" title="">代金券总额
-                            <span class="">{{sum.couponAll}}</span>
-                        </a>
+                        <router-link to="/user/coupon" title="">
+                            <span class="icon coup"></span>我的代金券 
+                            <!-- <span class="number">{{sum.couponNum}}</span> -->
+                        </router-link>
+                    </li>
+                  
+                    <li>
+                        <router-link to="/user/bill" title="">
+                            <span class="icon noPay"></span>我的账单
+                            <!-- <span class="number">{{sum.noPay}}</span> -->
+                        </router-link>
                     </li>
                     <li>
-                        <a href="javascript:" title="">
-                            <span class="icon noPay"></span>未支付订单
-                            <span class="number">{{sum.noPay}}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:" title="">
+                        <router-link to="/editOrder" title="">
                             <span class="icon order"></span>我的预订单
-                            <span class="number"></span>
-                        </a>
+                            <!-- <span class="number"></span> -->
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -46,37 +56,75 @@ import userPhoto from '@/assets/face.jpg'
 import sideBar from '@/components/aside'
 import { getStore } from '@/config/storage'
 
-import { getSummary } from '@/service'
+import { getSummary,addMember } from '@/service'
 export default {
     data() {
         return {
+            uploadImg:'/image-base/upload',
+            photo: userPhoto,
             sum: {
-                nickname: '未登录',
-                photo: userPhoto,
+                nickname: getStore('username'),
                 couponNum: 0,
                 couponAll: 0,
                 noPay: 0
-            }
+            },
+
 
         }
     },
     components: {
         sideBar
     },
-    async mounted() {
+     mounted() {
         if(getStore('username') != null){
-        this.sum = await getSummary()
-        if (this.sum.photo == null) {
-            this.sum.photo = userPhoto
+        
+            getSummary().then(res=>{
+                if(res.data.state == 200){
+                    let sum = res.data.content
+                    if (!sum.portrait) {
+                        this.photo = userPhoto
+                    }else{
+                        this.photo = sum.portrait.path
+                    }
+                    // console.log(this.sum)
+                    if (sum.nickname == '') {
+                        sum.nickname = '用户'
+                    }
+                
+                }else{
+                        this.$message('/login')
+                    }
+            })
         }
-        // console.log(this.sum)
-        if (this.sum.nickname == '') {
-            this.sum.nickname = '用户'
-        }
-        }
-
     },
     methods: {
+        handleSuccess(val){
+            console.log('loadimg',val)
+            if(val.state == 200 &&　val.content!=null){
+               this.savePhoto(val.content.url)
+            }else{
+                this.$message('上传失败，只能上传jpg、jpeg、png、gif等格式的图片')
+            }
+        },
+        handleError(val){
+            
+        },
+        savePhoto(val){
+                let prop = {
+                    portraitStr:{
+                        path:val
+                    }
+                }
+                addMember(prop).then(res => {
+                    console.log('photo',res)
+                    if(res.data.state == 200){
+                        this.photo = val
+                    }else{
+                        this.$message(res.data.messages)
+                    }
+                     
+                })
+        }
 
     }
 }
@@ -95,11 +143,39 @@ export default {
         width: 960px;
         float: left;
         background-color: white;
-        height: 660px;
+        min-height: 660px;
     }
     .avatar {
         width: 225px;
+        height: 185px;
         margin-right: 15px;
+        overflow: hidden;
+        background: white;
+        position: relative;
+        &>img{
+            width: 225px;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            max-height: 180px;
+            transform: translateY(-50%);
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+             
+        }
+        .photo-uploader{
+            width:100%;
+            height:100%;
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            .el-upload{
+                width:100%;
+                height:100%;
+            }
+        }
     }
     a {
         text-decoration: none;
@@ -162,5 +238,10 @@ export default {
             margin-left: 0;
         }
     }
+}
+.moreTxt{
+	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
 }
 </style>

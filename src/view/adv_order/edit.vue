@@ -1,4 +1,6 @@
 <template>
+<div class="content" v-loading="fullscreenLoading">
+  <breadRumb></breadRumb>
   <div class="container">
     <h2 class="pageTitle">填写并核对订单信息</h2>
     <div class="addr_box">
@@ -22,14 +24,14 @@
         </ul>
       </div>
       <div class="more_box " v-if="addrs.length>1">
-        <el-button type="text" @click="showMore">{{moreShow?'收起 ︽':'查看更多︾'}}</el-button>
+        <el-button type="text" @click="showMore">{{moreShow?'收起 ':'查看更多'}}<i :class="moreShow?'el-icon-arrow-up':'el-icon-arrow-down'"></i></el-button>
       </div>
       <div class="nullAddr"  v-if="addrs.length<1 ||　!addrs.length">您还没有添加收货地址！ </div>
     </div>
-    
+    <!-- <div v-if="fcEvents.length>0"></div> -->
     <full-calendar class="test-fc" 
           :events="fcEvents" 
-          v-if="flag"
+          v-if="flag &&　fcEvents.length>0"
           first-day='1' 
           locale="zh" 
           checkMore="false" 
@@ -41,16 +43,22 @@
                 <p><i class="fa"></i> {{ p.event.title }} test</p>
             </template> -->
     </full-calendar>
-    <div class="btn_box">
+    <div class="null" v-if="!fcEvents.length>0">
+      <span >您的预订单为空，<router-link to="/index">快去添加商品吧</router-link></span>
+      <!-- <span v-if="flag">您的账号需要等待审核通过才能才看您的预订单</span> -->
+      </div>
+    <div class="btn_box" v-if="fcEvents.length>0">
       <a class="btn" @click="saveOrder">保存预订单</a>
     </div>
      <el-dialog title="新增收货地址"  v-model="addFormVisible" :close-on-click-modal="false">
         <add-address @closeDailog="closeDailog" v-if="addFormVisible"></add-address>
       </el-dialog>
   </div>
+  </div>
 </template>
 
 <script>
+import breadRumb from '@/components/breadrumb'
 import fullCalendar from '@/components/calendar'
 import addAddress from '../common/addr'
 import { advOrderList,orderAddress,selAddress,editadvOrder } from '@/service'
@@ -58,6 +66,7 @@ import { advOrderList,orderAddress,selAddress,editadvOrder } from '@/service'
 export default {
   data() {
     return {
+      fullscreenLoading:false,
       addFormVisible:false,
       name: 'Sunny!',
       fcEvents: [],
@@ -70,13 +79,13 @@ export default {
           phone:'',
           tel:''
         },
-      defaultAddr: '0011',
+      defaultAddr: '',
       moreShow: false,
       addrs: []
     }
   },
   components: {
-    fullCalendar,addAddress
+    fullCalendar,addAddress,breadRumb
   },
    mounted() {
     this.getAddr()
@@ -84,14 +93,38 @@ export default {
   },
   methods: {
     async getAddr(){
+      let _this = this
+       _this.defaultAddr=''
         this.addrs = await orderAddress()
+        if(this.addrs && this.addrs.length>0){
+          this.addrs.forEach(function(v) {
+            if(v.isdefault){
+              _this.defaultAddr = v
+            }
+          });
+        }
     },
-    async getList(){ 
-        let lists = await advOrderList()
+     getList(){ 
+        this.fullscreenLoading = true
+        let lists
+         advOrderList().then(res =>{
+           console.log('order',res)
+           this.flag = true
+           this.fullscreenLoading = false
+           this.fcEvents = []
+            if(res.data.state == 200){
+              lists = res.data.content
+              this.makeOrderId = lists.makeOrderId
+              if(!lists.dayOrderList){return false}
+              this.fcEvents = lists.dayOrderList.filter( v => v.goodsVoList && v.goodsVoList.length>0)
+               console.log('list',this.fcEvents)
+            }else{
+                this.$message(res.data.messages)
+            }
+    
+        })
         console.log('test',lists)
-        this.flag = true
-        this.makeOrderId = lists[0].makeOrderId
-        this.fcEvents = lists[0].dayOrderList.filter( v => v.goodsVoList && v.goodsVoList.length>0)
+       
         // console.log(this.fcEvents)
     },
     closeDailog(val){
@@ -126,7 +159,6 @@ export default {
     selAddr(val) {
       let _this = this
       let prop = {
-        memberId : 'M20170814170704005',
         orderDaddressId :val
       }
       selAddress(prop).then((res) => {
@@ -140,16 +172,69 @@ export default {
       this.moreShow = !this.moreShow
     },
     saveOrder(){
+      if(this.defaultAddr == ''){
+        this.$message('请选择配送地址！')
+        return false;
+      }
+      let [dayIds,goodsIds,counts,names,lists] = [[],[],[],[],[]]
+      lists = this.fcEvents.slice(0)
+      // if(this.fcEvents.length>0){
+      //   this.fcEvents.forEach(v => {
+      //     let arr = []
+      //     arr.push(v)
+      //     lists.concat(arr)
+            
+      //      dayIds.concat(v.dayOrderId)
+      //      v.goodsVoList.forEach(m => {
+      //        goodsIds.concat(m.goodsId)
+      //        counts.concat(m.number)
+      //        names.concat(m.goods.goodsTitle)
+      //      })
+      //   })
+      // }
+      // dayIds = dayIds.join(',')
+      // goodsIds = goodsIds.join(',')
+      // counts = counts.join(',')
+      // console.log(counts)
+      // lists = JSON.stringify(lists)
+      // console.log(lists)
       let para = {
           makeOrderId:this.makeOrderId,
-          dayOrderId:'',
-          count:'',
-          goodsId:''
+          dayOrderList:lists
+          // dayOrderId:dayIds.join(','),
+          // count:counts.join(','),
+          // goodsId:goodsIds.join(',')
       }
-      editadvOrder(para).then((res) => {
-        console.log(res)
+      console.log(para)
+      para.dayOrderList.forEach(v => {
+        // console.log('v',v)
+        if((v.deliverTime+'').indexOf('-')>0){
+            let _times = v.deliverTime.split('-')
+            v.deliverTime =new Date(_times[0],_times[1]-1,_times[2],8,0,0).getTime()
+        }
+        //  console.log(new Date(_times[0],_times[1],_times[2],8,0,0).getTime())
+        if(v.goodsVoList.goods){
+             v.goodsVoList.goods.goodsPic.forEach(pic => {
+              pic = JSON.stringify(pic)
+            })
+        }
+         v.goodsVoList.forEach(l => {
+           v= JSON.stringify(l)
+         })
       })
-      console.log(this.fcEvents)
+       para.dayOrderList = JSON.stringify(para.dayOrderList)
+        this.fullscreenLoading = true
+      editadvOrder(para).then((res) => {
+        if(res.data.state == 200){
+        this.$message(res.data.messages)
+        this.fullscreenLoading = false
+        this.getList()
+        }else{
+          this.$message(res.data.messages)
+        }
+        console.log('edit',res)
+      })
+       
     }
 
   }

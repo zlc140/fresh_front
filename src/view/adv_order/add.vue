@@ -1,10 +1,12 @@
 <template>
-  <div class="container">
-    <div class="cart_box order2" :class="moreShow?'more':''" v-if="$route.query.ids">
-     <el-table :data="shopList" ref="carList"   v-loading="listLoading"  style="width: 100%;" >
+  <div class="content ">
+    <breadRumb></breadRumb>
+    <div class="container">
+    <div class="cart_box order2" :class="moreShow?'more':''" >
+     <el-table :data="shopList" ref="carList"   v-loading="listLoading"  style="width: 1196px;" >
              <el-table-column  prop="goodsVoList" label="" width="90"  label="商品" >
                <template scope="scope">
-                   <a class="imgBox"><img  /></a>
+                   <a class="imgBox"><img  :src="scope.row.goodsVoList[0].goods.goodsPic[0].path"/></a>
                </template>
              </el-table-column>
             <el-table-column  prop="goodsVoList" min-width="300" >
@@ -31,40 +33,9 @@
             </el-table-column>
         </el-table>
     </div>
-     <div class="cart_box order" :class="moreShow?'more':''" v-if="$route.query.id">
-        <el-table :data="shopList" ref="carList"   v-loading="listLoading"  style="width: 100%;" >
-              <el-table-column  prop="" label="" width="90"  label="商品" >
-                <template scope="scope">
-                    <a class="imgBox"><img  /></a>
-                </template>
-              </el-table-column>
-              <el-table-column  prop="goodsTitle" min-width="300" >
-                  <template scope="scope">
-                      <router-link class="fl title" :to="{path:'/detail',query:{id:scope.row.goodsId}}" >{{scope.row.goodsTitle}}</router-link>
-                  </template>
-              </el-table-column>
-              <el-table-column  prop="price" label="单价" width="120" >
-                  <template scope="scope">
-                      <span class="price">{{scope.row.price.GOODS_MARKET_PRICE | currency}}</span>
-                  </template>
-              </el-table-column>
-              <el-table-column prop="number" label="数量" width="80" >
-                <template scope="scope">
-                  <span>{{scope.row.number}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="小计" width="120" >
-                  <template scope="scope">
-                      <div  class="price">
-                        {{scope.row.number*scope.row.price.GOODS_MARKET_PRICE | currency}}
-                      </div>
-                  </template>
-              </el-table-column>
-          </el-table>
-    </div>
      <div class="null" v-if="shopList.length<1" style="height:100px;line-height:100px;">您还没有选择商品<router-link to="list">快去挑选吧~</router-link></div> 
     <div class="more_box" :class="moreShow?'addB':''" v-if="lists.length>1">
-      <el-button type="text" @click="showMore">{{moreShow?'收起 ︽':'查看更多︾'}}</el-button>
+      <el-button type="text" @click="showMore">{{moreShow?'收起 ':'查看更多'}}<i :class="moreShow?'el-icon-arrow-up':'el-icon-arrow-down'"></i></el-button>
       </div>
      <full-calendar class="test-fc" :events="fcEvents" 
       first-day='1' locale="zh"  checkMore="true"
@@ -80,11 +51,12 @@
       <a class="btn" @click="addOrder">添加</a>
       <router-link class="btn bgBtn" to="/shopCar">返回</router-link>
     </div>
+    </div>
   </div>
 </template>
 
 <script>
-
+import breadRumb from '@/components/breadrumb'
 import fullCalendar from '@/components/calendar'
 import {carList,saveDayOrder,goodsDetail } from '@/service'
 import { getStore } from '@/config/storage'
@@ -98,21 +70,22 @@ export default {
         listLoading:false,
         checked:false,
         selDay:[],
-        shopList:[]
+        shopList:[],
+        carts:false
       }
     },
     components:{
-      fullCalendar
+      fullCalendar,breadRumb
     },
     computed:{
       lists(){
         let list = []
         if( this.$route.query.ids && this.getList()){
-            
            this.getList().forEach((item) => {
             if(this.$route.query.ids && this.$route.query.ids.indexOf(item.cartId) > -1){
                 list.push(item)
                 this.shopList = list
+                console.log(this.shopList)
               }
             })
             
@@ -123,35 +96,45 @@ export default {
       }
     },
     mounted(){
-        
+        if(this.$route.query.ids){
+          this.carts = true
+        }
     },
     methods:{
       async getOne(){
-        console.log(0)
+         
         let _this = this
           let para = {
             goodsId:this.$route.query.id
           }
           let content = await goodsDetail(para)
           let num = this.$route.query.num
-          let good ={
-                goodsId:content.goodsId,
-                goodsTitle:content.goodsTitle,
-                price:content.price,
-                goodsPic:'',
-                number:num?num:1
-            }
+           let good = {
+             goodsVoList:[
+               {
+                  goodsId:content.goodsId,
+                  goods:content,
+                  number:num?num:1
+               }
+             ]
+           }
             _this.shopList = []
             _this.shopList.push(good)
-           console.log('text',_this.shopList)
-            // return good
+            
            
       },
       getList(){
         this.listLoading = true
+        let _this = this
         // this.lists =await carList()
         if(this.$store.state.shopCar.lists.length == 0 && getStore('username') != null){
          this.$store.dispatch('getShopCar').then((res) => {
+            if(res == '403'){
+              this.$message('登录失效，请重新登录！')
+             _this.$store.dispatch('logout').then(() =>{
+                     _this.$router.push('/login')
+                })
+            }
               this.listLoading = false
               return this.$store.state.shopCar.lists
           })
@@ -173,7 +156,7 @@ export default {
         },
         dayClick (day, jsEvent) {
           this.selDay = day
-          // console.log('dayClick', day)
+          console.log('dayClick', day,new Date(day[0]))
         },
         moreClick (day, events, jsEvent) {
           // console.log('moreCLick', day, events, jsEvent)
@@ -187,25 +170,25 @@ export default {
               goodsId:'',
               count:'',
               deliverTime:this.selDay,
-              memberId:'M20170814170704005'
             }
             let _this = this
-          this.lists.forEach( (v,index) => {
-             if(index == _this.lists.length-1){
-                para.goodsId = para.goodsId+(v.goodsVoList[0].goods.goodsId || v.goodsId)
-                para.count =para.count + (v.goodsVoList[0].number || v.number)
-             }else{
-                para.goodsId = para.goodsId+v.goodsVoList[0].goods.goodsId+','
-                para.count =para.count + v.goodsVoList[0].number+','
-             }
+          
+            this.shopList.forEach( (v,index) => {
+              if(index == _this.shopList.length-1){
+                  para.goodsId = para.goodsId+(v.goodsVoList[0].goods.goodsId || v.goodsId)
+                  para.count =para.count + (v.goodsVoList[0].number || v.number)
+              }else{
+                  para.goodsId = para.goodsId+v.goodsVoList[0].goods.goodsId+','
+                  para.count =para.count + v.goodsVoList[0].number+','
+              }
           })
-          // para.goodsId = para.goodsId.Substring(0,para.goodsId.length-1)
-          // para.count =para.count.Substring(0,para.count.length-1)
           para.deliverTime = para.deliverTime.join(',')
-          console.log(para)
           saveDayOrder(para).then((res) => {
+             console.log('addOrder',res)
             if(res.data.state == 200) {
                 this.$router.push('/editOrder')
+            }else{
+              this.$message(res.data.messages)
             }
             console.log(res.data)
           })
@@ -223,9 +206,12 @@ export default {
   }
   width: 100%;
    .el-table__body-wrapper{
-     height: 87px;
+     height: 86px;
      border: 1px solid $baseColor;
      overflow: hidden;
+     width:1198px;
+     z-index:9;
+    //  border-bottom:0px;
    }
    .el-table td, .el-table th.is-leaf{
      border-color: $baseColor;
@@ -246,13 +232,13 @@ export default {
       
     }
  }
- .price{
-   color:#f58500;
- }
-th{
-  font-size: 18px;
-  height: 50px;
-}
+//  .price{
+//    color:#f58500;
+//  }
+// th{
+//   font-size: 18px;
+//   height: 50px;
+// }
  a.title{
    white-space: nowrap;
    overflow: hidden;
@@ -274,7 +260,7 @@ th{
  }
 
  .addB{
-   border-top: 1px solid $baseColor;
+  //  border-top: 1px solid $baseColor;
  }
 .btn_box{
   text-align: right;

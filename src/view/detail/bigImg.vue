@@ -21,10 +21,7 @@
 </template>
 
 <script>
-import pro from '@/assets/images/pro.jpg'
-import pro2 from '@/assets/images/pro2.jpg'
-import pro3 from '@/assets/images/pro3.jpg'
-
+ 
 export default {
      props:{
         imgs:{
@@ -36,7 +33,7 @@ export default {
      },
     data() {
         return {
-            mid_url:pro,
+            mid_url:'',
             fix_url:'',
             // 小图
             Width:'',
@@ -163,7 +160,7 @@ export default {
         width:400px;
         height: 400px;
         background-color: white;
-        border:1px solid #ccc;
+        border:1px solid #f0f0f0;
         position: relative;
         .hoverBox{
             top: 0px;
@@ -214,7 +211,7 @@ export default {
                      width: 85px;
                      height:85px;
                      &:hover{
-                         border:1px solid #ccc;
+                         border:1px solid #6CA96E;
                      }
                  }
                  .bod{
@@ -233,8 +230,9 @@ export default {
              font-size:20px;
              color:#888;
              border: none;
-             background-color: #f0f0f0;
+             background-color: #fff;
              line-height: 100px;
+             
          }
          .left{
              left:0px;
@@ -243,7 +241,7 @@ export default {
              right:0;
          }
          .diss{
-             color:#ccc ;
+             color:#f0f0f0 ;
              cursor: default;
          }
      }

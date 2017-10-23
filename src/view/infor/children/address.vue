@@ -1,5 +1,5 @@
 <template>
-  <div class="addr_list">
+  <div class="addr_list" v-loading="fullscreenLoading">
     <div class="top_select cl">
       <a class=" on">收货地址</a>
       <el-button type="text" class="fr pos" @click="handAdd"> <i class="arrow el-icon-plus"></i>新增地址
@@ -7,7 +7,9 @@
       </el-button>
     </div>
     <div class="detail" v-if="addrList.length>0">
+      
       <p v-for="(item,id) in addrList" :key="id">
+        <!-- <el-radio class="radio" v-model="radio" label="1"></el-radio> -->
         <span class="name">{{item.name}}</span>
         <span class="addr">{{item.address}}</span>
         <span class="tel">{{item.phone | phone}}</span>
@@ -32,6 +34,8 @@ import { orderAddress,selAddress,delAddress } from '@/service'
 export default {
   data() {
     return {
+      fullscreenLoading:false,
+      radio:'',
       title: '',
       addrList: [],
       // 添加
@@ -67,7 +71,10 @@ export default {
       }
     },
     async getList() {
-      this.addrList = await orderAddress()
+      this.fullscreenLoading = true
+      this.addrList = await orderAddress() 
+      this.fullscreenLoading = false
+      console.log(this.addrList)
     },
     handAdd() {
       this.title = "新增收货地址"

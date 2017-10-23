@@ -1,7 +1,7 @@
 <template>
     <el-col :span="24">
         <el-col :span="24">
-            <div class="username">{{name}}</div>
+            <div class="username " :title="name">{{name}}</div>
             <ul class="side_bar">
                 <li v-for="(item,index) in sideData" :key="index" :class="$route.path == `/user/${item.path}`?'active':''">
                     <router-link :to="`/user/${item.path}`">
@@ -59,6 +59,9 @@ export default {
 
 <style lang="scss" scoped>
 .username {
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
     width: 223px;
     height: 58px;
     line-height: 58px;

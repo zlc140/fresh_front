@@ -1,8 +1,8 @@
 <template>
   <div class="content bgWhite">
-    <bread-rumb :breadname="breadname"></bread-rumb>
+    <bread-rumb :breadname="breadname" @clearName="clearName"></bread-rumb>
     <div class="container">
-      <cate-tem @getName="getName"></cate-tem> 
+      <cate-tem @getName="getName" :breadname="breadname"></cate-tem> 
       <pro-list @addFlew="addFlew"></pro-list>
     </div>
     <div class="flew"   ref="flew" v-show="flewMove"><img :src="flewPic"/></div>
@@ -36,12 +36,14 @@ export default {
       if(to.query.name && to.query != from.query){
         this.breadname = to.query.name
       }
-       
     }
   },
   methods: {
     getName(name){
       this.breadname = name
+    },
+    clearName(){
+      this.breadname = ''
     },
     addFlew(pic,event){
       this.flewMove = true

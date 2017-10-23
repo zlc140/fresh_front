@@ -94,7 +94,11 @@ export default {
       isNull: false
     }
   },
-    mounted(){
+  mounted(){
+    if(getStore('username') == null){
+      this.$message('请先登录')
+      this.$router.push('/login')
+    }
       this.caculate()
   },
   computed:{
@@ -114,10 +118,18 @@ export default {
   methods:{
     
      getList(){
+       let _this =this
         this.listLoading = true
         // this.lists =await carList()
         if(this.$store.state.shopCar.lists.length == 0 && this.$store.state.shopCar.islose.length == 0 && getStore('username') != null){
           this.$store.dispatch('getShopCar').then((res) => {
+            if(res == '403'){
+              this.$message('登录失效，请重新登录！')
+             _this.$store.dispatch('logout').then(() =>{
+                     _this.$router.push('/login')
+                })
+            }
+            console.log('e',res)
               this.listLoading = false
               this.isNull = res.length > 0?false:true
               return this.$store.state.shopCar.lists
@@ -125,6 +137,7 @@ export default {
         }else{
           this.listLoading = false
           // this.isNull = this.$store.state.shopCar.lists.length > 0?false:true
+          this.isNull = this.$store.state.shopCar.lists.length > 0?false:true
           return this.$store.state.shopCar.lists
         }
         

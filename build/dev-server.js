@@ -40,6 +40,17 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
+// var proxyPath = config.dev.proxypath
+// var context = config.dev.context
+
+// var options = {
+//   target: proxyPath,
+//   changeOrigin: true,
+// }
+// if(context.length) {
+//   app.use(proxyMiddleware(context,options))
+// }
+
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]

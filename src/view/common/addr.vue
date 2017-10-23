@@ -5,7 +5,7 @@
       <el-form-item label="收货人" prop="name">
         <el-input v-model="addForm.name" auto-complete="off" placeholder="请填写收货人真实姓名，方便收货"></el-input>
       </el-form-item>
-      <el-form-item label="所在地区" class="sel_addr">
+      <el-form-item label="所在地区" required class="sel_addr" style="margin-bottom:10px;">
         <div class="el-input">
             <span class="city">上海市</span> 
             <el-select v-model="addForm.county" placeholder="请选择区">
@@ -13,7 +13,7 @@
             </el-select>
         </div>
       </el-form-item>
-      <el-form-item label="详细地址" class="detail_addr" prop="addrDetail">
+      <el-form-item class="detail_addr" prop="addrDetail">
         <el-input v-model="addForm.addrDetail" placeholder="请填写详细地址" auto-complete="off"></el-input>
       </el-form-item>
      <!-- <el-row :gutter="20"> -->
@@ -46,6 +46,16 @@ export default {
         }
     },
     data(){
+         var validatePhone = (rule, value, callback) => {
+             let pon = /^1[34578]\d{9}$/gi;
+             if(value === '') {
+                 callback(new Error('手机号码不能为空'))
+             }else if(!pon.test(value)){
+                callback(new Error('请输入11位有效手机号码'))
+             }else{
+                  callback()
+             }
+         }
         return{
             // 添加
             addLoading:false,
@@ -85,7 +95,8 @@ export default {
                 { required: true, message: '地址详情不能为空', trigger: 'blur' }
                 ],
             phone:[
-                { required: true, message: '电话不能为空', trigger: 'blur' }
+                { required: true, message: '电话不能为空', trigger: 'blur' },
+                { validator:validatePhone,trigger:'blur' }
                 ],
             
             },
@@ -109,10 +120,13 @@ export default {
             let _this = this
             this.$refs.addForm.validate((valid) => {
                 if(valid) {
+                    if(this.addForm.county == ''){
+                        this.$message('请选择您所在的区')
+                        return false
+                    }
                     _this.addLoading = true
                     if(_this.formData == null){
                         let prop = {
-                            memberId : 'M20170814170704005',
                             address:'上海市,'+this.addForm.county+','+this.addForm.addrDetail,
                             phone:this.addForm.phone,
                             name:this.addForm.name
@@ -126,7 +140,6 @@ export default {
                         })
                     }else{
                          let prop = {
-                                memberId : 'M20170814170704005',
                                 address:'上海市,'+this.addForm.county+','+this.addForm.addrDetail,
                                 phone:this.addForm.phone,
                                 name:this.addForm.name,
@@ -152,10 +165,7 @@ export default {
 
 <style lang="scss">
 @import '../../assets/chang.scss'; 
-.dailog_addr .el-input__inner{
-            // width:400px;
-}
-  .city{
+.city{
   display: inline-block;
   width:140px;
   border: 1px solid #c5c5c5;
@@ -165,9 +175,7 @@ export default {
   margin-right: 8px;
   margin-top: 1px;
 }
-.detail_addr .el-input__inner{
-    // width:500px;
-}
+
 .sel_addr .el-input__inner{
         width:250px;
 }
