@@ -65,7 +65,7 @@ export default {
           // 店铺名称
         var nospace = (rule, value, callback) => {
             var par = /^[\d\a-zA-Z\u4E00-\u9FA5\_]{2,20}$/
-            if (!par.test(value) && value.trim() != '') {
+            if (!par.test(value.trim()) && value.trim() != '') {
                 callback(new Error('店铺名称为中英文,数字、下划线，长度2~20位'));
             } else if (value.trim() == '') {
                 callback(new Error('店铺名称不能为空'))
@@ -85,7 +85,7 @@ export default {
           var notel = (rule, value, callback) => {
             var par=/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,8}$/;
             var phone = /^1[34578]\d{9}$/ ;
-            if (!phone.test(value) && !par.test(value) && value.trim() != '' ) {
+            if (!phone.test(value.trim()) && !par.test(value.trim()) && value.trim() != '' ) {
                 callback(new Error('请输入电话号码的正确格式'));//09557777777
             } else if (value.trim() == '') {
                 callback(new Error('电话号码不能为空'))
@@ -202,7 +202,7 @@ export default {
                         tel: datas.officeTel[0],// 店铺电话
                         fax: '',// 店铺传真
                         about: datas.about,// 店铺简介
-                        regTime: datas.regTime==0?'':datas.regTime,// 公司成立时间
+                        regTime: datas.regTime==0?'':new Date(datas.regTime),// 公司成立时间
                     }
                      if(datas.faxes){
                         _this.addForm.fax = datas.faxes[0]
@@ -242,8 +242,9 @@ export default {
                         para.regTime = para.regTime.getTime()
                     }
                     para.imgs = JSON.stringify(para.imgs)
+                    para.tel = para.tel.trim()
+                   para.storeName = para.storeName.trim()
                     console.log(para)
-
                     if(this.type == 'add'){
                         saveStore(para).then((res) => {
                             this.loginLoading = false;

@@ -12,7 +12,7 @@
           </div>
           <div id="register_member_b">
                <p class="tip">提示：只有资料完善的用户才可以使用哈福生鲜的功能</p>
-                <el-form style="width:500px;min-height:475px;" :model="user" :rules="rules" ref="ruleForm" v-loading="loginLoading" label-position="center" class="demo-ruleForm login-container" >
+                <el-form style="width:500px;min-height:475px;display:inlne-block" :model="user" :rules="rules" ref="ruleForm" v-loading="loginLoading" label-position="center" class= "fl demo-ruleForm login-container" >
                     <el-form-item prop="workUnit">
                         <el-input placeholder = "请输入您所在的公司/机构名称" auto-complete="on" v-model="user.workUnit ">
                             <template slot="prepend"> 
@@ -48,7 +48,7 @@
                             </template> 
                         </el-input> 
                     </el-form-item> 
-                     <el-form-item >
+                     <el-form-item prop="idCardNo">
                         <el-input placeholder = "请输入您身份证号" auto-complete="off"  v-model="member.idCardNo">
                             <template slot="prepend"> 
                               <span>身份证<small>（可空）</small></span>
@@ -72,7 +72,7 @@
                     </div> -->
                     </el-form>
                          <!--证件上传-->
-                        <div id="register_member_b_r">
+                        <div class="register_member_b_r fr">
                               <!--证件上传-->
                         
                              <div class="register_upload_t2">
@@ -104,7 +104,7 @@
                             </div>
                         </div>
              
-             <el-button type="primary" class="btn" @click="validate" id="register_button">完善资料</el-button>
+             <div class="button_box"><el-button type="primary" class="btn" @click="validate" id="register_button">完善资料</el-button></div>
             <el-dialog v-model="imgPic"></el-dialog>
           </div>
           <!--底部-->
@@ -193,6 +193,7 @@ export default {
                 ],
                 workUnit : [
                     { required: true, message: '公司或机构名称必填', trigger: 'blur' },
+
                 ]
                 
             },
@@ -442,14 +443,21 @@ span small{
 
  }
 /*证件上传*/
-#register_member_b_r{
+.register_member_b_r{
     width: 478px;
-    height: 350px;
-    position: absolute;
+    /* height: 350px; */
+    /* position: absolute;
     top: 10px;
-    left: 600px;
-    margin-top: 20px;
-    margin-right: 40px;
+    left: 600px; */
+    display:inline-block;
+    /* margin-top: 20px; */
+    margin-right: 80px;
+}
+.button_box{
+    width:100%;
+    float:left;
+    text-align:center;
+    
 }
 .register_upload_t{
     text-align: left;

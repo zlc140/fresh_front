@@ -132,7 +132,7 @@ export default {
               let par = /^[0-9a-zA-Z_]{2,18}$/;
             if(value.length>0 && value.trim() == '' ){
                         callback(new Error('不能全部输入空格'));
-            }else if(!par.test(value) ) {
+            }else if(!par.test(value.trim()) ) {
                  callback(new Error('用户名为2~18位数字与英文字母下划线组成'))
              }else{
                  callback()
@@ -180,10 +180,7 @@ export default {
                     { required: true, message: '请输入您的用户名', trigger: 'blur' },
                     { validator:validateUser, trigger:'blur'}
                 ],
-                nickName: [
-                    { required: true, message: '请输入昵称', trigger: 'blur' },
-                     {validator:noSpace, trigger:'blur'}
-                ],
+               
                 name: [
                     { required: true, message: '请输入真实姓名', trigger: 'blur' },
                     {validator:noSpace, trigger:'blur'}
@@ -196,7 +193,6 @@ export default {
                     {validator : validateCompare, trigger:'blur'}
                 ],
                 eMail:[
-                  
                     { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
                 ],
                 phone:[
@@ -218,6 +214,7 @@ export default {
                 if(valid) {
                     this.loginLoading = true
                     let prop = Object.assign({},this.user)
+                    prop.username = prop.username.trim()
                     prop.phone = prop.phone.trim()
                     console.log(prop)
                     Register(prop).then((res) => {
