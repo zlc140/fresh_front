@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="banner_box">
+      <p>«ÿ÷æ‘∂</p>
       <banner-tem :type="type"></banner-tem>
     </div>
     <div class="floor_box">
